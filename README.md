@@ -26,7 +26,9 @@ npm run dev
 - `app` - Código de la aplicación
     - `app/routes.ts` - Definición de las rutas (URLs) de la aplicación. [Más información aquí](https://reactrouter.com/start/framework/routing)
     - `app/routes/` - Directorio donde se crearán las páginas.
-    - `app/components/` - Componentes reutilizables.
+    - `app/components/` - Componentes reutilizables. Cada componente debe tener una carpeta con su nombre, que contiene al menos los archivos:
+        - `<componente>.tsx` - Archivo principal del componente
+        - `<componente>.stories.tsx` - Historias/Documentación del componente. Guiarse del ejemplo en `app/components/Example`
     - `app/api/` - Directorio donde se crearán funciones del backend.
 
 ## Estilos
