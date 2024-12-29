@@ -7,14 +7,12 @@
     "dev": "react-router dev",
     "start": "cross-env NODE_ENV=production react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "storybook": "cross-env STORYBOOK=true storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "ladle": "npx ladle serve --viteConfig='ladle-vite-config.ts' --stories='app/components/**/*.stories.{js,jsx,ts,tsx,mdx}'"
   },
   "dependencies": {
+    "@ladle/react": "^5.0.0",
     "@react-router/node": "^7.1.1",
     "@react-router/serve": "^7.1.1",
-    "@storybook/builder-vite": "^8.4.7",
-    "@vitejs/plugin-react": "^4.3.4",
     "dotenv": "^16.4.7",
     "isbot": "^5.1.17",
     "prop-types": "^15.8.1",
@@ -23,15 +21,7 @@
     "react-router": "^7.1.1"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^3.2.3",
     "@react-router/dev": "^7.1.1",
-    "@storybook/addon-essentials": "^8.4.7",
-    "@storybook/addon-interactions": "^8.4.7",
-    "@storybook/addon-onboarding": "^8.4.7",
-    "@storybook/blocks": "^8.4.7",
-    "@storybook/react": "^8.4.7",
-    "@storybook/react-vite": "^8.4.7",
-    "@storybook/test": "^8.4.7",
     "@types/node": "^20",
     "@types/prop-types": "^15.7.14",
     "@types/react": "^19.0.1",
@@ -45,7 +35,6 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "postcss": "^8.4.49",
-    "storybook": "^8.4.7",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",

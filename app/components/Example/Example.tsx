@@ -11,7 +11,7 @@ interface ExampleProps {
 
 const Example: React.FC<ExampleProps> = ({ title, description }) => {
   return (
-    <div  className="example-container">
+    <div className="example-container">
       <h1 className="example-title">{title}</h1>
       <p className="example-description">{description}</p>
     </div>
