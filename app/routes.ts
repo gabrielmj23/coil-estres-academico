@@ -2,22 +2,22 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
   index("./routes/LandingPage.tsx"), // Ruta principal "/"
-  route("login", "./routes/LoginPage.tsx"), // Ruta "/login"
-  route("register", "./routes/RegisterPage.tsx"), // Ruta "/register"
-  route("test-selection", "./routes/TestSelectionPage.tsx"), // Ruta "/test-selection"
+  route("iniciar-sesion", "./routes/LoginPage.tsx"), // Ruta "/iniciar-sesion"
+  route("registrarse", "./routes/RegisterPage.tsx"), // Ruta "/registrarse"
+  route("seleccion-de-prueba", "./routes/TestSelectionPage.tsx"), // Ruta "/seleccion-de-prueba"
   
   // Rutas para los cuestionarios
-  route("test-sisco", "./routes/TestSiscoPage.tsx"), // Ruta "/test-sisco"
-  route("test-goldberg", "./routes/TestGoldbergPage.tsx"), // Ruta "/test-goldberg"
+  route("prueba-sisco", "./routes/TestSiscoPage.tsx"), // Ruta "/prueba-sisco"
+  route("prueba-goldberg", "./routes/TestGoldbergPage.tsx"), // Ruta "/prueba-goldberg"
   
   // Cuestionarios: Sisco y Goldberg
-  route("questionnaire-sisco", "./routes/QuestionnaireSiscoPage.tsx"), // Ruta "/questionnaire-sisco"
-  route("questionnaire-goldberg", "./routes/QuestionnaireGoldbergPage.tsx"), // Ruta "/questionnaire-goldberg"
+  route("cuestionario-sisco", "./routes/QuestionnaireSiscoPage.tsx"), // Ruta "/cuestionario-sisco"
+  route("cuestionario-goldberg", "./routes/QuestionnaireGoldbergPage.tsx"), // Ruta "/cuestionario-goldberg"
   
   // Completado del cuestionario
-  route("questionnaire-completion", "./routes/QuestionnaireCompletionPage.tsx"), // Ruta "/questionnaire-completion"
+  route("completado-cuestionario", "./routes/QuestionnaireCompletionPage.tsx"), // Ruta "/completado-cuestionario"
   
   // Página de recomendaciones y aviso psicológico
-  route("recommendations", "./routes/RecommendationsPage.tsx"), // Ruta "/recommendations"
-  route("psychological-warning", "./routes/PsychologicalWarningPage.tsx"), // Ruta "/psychological-warning"
+  route("recomendaciones", "./routes/RecommendationsPage.tsx"), // Ruta "/recomendaciones"
+  route("aviso-psicologico", "./routes/PsychologicalWarningPage.tsx"), // Ruta "/aviso-psicologico"
 ] satisfies RouteConfig;
