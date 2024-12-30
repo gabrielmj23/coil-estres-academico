@@ -1,5 +1,6 @@
 import type { Route } from "./+types/testcomp";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
+import Button from "../components/ContinueButton/ContinueButton";
 
 // Define los metadatos de la página
 export function meta({}: Route.MetaArgs) {
@@ -9,18 +10,21 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+const handleClick = () => {
+  console.log("Activado");
+};
+
 export default function SurveyPage() {
-    const options = ["Nunca", "Rara vez", "A veces", "Siempre"];
-  
-    return (
-        <div>
+  const options = ["Nunca", "Rara vez", "A veces", "Siempre"];
+
+  return (
+    <div>
       <h1>Survey</h1>
       <p>¿Con qué frecuencia haces algo?</p>
       <div>
-          <SurveyOption
-            options={options}
-          />
+        <SurveyOption options={options} />
       </div>
+      <Button label="Continue →" onClick={handleClick} />
     </div>
-    );
+  );
 }
