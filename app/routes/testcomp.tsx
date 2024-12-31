@@ -1,6 +1,6 @@
 import type { Route } from "./+types/testcomp";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
-
+import { useState } from 'react'
 // Define los metadatos de la página
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,6 +10,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function SurveyPage() {
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const options = ["Nunca", "Rara vez", "A veces", "Siempre"];
   
     return (
@@ -19,8 +20,10 @@ export default function SurveyPage() {
       <div>
           <SurveyOption
             options={options}
+            onChange={setSelectedOption}
           />
       </div>
+      {selectedOption && <p>Selected: {selectedOption} </p>}
     </div>
     );
 }
