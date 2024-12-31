@@ -1,12 +1,12 @@
 import React from "react";
-import "./ContinueButton.css";
+import "./PrimaryButton.css";
 
 interface ButtonProps {
   label: string;
   onClick: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
+const PrimaryButton: React.FC<ButtonProps> = ({ label, onClick }) => {
   return (
     <button className="button" onClick={onClick}>
       {label}
@@ -14,4 +14,4 @@ const Button: React.FC<ButtonProps> = ({ label, onClick }) => {
   );
 };
 
-export default Button;
+export default PrimaryButton;
