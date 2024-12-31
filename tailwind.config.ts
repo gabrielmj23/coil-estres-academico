@@ -6,6 +6,7 @@ export default {
     extend: {
       fontFamily: {
         sans: [
+          '"Urbanist"',
           '"Inter"',
           "ui-sans-serif",
           "system-ui",
@@ -15,6 +16,19 @@ export default {
           '"Segoe UI Symbol"',
           '"Noto Color Emoji"',
         ],
+      },
+      colors: {
+        coilterracota: "#582828",
+        coilbeige: "#fde0b5",
+        coilgreen: "#9bb168",
+        coilorange: {
+          light: "#fe8659",
+          dark: "#b2563c",
+        },
+        coilgray: {
+          light: "#f0eaea",
+          dark: "#736b66",
+        },
       },
     },
   },
