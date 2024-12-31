@@ -1,0 +1,24 @@
+.button {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background-color: #582828;
+  border: 3px solid #b2563c;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Arial", sans-serif;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border-radius: 20px; /* Rounded corners */
+}
+
+.button:hover {
+  background-color: #b2563c; /* Darker maroon on hover */
+}

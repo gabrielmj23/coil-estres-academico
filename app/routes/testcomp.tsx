@@ -1,6 +1,8 @@
 import type { Route } from "./+types/testcomp";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
 import { useState } from 'react'
+import Button from "../components/ContinueButton/ContinueButton";
+
 // Define los metadatos de la página
 export function meta({}: Route.MetaArgs) {
   return [
@@ -8,6 +10,10 @@ export function meta({}: Route.MetaArgs) {
     { name: "description", content: "Choose your survey option!" },
   ];
 }
+
+const handleClick = () => {
+  console.log("Activado");
+};
 
 export default function SurveyPage() {
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -24,6 +30,7 @@ export default function SurveyPage() {
           />
       </div>
       {selectedOption && <p>Selected: {selectedOption} </p>}
+      <Button label="Continue →" onClick={handleClick} />
     </div>
-    );
+  );
 }
