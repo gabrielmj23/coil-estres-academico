@@ -1,5 +1,6 @@
 import type { Route } from "./+types/testcomp";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
+import { useState } from 'react'
 import Button from "../components/ContinueButton/ContinueButton";
 
 // Define los metadatos de la página
@@ -15,15 +16,20 @@ const handleClick = () => {
 };
 
 export default function SurveyPage() {
-  const options = ["Nunca", "Rara vez", "A veces", "Siempre"];
-
-  return (
-    <div>
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
+    const options = ["Nunca", "Rara vez", "A veces", "Siempre"];
+  
+    return (
+        <div>
       <h1>Survey</h1>
       <p>¿Con qué frecuencia haces algo?</p>
       <div>
-        <SurveyOption options={options} />
+          <SurveyOption
+            options={options}
+            onChange={setSelectedOption}
+          />
       </div>
+      {selectedOption && <p>Selected: {selectedOption} </p>}
       <Button label="Continue →" onClick={handleClick} />
     </div>
   );

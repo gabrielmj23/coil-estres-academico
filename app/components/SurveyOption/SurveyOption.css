@@ -38,7 +38,7 @@
   /* Opción seleccionada */
   .survey-option.selected {
     background-color: #582828;
-    border: 3px solid #3e2924;
+    box-shadow: 0 0 0 4px rgba(178, 86, 60, 0.25);
     color: #fff;
   }
   
