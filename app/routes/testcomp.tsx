@@ -1,7 +1,7 @@
 import type { Route } from "./+types/testcomp";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
 import { useState } from 'react'
-import Button from "../components/ContinueButton/ContinueButton";
+import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 
 // Define los metadatos de la página
 export function meta({}: Route.MetaArgs) {
@@ -30,7 +30,7 @@ export default function SurveyPage() {
           />
       </div>
       {selectedOption && <p>Selected: {selectedOption} </p>}
-      <Button label="Continue →" onClick={handleClick} />
+      <PrimaryButton label="Continue →" onClick={handleClick} />
     </div>
   );
 }
