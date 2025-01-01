@@ -1,7 +1,14 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+// index.ts
+import express from 'express';
+import routes from './routes';
 
-const db = drizzle(process.env.DATABASE_URL!);
+const app = express();
+const port = 3000;
 
-//Colocar aqui codigo para insertar en las tablas de la base de datos o usa el PGAdmin para hacerlo
-console.log("hola mundo");
+//Middleware
+app.use(express.json());
+app.use('/', routes);
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
