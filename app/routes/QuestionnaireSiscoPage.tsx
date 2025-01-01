@@ -3,8 +3,9 @@ import type { Route } from "./+types/QuestionnaireSiscoPage";
 import { useQuestionIndex } from "~/hooks/useQuestionIndex";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
 import { redirect } from "react-router";
-import Button from "~/components/ContinueButton/ContinueButton";
+import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import { useState } from "react";
+import ArrowRight from "~/icons/ArrowRight";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -66,13 +67,15 @@ export default function QuestionnaireSiscoPage({
             selectedOption={selectedOption}
             onChange={(option) => setSelectedOption(option)}
           />
-          <Button
+          <PrimaryButton
+            label="Continuar"
             onClick={() => {
               console.log(selectedOption);
               setSelectedOption(null);
               nextQuestion();
             }}
-            label="Continuar"
+            disabled={selectedOption === null}
+            icon={<ArrowRight className="w-6" />}
           />
         </div>
       </main>
