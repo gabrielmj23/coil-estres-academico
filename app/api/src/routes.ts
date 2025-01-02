@@ -1,9 +1,9 @@
 // routes/index.ts
 import { Router } from 'express';
-import { getHome } from './controllers/tests';
+import { getCuestionarios } from './controllers/cuestionarios';
 
 const router = Router();
 
-router.get('/', getHome);
+router.get('/cuestionarios', getCuestionarios);
 
 export default router;

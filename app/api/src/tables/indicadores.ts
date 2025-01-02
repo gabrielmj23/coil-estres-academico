@@ -21,7 +21,6 @@ export const initIndicadores = async () => {
   for (const indicador of predefinedIndicadores) {
     try{
     await db.insert(indicadores).values(indicador).onConflictDoNothing();
-    console.log(`Indicador ${indicador.nombre} creado`);
     }catch(e){
       console.log(e);
     }
