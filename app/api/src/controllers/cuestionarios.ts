@@ -21,3 +21,4 @@ export const getCuestionarios = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ message: 'Error al obtener los cuestionarios.' });
   }
 };
+
