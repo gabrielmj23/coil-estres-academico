@@ -36,7 +36,7 @@ npm install
 npm run dev
 ```
 
-3. Abre tu navegador en `http://localhost:5173`.
+3. Abre tu navegador en `http://localhost:3000`.
 
 ## Estructura de archivos
 
