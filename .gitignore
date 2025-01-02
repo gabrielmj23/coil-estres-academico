@@ -1,8 +1,9 @@
 .DS_Store
 /node_modules/
-
+app/api/src/node_modules
 # React Router
 /.react-router/
 /build/
 
 *storybook.log
+.env
