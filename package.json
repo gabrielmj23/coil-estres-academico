@@ -51,7 +51,6 @@
   },
   "description": "Página web para cuestionarios que miden el estrés académico e indicadores asociados",
   "version": "1.0.0",
-  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC"
