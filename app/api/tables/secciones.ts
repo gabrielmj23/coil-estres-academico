@@ -7,7 +7,6 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import db from "../db";
 import { cuestionarios } from "./cuestionarios";
 import { sql } from "drizzle-orm";
 
@@ -34,9 +33,3 @@ export const secciones = pgTable(
     },
   ]
 );
-
-//inicializador de secciones
-export const initSecciones = async () => {
-  // Reiniciar la secuencia del ID para que comience desde 1
-  await db.execute(`ALTER SEQUENCE secciones_id RESTART WITH 1`);
-};
