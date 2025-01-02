@@ -4,162 +4,229 @@ import {
   varchar,
   integer,
   primaryKey,
+  foreignKey,
+  check,
 } from "drizzle-orm/pg-core";
 import db from "../db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { preguntas } from "./preguntas";
 import { cuestionarios } from "./cuestionarios";
-
+import { secciones } from "./secciones";
 
 export const opciones = pgTable(
   "opciones",
   {
-    id: serial("id").notNull(),
     idCuestionario: integer("id_cuestionario")
       .notNull()
       .references(() => cuestionarios.id),
-    idPregunta: integer("id_pregunta")
-      .notNull()
-      .references(() => preguntas.id),
+    idSeccion: integer("id_seccion").notNull(),
+    idPregunta: integer("id_pregunta").notNull(),
+    id: serial("id").notNull(),
     contenido: varchar("contenido", { length: 50 }).notNull(),
     puntaje: integer("puntaje").notNull(),
     posicion: integer("posicion").notNull(),
   },
-  (table) => ({
-    compositePk: primaryKey(table.idCuestionario, table.idPregunta, table.id), // Clave primaria compuesta
-  })
+  (table) => [
+    {
+      // Clave primaria compuesta
+      pk: primaryKey({
+        columns: [
+          table.idCuestionario,
+          table.idSeccion,
+          table.idPregunta,
+          table.id,
+        ],
+      }),
+    },
+    {
+      seccionForeignKey: foreignKey({
+        columns: [table.idCuestionario, table.idSeccion],
+        foreignColumns: [secciones.idCuestionario, secciones.id],
+        name: "seccion_fk",
+      }),
+      preguntaForeignKey: foreignKey({
+        columns: [table.idCuestionario, table.idSeccion, table.idPregunta],
+        foreignColumns: [
+          preguntas.idCuestionario,
+          preguntas.idSeccion,
+          preguntas.id,
+        ],
+        name: "pregunta_fk",
+      }),
+    },
+    {
+      posicionCheck: check("opcion_posicion_check", sql`${table.posicion} > 0`),
+    },
+  ]
 );
 
 // Inicializador de opciones para el cuestionario "Goldberg"
 export const initOpcionesGoldberg = async () => {
-     // Verificar si ya hay registros en la tabla de preguntas
-     const opcionesExistentes = await db.select().from(opciones).where(eq(opciones.idCuestionario, 2));
+  // Verificar si ya hay registros en la tabla de preguntas
+  const opcionesExistentes = await db
+    .select()
+    .from(opciones)
+    .where(eq(opciones.idCuestionario, 2));
 
-     if (opcionesExistentes.length > 0) {
-       console.log("Las opciones ya han sido inicializadas.");
-       return;  // No hacer nada si ya existen registros
-     }
+  if (opcionesExistentes.length > 0) {
+    console.log("Las opciones ya han sido inicializadas.");
+    return; // No hacer nada si ya existen registros
+  }
 
-     // Verificar si ya hay registros en la tabla de preguntas
-     const preguntasExistentes = await db.select().from(opciones).where(eq(opciones.idCuestionario, 2));
+  // Verificar si ya hay registros en la tabla de preguntas
+  const preguntasExistentes = await db
+    .select()
+    .from(opciones)
+    .where(eq(opciones.idCuestionario, 2));
 
-     if (preguntasExistentes.length > 0) {
-       console.log("No se encontraron preguntas para asociar.");
-       return;  // No hacer nada si ya existen registros
-     }
+  if (preguntasExistentes.length > 0) {
+    console.log("No se encontraron preguntas para asociar.");
+    return; // No hacer nada si ya existen registros
+  }
 
   // Reiniciar la secuencia del ID para que comience desde 1
   await db.execute(`ALTER SEQUENCE opciones_id_seq RESTART WITH 1`);
 
   const opcionesPorPregunta = [
-    { idPregunta: 1, opciones: [
+    {
+      idPregunta: 1,
+      opciones: [
         { contenido: "Mejor que lo habitual", puntaje: 4, posicion: 1 },
         { contenido: "Igual que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Menos que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho menos que lo habitual", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 2, opciones: [
+    {
+      idPregunta: 2,
+      opciones: [
         { contenido: "No, en absoluto", puntaje: 4, posicion: 1 },
         { contenido: "No más que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho más", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 3, opciones: [
+    {
+      idPregunta: 3,
+      opciones: [
         { contenido: "Más que lo habitual", puntaje: 4, posicion: 1 },
         { contenido: "Igual que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Menos útil que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho menos", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 4, opciones: [
+    {
+      idPregunta: 4,
+      opciones: [
         { contenido: "Más capaz que lo habitual", puntaje: 4, posicion: 1 },
         { contenido: "Igual que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Menos capaz que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho menos", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 5, opciones: [
+    {
+      idPregunta: 5,
+      opciones: [
         { contenido: "No, en absoluto", puntaje: 4, posicion: 1 },
         { contenido: "No más que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho más", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 6, opciones: [
+    {
+      idPregunta: 6,
+      opciones: [
         { contenido: "No, en absoluto", puntaje: 4, posicion: 1 },
         { contenido: "No más que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho más", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 7, opciones: [
+    {
+      idPregunta: 7,
+      opciones: [
         { contenido: "Más que lo habitual", puntaje: 4, posicion: 1 },
         { contenido: "Igual que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Menos que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho menos", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 8, opciones: [
+    {
+      idPregunta: 8,
+      opciones: [
         { contenido: "Más capaz que lo habitual", puntaje: 4, posicion: 1 },
         { contenido: "Igual que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Menos capaz que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho menos", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 9, opciones: [
+    {
+      idPregunta: 9,
+      opciones: [
         { contenido: "No, en absoluto", puntaje: 4, posicion: 1 },
         { contenido: "No más que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho más", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 10, opciones: [
+    {
+      idPregunta: 10,
+      opciones: [
         { contenido: "No, en absoluto", puntaje: 4, posicion: 1 },
         { contenido: "No más que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho Más", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 11, opciones: [
+    {
+      idPregunta: 11,
+      opciones: [
         { contenido: "No, en absoluto", puntaje: 4, posicion: 1 },
         { contenido: "No más que lo habitual", puntaje: 3, posicion: 2 },
         { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho más", puntaje: 1, posicion: 4 },
-      ]
+      ],
     },
-    { idPregunta: 12, opciones: [
+    {
+      idPregunta: 12,
+      opciones: [
         { contenido: "Más feliz que lo habitual", puntaje: 4, posicion: 1 },
-        { contenido: "Aproximadamente lo mismo que lo habitual", puntaje: 3, posicion: 2 },
+        {
+          contenido: "Aproximadamente lo mismo que lo habitual",
+          puntaje: 3,
+          posicion: 2,
+        },
         { contenido: "Menos feliz que lo habitual", puntaje: 2, posicion: 3 },
         { contenido: "Mucho menos que lo habitual", puntaje: 1, posicion: 4 },
-      ]
-    }
+      ],
+    },
   ];
-  
+
   try {
-        // Obtener IDs de los cuestionarios e indicadores relacionados
-        const goldberg = await db
-        .select({ id: cuestionarios.id })
-        .from(cuestionarios)
-        .where(eq(cuestionarios.nombre, "Goldberg"))
-        .limit(1);
-  
-      if (!goldberg.length) {
-        console.error("Faltan datos iniciales (Goldberg).");
-        return;
-      }
-  
+    // Obtener IDs de los cuestionarios e indicadores relacionados
+    const goldberg = await db
+      .select({ id: cuestionarios.id })
+      .from(cuestionarios)
+      .where(eq(cuestionarios.nombre, "Goldberg"))
+      .limit(1);
+
+    if (!goldberg.length) {
+      console.error("Faltan datos iniciales (Goldberg).");
+      return;
+    }
+
     const idCuestionarioGoldberg = goldberg[0].id;
 
     // Insertar las opciones para cada pregunta
-    for (const { idPregunta, opciones: opcionesDePregunta } of opcionesPorPregunta) {
+    for (const {
+      idPregunta,
+      opciones: opcionesDePregunta,
+    } of opcionesPorPregunta) {
       for (const opcion of opcionesDePregunta) {
         await db
           .insert(opciones)
           .values({
-            idCuestionario: idCuestionarioGoldberg,  // Usando el idCuestionario de "Goldberg" de antes
+            idCuestionario: idCuestionarioGoldberg, // Usando el idCuestionario de "Goldberg" de antes
             idPregunta: idPregunta,
             contenido: opcion.contenido,
             puntaje: opcion.puntaje,
@@ -169,7 +236,10 @@ export const initOpcionesGoldberg = async () => {
       }
     }
   } catch (error) {
-    console.error("Error al inicializar opciones para el cuestionario Goldberg:", error);
+    console.error(
+      "Error al inicializar opciones para el cuestionario Goldberg:",
+      error
+    );
   }
 };
 
@@ -179,20 +249,23 @@ export const initOpcionesSISCO = async () => {
   const opcionesExistentes = await db
     .select()
     .from(opciones)
-    .where(eq(opciones.idCuestionario, 1));  // Suponiendo que "SISCO" tiene id 3
+    .where(eq(opciones.idCuestionario, 1)); // Suponiendo que "SISCO" tiene id 3
 
   if (opcionesExistentes.length > 0) {
     console.log("Las opciones ya han sido inicializadas para SISCO.");
-    return;  // No hacer nada si ya existen registros
+    return; // No hacer nada si ya existen registros
   }
 
-       // Verificar si ya hay registros en la tabla de preguntas
-       const preguntasExistentes = await db.select().from(opciones).where(eq(opciones.idCuestionario, 1));
+  // Verificar si ya hay registros en la tabla de preguntas
+  const preguntasExistentes = await db
+    .select()
+    .from(opciones)
+    .where(eq(opciones.idCuestionario, 1));
 
-       if (preguntasExistentes.length > 0) {
-         console.log("No se encontraron preguntas para asociar.");
-         return;  // No hacer nada si ya existen registros
-       }
+  if (preguntasExistentes.length > 0) {
+    console.log("No se encontraron preguntas para asociar.");
+    return; // No hacer nada si ya existen registros
+  }
 
   // Reiniciar la secuencia del ID para que comience desde 1
   await db.execute(`ALTER SEQUENCE opciones_id_seq RESTART WITH 1`);
@@ -227,7 +300,7 @@ export const initOpcionesSISCO = async () => {
         await db
           .insert(opciones)
           .values({
-            idCuestionario: idCuestionarioSISCO,  // Usando el idCuestionario de "SISCO"
+            idCuestionario: idCuestionarioSISCO, // Usando el idCuestionario de "SISCO"
             idPregunta: idPregunta,
             contenido: opcion.contenido,
             puntaje: opcion.puntaje,
@@ -239,8 +312,9 @@ export const initOpcionesSISCO = async () => {
 
     console.log("Opciones para el cuestionario SISCO han sido inicializadas.");
   } catch (error) {
-    console.error("Error al inicializar opciones para el cuestionario SISCO:", error);
+    console.error(
+      "Error al inicializar opciones para el cuestionario SISCO:",
+      error
+    );
   }
 };
-
-
