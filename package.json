@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build && mkdir vercel/output && node vercel/prepare.js",
+    "build": "react-router build && node vercel/prepare.js",
     "dev": "cross-env NODE_ENV=development node ./dev-server.js",
     "typecheck": "react-router typegen && tsc",
     "ladle": "npx ladle serve --viteConfig='ladle-vite-config.ts' --stories='app/components/**/*.stories.{js,jsx,ts,tsx,mdx}'",
@@ -51,7 +51,6 @@
   },
   "description": "Página web para cuestionarios que miden el estrés académico e indicadores asociados",
   "version": "1.0.0",
-  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC"
