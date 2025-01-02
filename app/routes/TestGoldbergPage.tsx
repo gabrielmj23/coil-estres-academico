@@ -1,4 +1,5 @@
 import type { Route } from "./+types/test-goldberg";
+import { Testpage } from "~/components/Testpage/testpage";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -8,5 +9,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function TestGoldbergPage() {
-  return <h1>Test Goldberg</h1>;
+  return (Testpage({
+    icon: "/app/api/src/assets/goldbergIcono.svg",
+    image: "/app/components/Testpage/assets/goldbergtest.png",
+    buttonpath: "/test-goldberg",
+    }));
 }
