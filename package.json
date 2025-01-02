@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build && node vercel/prepare.js",
+    "build": "npx drizzle-kit migrate && react-router build && node vercel/prepare.js",
     "dev": "cross-env NODE_ENV=development node ./dev-server.js",
     "typecheck": "react-router typegen && tsc",
     "ladle": "npx ladle serve --viteConfig='ladle-vite-config.ts' --stories='app/components/**/*.stories.{js,jsx,ts,tsx,mdx}'",
