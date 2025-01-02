@@ -6,3 +6,4 @@ app/api/src/node_modules
 /build/
 
 *storybook.log
+.env

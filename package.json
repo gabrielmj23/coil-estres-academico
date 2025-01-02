@@ -7,7 +7,8 @@
     "dev": "react-router dev",
     "start": "cross-env NODE_ENV=production react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "ladle": "npx ladle serve --viteConfig='ladle-vite-config.ts' --stories='app/components/**/*.stories.{js,jsx,ts,tsx,mdx}'"
+    "ladle": "npx ladle serve --viteConfig='ladle-vite-config.ts' --stories='app/components/**/*.stories.{js,jsx,ts,tsx,mdx}'",
+    "init-db": "tsx app/api/initDb.ts"
   },
   "dependencies": {
     "@ladle/react": "^5.0.0",
