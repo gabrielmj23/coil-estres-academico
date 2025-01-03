@@ -1,4 +1,4 @@
-import type { Route } from "./+types/questionnaire-sisco";
+import type { Route } from "./+types/QuestionnaireSiscoPage";
 
 export function meta({}: Route.MetaArgs) {
   return [

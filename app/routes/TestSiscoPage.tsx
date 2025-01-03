@@ -1,5 +1,5 @@
-import type { Route } from "./+types/test-sisco";
-import { Testpage } from "~/components/Testpage/testpage";
+import type { Route } from "./+types/TestSiscoPage";
+import { Testpage } from "~/components/Testpage/Testpage";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,9 +9,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function TestSiscoPage() {
-  return (Testpage({
+  return Testpage({
     icon: "/app/api/src/assets/siscoIcono.svg",
     image: "/app/components/Testpage/assets/siscotest.png",
     buttonpath: "/test-sisco",
-  }));
+  });
 }

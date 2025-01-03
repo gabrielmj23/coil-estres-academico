@@ -1,4 +1,4 @@
-import type { Route } from "./+types/psychological-warning";
+import type { Route } from "./+types/PsychologicalWarningPage";
 
 export function meta({}: Route.MetaArgs) {
   return [

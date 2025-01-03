@@ -1,5 +1,5 @@
-import type { Route } from "./+types/test-goldberg";
-import { Testpage } from "~/components/Testpage/testpage";
+import type { Route } from "./+types/TestGoldbergPage";
+import { Testpage } from "~/components/Testpage/Testpage";
 
 export function meta({}: Route.MetaArgs) {
   return [
