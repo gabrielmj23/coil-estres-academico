@@ -1,11 +1,10 @@
 // route("cuestionario-sisco", "./routes/QuestionnaireSiscoPage.tsx")
 import type { Route } from "./+types/QuestionnaireSiscoPage";
-import { useQuestionIndex } from "~/hooks/useQuestionIndex";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
-import { redirect } from "react-router";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import { useState } from "react";
 import ArrowRight from "~/icons/ArrowRight";
+import { getPreguntasSISCO } from "~/api/controllers/preguntas";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,44 +14,19 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader() {
-  const siscoQuestions = [
-    {
-      id: 1,
-      content: "La competencia con los compañeros del grupo",
-      options: [
-        { id: 1, content: "Nunca", points: 1 },
-        { id: 2, content: "Rara vez", points: 2 },
-        { id: 3, content: "Algunas veces", points: 3 },
-        { id: 4, content: "Casi siempre", points: 4 },
-        { id: 5, content: "Siempre", points: 5 },
-      ],
-    },
-    {
-      id: 2,
-      content: "Sobrecarga de tareas y trabajos escolares",
-      options: [
-        { id: 1, content: "Nunca", points: 1 },
-        { id: 2, content: "Rara vez", points: 2 },
-        { id: 3, content: "Algunas veces", points: 3 },
-        { id: 4, content: "Casi siempre", points: 4 },
-        { id: 5, content: "Siempre", points: 5 },
-      ],
-    },
-  ];
-  return siscoQuestions;
+  return getPreguntasSISCO();
 }
 
 export default function QuestionnaireSiscoPage({
   loaderData,
 }: Route.ComponentProps) {
-  const [questionIndex, nextQuestion, goBack] = useQuestionIndex();
+  const [sectionIndex, setSectionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
-  if (questionIndex < 0 || questionIndex >= loaderData.length) {
-    return redirect("/");
-  }
+  const sections = loaderData.sections;
 
-  const currentQuestion = loaderData[questionIndex];
+  const currentQuestion = sections[sectionIndex].preguntas[questionIndex];
 
   return (
     <>
@@ -60,10 +34,10 @@ export default function QuestionnaireSiscoPage({
       <main>
         <div>
           <h2 className="text-center text-xl font-bold text-coilterracota px-3 py-5 pb-2">
-            {currentQuestion.content}
+            {currentQuestion.contenido}
           </h2>
           <SurveyOption
-            options={currentQuestion.options.map((option) => option.content)}
+            options={currentQuestion.opciones.map((option) => option.contenido)}
             selectedOption={selectedOption}
             onChange={(option) => setSelectedOption(option)}
           />
@@ -72,7 +46,19 @@ export default function QuestionnaireSiscoPage({
             onClick={() => {
               console.log(selectedOption);
               setSelectedOption(null);
-              nextQuestion();
+              if (
+                questionIndex + 1 ===
+                sections[sectionIndex].preguntas.length
+              ) {
+                if (sectionIndex + 1 === sections.length) {
+                  console.log("END");
+                } else {
+                  setSectionIndex((prev) => prev + 1);
+                  setQuestionIndex(0);
+                }
+              } else {
+                setQuestionIndex((prev) => prev + 1);
+              }
             }}
             disabled={selectedOption === null}
             icon={<ArrowRight className="w-6" />}
