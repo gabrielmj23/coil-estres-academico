@@ -22,11 +22,48 @@ export default function QuestionnaireSiscoPage({
 }: Route.ComponentProps) {
   const [sectionIndex, setSectionIndex] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [answers, setAnswers] = useState<StoredAnswer[]>([]);
 
   const sections = loaderData.sections;
 
   const currentQuestion = sections[sectionIndex].preguntas[questionIndex];
+
+  /**
+   * Saves an answer and advances to next question/section
+   * @author Gabriel
+   */
+  const saveAnswer = () => {
+    // Store answer
+    setAnswers((prev) => [
+      ...prev,
+      {
+        sectionId: sections[sectionIndex].idSeccion,
+        questionId: currentQuestion.idPregunta,
+        indicatorId: currentQuestion.idIndicador,
+        optionId: selectedOption || 0,
+        points:
+          currentQuestion.opciones.find((op) => op.idOpcion === selectedOption)
+            ?.puntaje ?? 0,
+      },
+    ]);
+
+    // Clear selection
+    setSelectedOption(null);
+
+    // Continue
+    if (questionIndex + 1 === sections[sectionIndex].preguntas.length) {
+      if (sectionIndex + 1 === sections.length) {
+        console.log("END");
+        console.log(answers);
+      } else {
+        setSectionIndex((prev) => prev + 1);
+        setQuestionIndex(0);
+      }
+    } else {
+      setQuestionIndex((prev) => prev + 1);
+    }
+  };
 
   return (
     <>
@@ -37,29 +74,13 @@ export default function QuestionnaireSiscoPage({
             {currentQuestion.contenido}
           </h2>
           <SurveyOption
-            options={currentQuestion.opciones.map((option) => option.contenido)}
+            options={currentQuestion.opciones}
             selectedOption={selectedOption}
-            onChange={(option) => setSelectedOption(option)}
+            onChange={(option) => setSelectedOption(option.idOpcion)}
           />
           <PrimaryButton
             label="Continuar"
-            onClick={() => {
-              console.log(selectedOption);
-              setSelectedOption(null);
-              if (
-                questionIndex + 1 ===
-                sections[sectionIndex].preguntas.length
-              ) {
-                if (sectionIndex + 1 === sections.length) {
-                  console.log("END");
-                } else {
-                  setSectionIndex((prev) => prev + 1);
-                  setQuestionIndex(0);
-                }
-              } else {
-                setQuestionIndex((prev) => prev + 1);
-              }
-            }}
+            onClick={saveAnswer}
             disabled={selectedOption === null}
             icon={<ArrowRight className="w-6" />}
           />

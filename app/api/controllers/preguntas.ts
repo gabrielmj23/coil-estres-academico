@@ -6,28 +6,6 @@ import { opciones } from "../tables/opciones";
 import { secciones } from "../tables/secciones";
 import { cuestionarios } from "../tables/cuestionarios";
 
-type OpcionesReturn = {
-  idOpcion: number;
-  contenido: string;
-  posicion: number;
-  puntaje: number;
-};
-
-type PreguntasReturn = {
-  idPregunta: number;
-  contenido: string;
-  posicion: number;
-  opciones: OpcionesReturn[];
-};
-
-type SeccionesReturn = {
-  idSeccion: number;
-  instruccion: string;
-  imagen: string;
-  posicion: number;
-  preguntas: PreguntasReturn[];
-};
-
 /**
  * Get full list of questions, with their options, from a questionnaire
  * @param id Questionnaire ID
@@ -45,6 +23,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
         instruccionSeccion: secciones.instruccion,
         imagenSeccion: secciones.imagen,
         contenidoPregunta: preguntas.contenido,
+        indicadorPregunta: preguntas.idIndicador,
         contenidoOpcion: opciones.contenido,
         puntajeOpcion: opciones.puntaje,
         posicionSeccion: secciones.posicion,
@@ -91,6 +70,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
           preguntas: [
             {
               idPregunta: seccion.idPregunta,
+              idIndicador: seccion.indicadorPregunta || 0,
               contenido: seccion.contenidoPregunta,
               posicion: seccion.posicionPregunta,
               opciones: [
@@ -112,6 +92,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
         if (preguntaIndex === -1) {
           parsedSections[seccionIndex].preguntas.push({
             idPregunta: seccion.idPregunta,
+            idIndicador: seccion.indicadorPregunta || 0,
             contenido: seccion.contenidoPregunta,
             posicion: seccion.posicionPregunta,
             opciones: [
