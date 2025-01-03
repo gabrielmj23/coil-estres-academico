@@ -160,11 +160,11 @@ await db.transaction(async (tx) => {
       "Señala con qué Frecuencia te Inquietaron las Siguientes Situaciones"
     ) {
       const opcionesSisco = [
-        { contenido: "Nunca", puntaje: 1, posicion: 1 },
-        { contenido: "Rara vez", puntaje: 2, posicion: 2 },
-        { contenido: "Algunas veces", puntaje: 3, posicion: 3 },
-        { contenido: "Casi siempre", puntaje: 4, posicion: 4 },
-        { contenido: "Siempre", puntaje: 5, posicion: 5 },
+        { contenido: "Nunca", puntaje: 0, posicion: 1 },
+        { contenido: "Rara vez", puntaje: 1, posicion: 2 },
+        { contenido: "Algunas veces", puntaje: 2, posicion: 3 },
+        { contenido: "Casi siempre", puntaje: 3, posicion: 4 },
+        { contenido: "Siempre", puntaje: 4, posicion: 5 },
       ];
 
       const preguntasSisco = [
@@ -226,11 +226,11 @@ await db.transaction(async (tx) => {
       "Señala con qué Frecuencia Tuviste las Siguientes Reacciones Cuando Estabas Preocupado o Nervioso"
     ) {
       const opcionesSisco = [
-        { contenido: "Nunca", puntaje: 1, posicion: 1 },
-        { contenido: "Rara vez", puntaje: 2, posicion: 2 },
-        { contenido: "Algunas veces", puntaje: 3, posicion: 3 },
-        { contenido: "Casi siempre", puntaje: 4, posicion: 4 },
-        { contenido: "Siempre", puntaje: 5, posicion: 5 },
+        { contenido: "Nunca", puntaje: 0, posicion: 1 },
+        { contenido: "Rara vez", puntaje: 1, posicion: 2 },
+        { contenido: "Algunas veces", puntaje: 2, posicion: 3 },
+        { contenido: "Casi siempre", puntaje: 3, posicion: 4 },
+        { contenido: "Siempre", puntaje: 4, posicion: 5 },
       ];
 
       const preguntasSisco = [
@@ -306,10 +306,10 @@ await db.transaction(async (tx) => {
     ) {
       const opcionesSisco = [
         { contenido: "Nunca", puntaje: 0, posicion: 1 },
-        { contenido: "Rara vez", puntaje: 0, posicion: 2 },
-        { contenido: "Algunas veces", puntaje: 0, posicion: 3 },
-        { contenido: "Casi siempre", puntaje: 0, posicion: 4 },
-        { contenido: "Siempre", puntaje: 0, posicion: 5 },
+        { contenido: "Rara vez", puntaje: 1, posicion: 2 },
+        { contenido: "Algunas veces", puntaje: 2, posicion: 3 },
+        { contenido: "Casi siempre", puntaje: 3, posicion: 4 },
+        { contenido: "Siempre", puntaje: 4, posicion: 5 },
       ];
 
       const preguntasSisco = [

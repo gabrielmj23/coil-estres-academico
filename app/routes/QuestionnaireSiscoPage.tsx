@@ -5,6 +5,7 @@ import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import { useState } from "react";
 import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasSISCO } from "~/api/controllers/preguntas";
+import { calculateTotalPoints } from "~/api/utils/utils";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -24,7 +25,7 @@ export default function QuestionnaireSiscoPage({
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answers, setAnswers] = useState<StoredAnswer[]>([]);
-
+  console.log(answers)
   const sections = loaderData.sections;
 
   const currentQuestion = sections[sectionIndex].preguntas[questionIndex];
@@ -64,6 +65,8 @@ export default function QuestionnaireSiscoPage({
       setQuestionIndex((prev) => prev + 1);
     }
   };
+
+  console.log(calculateTotalPoints(answers))
 
   return (
     <>
