@@ -19,7 +19,7 @@
 }
 
 .progress-bar::-webkit-progress-bar {
-    @apply bg-coilbeige;
+    background-color: rgba(224, 197, 191);
     /* Color for the not charged part */
     border-radius: 10px;
     /* Optional: to keep the rounded corners */
