@@ -1,0 +1,69 @@
+import React from "react";
+import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
+import "./SectionPage.css";
+import ArrowRight from "~/icons/ArrowRight";
+import RoundButton from "../RoundButton/RoundButton";
+
+interface SectionPageProps {
+  // props which come from parent to child
+  icon: string;
+  image: string;
+  instruction: string;
+  onContinue: () => void;
+}
+
+/**
+ * Section instructions page for questionnaires
+ * @author Ricardo
+ * @param props
+ * @param props.icon Topbar icon
+ * @param props.image Section image
+ * @param props.instruction Section instruction
+ * @param props.onContinue Handler for continuing from this screen
+ */
+export const SectionPage: React.FC<SectionPageProps> = ({
+  icon,
+  image,
+  instruction,
+  onContinue,
+}) => {
+  const returnClick = () => {
+    window.location.href = "/";
+  };
+
+  return (
+    <div className="container">
+      {/* Top Bar */}
+      <div className="top-bar">
+        <img src={icon} alt="Logo" className="icon" />
+        <div>
+          <PrimaryButton label="←" onClick={returnClick}></PrimaryButton>
+        </div>
+      </div>
+
+      <div className="container">
+        {/* Ilustración */}
+        <div className="image-container">
+          <img
+            src={image} // Reemplaza con la ruta de tu imagen
+            alt="Illustration"
+            className="image"
+          />
+        </div>
+
+        {/* Texto */}
+        <div className="text-container">
+          <p className="text font-bold">{instruction}</p>
+        </div>
+
+        {/* Botón */}
+        <RoundButton
+          icon={<ArrowRight className="h-8" />}
+          onClick={onContinue}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default SectionPage;

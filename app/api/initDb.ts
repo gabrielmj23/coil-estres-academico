@@ -99,14 +99,14 @@ await db.transaction(async (tx) => {
       instruccion:
         "Señala con qué Frecuencia Tuviste las Siguientes Reacciones Cuando Estabas Preocupado o Nervioso",
       posicion: 2,
-      imagen: "/sisco2.svg",
+      imagen: "/sisco1.svg",
     },
     {
       idCuestionario: siscoId,
       instruccion:
         "Señala con qué Frecuencia Utilizaste las Siguientes Estrategias para Enfrentar la Situación que te Preocupó",
       posicion: 3,
-      imagen: "/sisco3.svg",
+      imagen: "/sisco1.svg",
     },
   ];
 

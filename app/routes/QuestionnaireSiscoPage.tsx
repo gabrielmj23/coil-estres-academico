@@ -6,6 +6,7 @@ import { useState } from "react";
 import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasSISCO } from "~/api/controllers/preguntas";
 import { calculateTotalPoints } from "~/api/utils/utils";
+import SectionPage from "~/components/SectionPage/SectionPage";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -25,10 +26,12 @@ export default function QuestionnaireSiscoPage({
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answers, setAnswers] = useState<StoredAnswer[]>([]);
-  console.log(answers)
+  const [showInstructions, setShowInstructions] = useState(true);
+
   const sections = loaderData.sections;
 
-  const currentQuestion = sections[sectionIndex].preguntas[questionIndex];
+  const currentSection = sections[sectionIndex];
+  const currentQuestion = currentSection.preguntas[questionIndex];
 
   /**
    * Saves an answer and advances to next question/section
@@ -39,7 +42,7 @@ export default function QuestionnaireSiscoPage({
     setAnswers((prev) => [
       ...prev,
       {
-        sectionId: sections[sectionIndex].idSeccion,
+        sectionId: currentSection.idSeccion,
         questionId: currentQuestion.idPregunta,
         indicatorId: currentQuestion.idIndicador,
         optionId: selectedOption || 0,
@@ -53,20 +56,32 @@ export default function QuestionnaireSiscoPage({
     setSelectedOption(null);
 
     // Continue
-    if (questionIndex + 1 === sections[sectionIndex].preguntas.length) {
+    if (questionIndex + 1 === currentSection.preguntas.length) {
       if (sectionIndex + 1 === sections.length) {
         console.log("END");
         console.log(answers);
       } else {
         setSectionIndex((prev) => prev + 1);
         setQuestionIndex(0);
+        setShowInstructions(true);
       }
     } else {
       setQuestionIndex((prev) => prev + 1);
     }
   };
 
-  console.log(calculateTotalPoints(answers))
+  console.log(calculateTotalPoints(answers));
+
+  if (showInstructions) {
+    return (
+      <SectionPage
+        icon={""}
+        image={currentSection.imagen}
+        instruction={currentSection.instruccion}
+        onContinue={() => setShowInstructions(false)}
+      />
+    );
+  }
 
   return (
     <>
