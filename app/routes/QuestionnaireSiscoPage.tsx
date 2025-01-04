@@ -75,7 +75,6 @@ export default function QuestionnaireSiscoPage({
   if (showInstructions) {
     return (
       <SectionPage
-        icon={""}
         image={currentSection.imagen}
         instruction={currentSection.instruccion}
         onContinue={() => setShowInstructions(false)}
