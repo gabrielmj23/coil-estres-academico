@@ -7,7 +7,7 @@
 }
 
 .progress-bar {
-    width: 33%;
+    width: 70%;
     height: 10px;
     appearance: none;
     -webkit-appearance: none;
@@ -19,7 +19,7 @@
 }
 
 .progress-bar::-webkit-progress-bar {
-    background-color: #FE8659;
+    @apply bg-coilbeige;
     /* Color for the not charged part */
     border-radius: 10px;
     /* Optional: to keep the rounded corners */
