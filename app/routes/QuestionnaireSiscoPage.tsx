@@ -7,6 +7,7 @@ import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasSISCO } from "~/api/controllers/preguntas";
 import { calculateTotalPoints } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
+import ProgressBar from '../components/ProgressBar/ProgressBar';
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -24,6 +25,7 @@ export default function QuestionnaireSiscoPage({
 }: Route.ComponentProps) {
   const [sectionIndex, setSectionIndex] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [globalIndex, setGlobalIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answers, setAnswers] = useState<StoredAnswer[]>([]);
   const [showInstructions, setShowInstructions] = useState(true);
@@ -32,12 +34,13 @@ export default function QuestionnaireSiscoPage({
 
   const currentSection = sections[sectionIndex];
   const currentQuestion = currentSection.preguntas[questionIndex];
-
+  const TOTAL_QUESTIONS = 29
   /**
    * Saves an answer and advances to next question/section
    * @author Gabriel
    */
   const saveAnswer = () => {
+    setGlobalIndex(globalIndex + 1);
     // Store answer
     setAnswers((prev) => [
       ...prev,
@@ -101,6 +104,8 @@ export default function QuestionnaireSiscoPage({
             disabled={selectedOption === null}
             icon={<ArrowRight className="w-6" />}
           />
+          
+          <ProgressBar progress={globalIndex*100/TOTAL_QUESTIONS}></ProgressBar>
         </div>
       </main>
     </>
