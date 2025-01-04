@@ -1,4 +1,4 @@
-import type { Route } from "./+types/questionnaire-goldberg";
+import type { Route } from "./+types/QuestionnaireGoldbergPage";
 
 export function meta({}: Route.MetaArgs) {
   return [

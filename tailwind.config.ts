@@ -1,7 +1,12 @@
 import type { Config } from "tailwindcss";
+const flowbite = require("flowbite-react/tailwind");
 
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}",
+    flowbite.content(),
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -32,5 +37,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [flowbite.plugin()],
 } satisfies Config;
