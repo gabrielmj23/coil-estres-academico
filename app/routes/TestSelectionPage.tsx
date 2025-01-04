@@ -1,4 +1,4 @@
-import type { Route } from "./+types/test-selection";
+import type { Route } from "./+types/TestSelectionPage";
 
 export function meta({}: Route.MetaArgs) {
   return [

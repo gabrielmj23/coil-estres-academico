@@ -6,10 +6,6 @@ export default [
   route("registrarse", "./routes/RegisterPage.tsx"), // Ruta "/registrarse"
   route("seleccion-de-prueba", "./routes/TestSelectionPage.tsx"), // Ruta "/seleccion-de-prueba"
   
-  // Rutas para los cuestionarios
-  route("prueba-sisco", "./routes/TestSiscoPage.tsx"), // Ruta "/prueba-sisco"
-  route("prueba-goldberg", "./routes/TestGoldbergPage.tsx"), // Ruta "/prueba-goldberg"
-  
   // Cuestionarios: Sisco y Goldberg
   route("cuestionario-sisco", "./routes/QuestionnaireSiscoPage.tsx"), // Ruta "/cuestionario-sisco"
   route("cuestionario-goldberg", "./routes/QuestionnaireGoldbergPage.tsx"), // Ruta "/cuestionario-goldberg"
@@ -20,7 +16,4 @@ export default [
   // Página de recomendaciones y aviso psicológico
   route("recomendaciones", "./routes/RecommendationsPage.tsx"), // Ruta "/recomendaciones"
   route("aviso-psicologico", "./routes/PsychologicalWarningPage.tsx"), // Ruta "/aviso-psicologico"
-  
-  //Test componente
-  route("testcomp", "./routes/testcomp.tsx")
 ] satisfies RouteConfig;

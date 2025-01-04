@@ -1,16 +1,15 @@
 .button {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 0 auto;
-  background-color: #582828;
-  border: 3px solid #b2563c;
+  background-color: var(--coilterracota);
   color: #fff;
   border: none;
   padding: 10px;
   text-align: center;
   align-items: center;
-  justify-content: space-between;
-  font-family: "Arial", sans-serif;
+  justify-content: center;
+  gap: 0.6rem;
   text-decoration: none;
   font-size: 16px;
   font-weight: 600;
@@ -20,5 +19,9 @@
 }
 
 .button:hover {
-  background-color: #b2563c; /* Darker maroon on hover */
+  background-color: var(--coilorange-dark); /* Darker maroon on hover */
+}
+
+.button:disabled {
+  @apply bg-coilgray-dark;
 }
