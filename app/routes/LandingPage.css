@@ -1,0 +1,150 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.welcome-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  height: 100vh;
+  background-color: #f0eaea;
+}
+
+.header img {
+  max-width: 22%;
+  margin: 1% auto -9%;
+  padding: 5px;
+  text-align: center;
+  display: flex;
+}
+
+.content {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 450%;
+  text-align: center;
+  color: var(--coilterracota);
+  margin: 4% 2% 0%;
+}
+
+.highlight {
+  color: var(--coilterracota);
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 600;
+  font-size: 3em;
+  letter-spacing: 8px;
+  margin: 1% 3px 4px;
+  color: var(--coilorange-dark);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.tagline {
+  font-size: 16px;
+  color: var(--coilgray-dark);
+  margin: 1% 16px 1%;
+}
+
+.tagline .highlight-green {
+  color: var(--coilgreen);
+  font-weight: bold;
+}
+
+.illustration img {
+  height: auto;
+  margin: 1% auto 1%;
+  max-width: 65%;
+  border-radius: 24%;
+  box-shadow: 0 4px 10px #f0eaea;
+}
+
+.start-button {
+  background-color: var(--coilterracota);
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.start-button:hover {
+  background-color: #331c1b;
+}
+
+.login-text {
+  font-size: 14px;
+  color: #646464;
+  margin-top: 10px;
+}
+
+.login-link {
+  color: #b2775c;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header img {
+    max-width: 28%;
+    margin: 20px auto -13%;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+  }
+
+  .title {
+    font-size: 390%;
+    text-align: center;
+    margin: 0%;
+    margin-bottom: 6px;
+    line-height: 4rem;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 8px;
+    margin: -21% 3px 4px;
+    color: var(--coilorange-dark); /* Light brown */
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .illustration img {
+    height: auto;
+    margin: -67px auto -30px;
+    max-width: 90%;
+    border-radius: 24%;
+    box-shadow: 0 4px 10px #f0eaea;
+  }
+
+  .tagline {
+    font-size: 19px;
+    color: var(--coilgray-dark);
+    margin: -15% 0 20px;
+  }
+
+  .start-button {
+    font-size: 16px;
+    padding: 12px 30px;
+  }
+}
