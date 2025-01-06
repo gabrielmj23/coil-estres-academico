@@ -1,7 +1,6 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Inter", sans-serif;
 }
 
 .welcome-screen {
@@ -29,37 +28,35 @@ body {
 
 .title {
   font-weight: 900;
-  letter-spacing: 0.1em; /* Espacio entre letras */
   font-size: 450%;
   text-align: center;
-  color: #402320;
+  color: var(--coilterracota);
   margin: 4% 2% 0%;
 }
 
 .highlight {
-  color: #402320;
+  color: var(--coilterracota);
 }
 
 .subtitle {
   font-size: 18px;
-  font-family: "Roboto", sans-serif;
-  font-weight: lighter;
+  font-weight: 600;
   font-size: 3em;
   letter-spacing: 8px;
   margin: 1% 3px 4px;
-  color: #b2563c;
+  color: var(--coilorange-dark);
   line-height: 1.2;
   text-align: center;
 }
 
 .tagline {
   font-size: 16px;
-  color: #646464;
+  color: var(--coilgray-dark);
   margin: 1% 16px 1%;
 }
 
 .tagline .highlight-green {
-  color: #68c473;
+  color: var(--coilgreen);
   font-weight: bold;
 }
 
@@ -72,7 +69,7 @@ body {
 }
 
 .start-button {
-  background-color: #402320;
+  background-color: var(--coilterracota);
   color: #ffffff;
   border: none;
   border-radius: 25px;
@@ -106,7 +103,7 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
   .header img {
-    max-width: 27%;
+    max-width: 28%;
     margin: 20px auto -13%;
     padding: 10px;
     text-align: center;
@@ -117,15 +114,17 @@ body {
     font-size: 390%;
     text-align: center;
     margin: 0%;
+    margin-bottom: 6px;
+    line-height: 4rem;
+    text-wrap: balance;
   }
+
   .subtitle {
-    font-size: 18px;
-    font-family: "Roboto", sans-serif;
-    font-weight: lighter;
-    font-size: 3em;
+    font-size: 2.5rem;
+    font-weight: 300;
     letter-spacing: 8px;
     margin: -21% 3px 4px;
-    color: #b2563c; /* Light brown */
+    color: var(--coilorange-dark); /* Light brown */
     line-height: 1.2;
     text-align: center;
   }
@@ -133,15 +132,15 @@ body {
   .illustration img {
     height: auto;
     margin: -67px auto -30px;
-    max-width: 74%;
+    max-width: 90%;
     border-radius: 24%;
     box-shadow: 0 4px 10px #f0eaea;
   }
 
   .tagline {
     font-size: 19px;
-    color: #646464;
-    margin: -20% 0 20px;
+    color: var(--coilgray-dark);
+    margin: -15% 0 20px;
   }
 
   .start-button {
