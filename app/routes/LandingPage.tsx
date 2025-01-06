@@ -32,7 +32,7 @@ export default function LandingPage() {
       <div className="illustration">
         <img src="/health-home.svg" alt="Ilustración" />
       </div>
-      <PrimaryButton label={"Continuar"} onClick={handleButtonClick} />
+      <PrimaryButton label={"Continuar"} linkTo="seleccion-de-prueba" />
       <p className="login-text">
         ¿Ya tienes una cuenta?{" "}
         <a href="/login" className="login-link">

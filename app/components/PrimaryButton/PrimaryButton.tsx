@@ -1,11 +1,13 @@
 import React from "react";
 import "./PrimaryButton.css";
+import { Link } from "react-router";
 
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   icon?: React.JSX.Element;
+  linkTo?: string;
 }
 
 const PrimaryButton: React.FC<ButtonProps> = ({
@@ -13,7 +15,16 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   onClick,
   disabled,
   icon,
+  linkTo,
 }) => {
+  if (linkTo) {
+    return (
+      <Link to={linkTo} className="button w-2/3 md:w-72">
+        {label}
+        {icon}
+      </Link>
+    );
+  }
   return (
     <button
       className="button w-2/3 md:w-72"
