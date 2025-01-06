@@ -1,4 +1,4 @@
-import type { Route } from "./+types/landing";
+import type { Route } from "./+types/LandingPage";
 import "./LandingPage.css";
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
 

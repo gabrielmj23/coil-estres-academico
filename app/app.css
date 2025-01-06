@@ -2,11 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+  * Color variables for general use
+  */
+:root {
+  --coilterracota: #582828;
+  --coilbeige: #fde0b5;
+  --coilgreen: #9bb168;
+  --coilorange-light: #fe8659;
+  --coilorange-dark: #b2563c;
+  --coilgray-light: #f0eaea;
+  --coilgray-dark: #736b66;
+}
+
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-coilgray-light;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+h1 {
+  @apply text-coilterracota font-bold;
+}
+
+header.questionnaire {
+  @apply bg-coilterracota h-32;
+  -webkit-clip-path: ellipse(85% 100% at 50% -15%);
+  clip-path: ellipse(85% 100% at 50% -15%);
 }
