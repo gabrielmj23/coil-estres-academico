@@ -1,6 +1,7 @@
 import { cuestionarios } from "../tables/cuestionarios";
 import db from "../db";
 import { data } from "react-router";
+import { asc } from "drizzle-orm";
 
 /**
  * Get full list of questionnaires
@@ -10,7 +11,10 @@ import { data } from "react-router";
 export const getCuestionarios = async () => {
   try {
     // Realizar la consulta para obtener todos los cuestionarios
-    const cuestionariosList = await db.select().from(cuestionarios);
+    const cuestionariosList = await db
+      .select()
+      .from(cuestionarios)
+      .orderBy(asc(cuestionarios.id));
 
     return data({ questionnaires: cuestionariosList }, { status: 200 });
   } catch (error) {
