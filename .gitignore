@@ -7,3 +7,4 @@ app/api/src/node_modules
 
 *storybook.log
 .env
+.vercel
