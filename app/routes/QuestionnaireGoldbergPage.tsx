@@ -4,7 +4,7 @@ import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import { useState } from "react";
 import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasGoldBerg } from "~/api/controllers/preguntas";
-import { calculateTotalPoints } from "~/api/utils/utils";
+import { calculatePointsGoldberg } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 
@@ -72,7 +72,7 @@ export default function QuestionnaireGoldbergPage({
     }
   };
 
-  console.log(calculateTotalPoints(answers));
+  console.log(calculatePointsGoldberg(answers));
 
   if (showInstructions) {
     return (
