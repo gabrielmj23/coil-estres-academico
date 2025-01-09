@@ -147,3 +147,20 @@ export const getPreguntasSISCO = async () => {
     );
   }
 };
+
+export const getPreguntasGoldBerg = async () => {
+  try {
+    const goldbergId = await db
+      .select({ id: cuestionarios.id })
+      .from(cuestionarios)
+      .where(eq(cuestionarios.nombre, "Goldberg"));
+    return await getPreguntasPorCuestionario(goldbergId[0].id);
+  } catch (error) {
+    // En caso de error, responder con un mensaje de error
+    console.error("Error al obtener las preguntas del cuestionario:", error);
+    throw data(
+      { message: "Error al obtener las preguntas del cuestionario." },
+      { status: 500 }
+    );
+  }
+};
