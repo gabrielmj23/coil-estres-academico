@@ -1,4 +1,4 @@
-CREATE TABLE "ejercicios" (
+CREATE TABLE IF NOT EXISTS "ejercicios" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"nombre" varchar(120) NOT NULL,
 	"descripcion" text NOT NULL,
