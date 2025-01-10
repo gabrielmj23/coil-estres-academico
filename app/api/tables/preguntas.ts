@@ -30,15 +30,11 @@ export const preguntas = pgTable(
       pk: primaryKey({
         columns: [table.idCuestionario, table.idSeccion, table.id],
       }),
-    },
-    {
       seccionForeignKey: foreignKey({
         columns: [table.idCuestionario, table.idSeccion],
         foreignColumns: [secciones.idCuestionario, secciones.id],
         name: "seccion_fk",
       }),
-    },
-    {
       checkConstraint: check(
         "pregunta_posicion_check",
         sql`${table.posicion} > 0`

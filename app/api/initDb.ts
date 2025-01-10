@@ -5,6 +5,7 @@ import { indicadores } from "./tables/indicadores";
 import { secciones } from "./tables/secciones";
 import { preguntas } from "./tables/preguntas";
 import { opciones } from "./tables/opciones";
+import { ejercicios } from "./tables/ejercicios";
 
 console.log("init-db: Iniciando...");
 await db.transaction(async (tx) => {
@@ -14,6 +15,7 @@ await db.transaction(async (tx) => {
   await tx.delete(secciones);
   await tx.delete(indicadores);
   await tx.delete(cuestionarios);
+  await tx.delete(ejercicios);
 
   // Restart sequences
   await tx.execute(`ALTER SEQUENCE cuestionarios_id_seq RESTART WITH 1`);
@@ -21,6 +23,7 @@ await db.transaction(async (tx) => {
   await tx.execute(`ALTER SEQUENCE secciones_id_seq RESTART WITH 1`);
   await tx.execute(`ALTER SEQUENCE preguntas_id_seq RESTART WITH 1`);
   await tx.execute(`ALTER SEQUENCE opciones_id_seq RESTART WITH 1`);
+  await tx.execute(`ALTER SEQUENCE ejercicios_id_seq RESTART WITH 1`);
 
   // #region Questionnaires
   console.log("init-db: Creando cuestionarios...");
@@ -557,6 +560,45 @@ await db.transaction(async (tx) => {
   }
   console.log("init-db: Preguntas para Goldberg creadas");
   // #endregion
+
+  // #region Ejercicios
+  console.log("init-db: Creando ejercicios");
+  const ejerciciosList = [
+    {
+      nombre: "Respiración Profunda",
+      descripcion:
+        "Al inhalar y exhalar conscientemente, se induce una respuesta de relajación, por lo que es un método inmediato para mitigar el estrés",
+      icono: "/respiracion.png",
+    },
+    {
+      nombre: "Terapia Manual",
+      descripcion:
+        "A través de manipulaciones suaves y profundas, los fisioterapeutas ayudan a liberar las contracturas que se producen por el estrés",
+      icono: "/masaje.png",
+    },
+    {
+      nombre: "Ejercicio Terapéutico",
+      descripcion:
+        "Actividades como el yoga, el pilates y los estiramientos pueden promover la liberación de endorfinas, las hormonas de la felicidad",
+      icono: "/yoga.png",
+    },
+    {
+      nombre: "Terapia de Movimiento",
+      descripcion:
+        "Movimientos lentos y controlados, como los utilizados en el Tai Chi o el yoga, ayudan a alinear la mente y el cuerpo",
+      icono: "/taichi.png",
+    },
+    {
+      nombre: "Estimulación Sensorial",
+      descripcion:
+        "Estas técnicas se centran en calmar los sentidos y disminuir la sobrecarga emocional",
+      icono: "/sensorial.png",
+    },
+  ];
+  await tx.insert(ejercicios).values(ejerciciosList);
+  console.log("init-db: Ejercicios creados")
+  // #endregion
+
   console.log("init-db: Ejecutando transacción...");
 });
 console.log("init-db: Finalizado");
