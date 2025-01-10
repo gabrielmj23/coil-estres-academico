@@ -24,16 +24,12 @@ export const SectionPage: React.FC<SectionPageProps> = ({
   instruction,
   onContinue,
 }) => {
-  const returnClick = () => {
-    window.location.href = "/";
-  };
-
   return (
     <div className="container">
       {/* Top Bar */}
       <div className="top-bar">
         <div>
-          <PrimaryButton label="←" onClick={returnClick}></PrimaryButton>
+          <PrimaryButton label="←" linkTo="/" />
         </div>
       </div>
 

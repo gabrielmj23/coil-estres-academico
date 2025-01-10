@@ -19,7 +19,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
 }) => {
   if (linkTo) {
     return (
-      <Link to={linkTo} className="button w-2/3 md:w-72">
+      <Link to={linkTo} className="button w-2/3 md:w-72" viewTransition>
         {label}
         {icon}
       </Link>
