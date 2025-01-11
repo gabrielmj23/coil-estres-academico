@@ -34,7 +34,8 @@ export default function QuestionnaireSiscoPage({
 
   const currentSection = sections[sectionIndex];
   const currentQuestion = currentSection.preguntas[questionIndex];
-  const TOTAL_QUESTIONS = 29
+  const TOTAL_QUESTIONS = 29;
+  
   /**
    * Saves an answer and advances to next question/section
    * @author Gabriel
