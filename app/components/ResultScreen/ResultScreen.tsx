@@ -1,10 +1,8 @@
 import React from "react";
 
 interface ResultCardProps {
-    hasSymptoms: boolean;
-
+  hasSymptoms: boolean;
 }
-
 
 export const ResultCard: React.FC<ResultCardProps> = ({ hasSymptoms }) => {
   // Datos dinámicos basados en el estado de síntomas
@@ -12,13 +10,14 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hasSymptoms }) => {
     ? {
         title: "Resultado",
         message: "Presenta síntomas de Ansiedad/Depresión y Disfunción Social.",
-        imageSrc: "url-del-icono-con-síntomas", // Coloca la URL de la imagen con síntomas
+        imageSrc: "/con-sintomas.svg",
         borderColor: "transparent", // Azul para el borde
       }
     : {
         title: "Resultado",
-        message: "No presenta síntomas de Ansiedad/Depresión ni Disfunción Social.",
-        imageSrc: "url-del-icono-sin-síntomas", // Coloca la URL de la imagen sin síntomas
+        message:
+          "No presenta síntomas de Ansiedad/Depresión ni Disfunción Social.",
+        imageSrc: "/sin-sintomas.svg",
         borderColor: "transparent", // Sin borde para el caso positivo
       };
 
@@ -50,11 +49,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hasSymptoms }) => {
     <div style={containerStyle}>
       <h3>{data.title}</h3>
       <div style={{ width: "150px", margin: "0 auto" }}>
-        <img
-          src={data.imageSrc}
-          alt="Resultado"
-          style={imageStyle}
-        />
+        <img src={data.imageSrc} alt="Resultado" style={imageStyle} />
       </div>
       <p style={messageStyle}>{data.message}</p>
     </div>
