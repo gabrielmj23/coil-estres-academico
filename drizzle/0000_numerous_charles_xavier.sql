@@ -40,7 +40,26 @@ CREATE TABLE IF NOT EXISTS "secciones" (
 	"imagen" text NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "opciones" ADD CONSTRAINT "opciones_id_cuestionario_cuestionarios_id_fk" FOREIGN KEY ("id_cuestionario") REFERENCES "public"."cuestionarios"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "preguntas" ADD CONSTRAINT "preguntas_id_cuestionario_cuestionarios_id_fk" FOREIGN KEY ("id_cuestionario") REFERENCES "public"."cuestionarios"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "preguntas" ADD CONSTRAINT "preguntas_id_indicador_indicadores_id_fk" FOREIGN KEY ("id_indicador") REFERENCES "public"."indicadores"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "secciones" ADD CONSTRAINT "secciones_id_cuestionario_cuestionarios_id_fk" FOREIGN KEY ("id_cuestionario") REFERENCES "public"."cuestionarios"("id") ON DELETE no action ON UPDATE no action;
+DO $$ BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'opciones_id_cuestionario_cuestionarios_id_fk') THEN
+		ALTER TABLE "opciones" ADD CONSTRAINT "opciones_id_cuestionario_cuestionarios_id_fk" FOREIGN KEY ("id_cuestionario") REFERENCES "public"."cuestionarios"("id") ON DELETE no action ON UPDATE no action;
+	END IF;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'preguntas_id_cuestionario_cuestionarios_id_fk') THEN
+		ALTER TABLE "preguntas" ADD CONSTRAINT "preguntas_id_cuestionario_cuestionarios_id_fk" FOREIGN KEY ("id_cuestionario") REFERENCES "public"."cuestionarios"("id") ON DELETE no action ON UPDATE no action;
+	END IF;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'preguntas_id_indicador_indicadores_id_fk') THEN
+		ALTER TABLE "preguntas" ADD CONSTRAINT "preguntas_id_indicador_indicadores_id_fk" FOREIGN KEY ("id_indicador") REFERENCES "public"."indicadores"("id") ON DELETE no action ON UPDATE no action;
+	END IF;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+	IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'secciones_id_cuestionario_cuestionarios_id_fk') THEN
+		ALTER TABLE "secciones" ADD CONSTRAINT "secciones_id_cuestionario_cuestionarios_id_fk" FOREIGN KEY ("id_cuestionario") REFERENCES "public"."cuestionarios"("id") ON DELETE no action ON UPDATE no action;
+	END IF;
+END $$;

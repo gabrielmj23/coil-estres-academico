@@ -24,8 +24,6 @@ export const secciones = pgTable(
   (table) => [
     {
       pk: primaryKey({ columns: [table.idCuestionario, table.id] }),
-    },
-    {
       checkConstraint: check(
         "seccion_posicion_check",
         sql`${table.posicion} > 0`

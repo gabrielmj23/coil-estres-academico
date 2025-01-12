@@ -36,8 +36,6 @@ export const opciones = pgTable(
           table.id,
         ],
       }),
-    },
-    {
       seccionForeignKey: foreignKey({
         columns: [table.idCuestionario, table.idSeccion],
         foreignColumns: [secciones.idCuestionario, secciones.id],
@@ -52,8 +50,6 @@ export const opciones = pgTable(
         ],
         name: "pregunta_fk",
       }),
-    },
-    {
       posicionCheck: check("opcion_posicion_check", sql`${table.posicion} > 0`),
     },
   ]
