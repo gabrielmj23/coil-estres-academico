@@ -38,7 +38,7 @@ export default function QuestionnaireSiscoPage({
   const currentSection = sections[sectionIndex];
   const currentQuestion = currentSection.preguntas[questionIndex];
   const TOTAL_QUESTIONS = 29;
-
+  console.log(calculatePointsSISCO(answers))
   /**
    * Saves an answer and advances to next question/section
    * @author Gabriel
@@ -46,8 +46,8 @@ export default function QuestionnaireSiscoPage({
   const saveAnswer = () => {
     setGlobalIndex(globalIndex + 1);
     // Store answer
-    setAnswers((prev) => [
-      ...prev,
+    const newAnswers = [
+      ...answers, 
       {
         sectionId: currentSection.idSeccion,
         questionId: currentQuestion.idPregunta,
@@ -58,7 +58,8 @@ export default function QuestionnaireSiscoPage({
           currentQuestion.opciones.find((op) => op.idOpcion === selectedOption)
             ?.puntaje ?? 0,
       },
-    ]);
+    ]
+    setAnswers(newAnswers);
 
     // Clear selection
     setSelectedOption(null);
@@ -70,7 +71,7 @@ export default function QuestionnaireSiscoPage({
         localStorage.setItem("testType", "SISCO");
         localStorage.setItem(
           "scoreStress",
-          String(calculatePointsSISCO(answers))
+          String(calculatePointsSISCO(newAnswers))
         );
         navigate("/cuestionario-completado");
       } else {
