@@ -55,7 +55,7 @@ export default function QuestionnaireCompletionPage({
       <>
         <header className="questionnaire"></header>
         <main className="flex flex-col h-[75dvh] justify-between">
-          <StressLevel percentage={Number(loaderData.scoreStress)} />
+          <StressLevel percentage={Number(loaderData.scoreStress)/116} />
           <div className="flex flex-col gap-3 items-center">
             <PrimaryButton label="Recomendaciones" linkTo="/recomendaciones" />
             <SecondaryButton label="Volver a Inicio" linkTo="/" />

@@ -36,10 +36,12 @@ export const StressLevel: React.FC<StressLevelProps> = ({ percentage }) => {
     borderColor: getColor(percentage),
   };
 
+  const roundedPercentage = Math.round(percentage * 100)
+
   return (
     <div className="text-center pt-12">
       <h1 className="text-3xl">Nivel de Estrés Académico</h1>
-      <div style={circleStyle}>{percentage}%</div>
+      <div style={circleStyle}>{roundedPercentage}%</div>
     </div>
   );
 };
