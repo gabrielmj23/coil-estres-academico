@@ -1,5 +1,5 @@
 import React from "react";
-import "./PrimaryButton.css";
+import "./SecondaryButton.css";
 import { Link } from "react-router";
 
 interface ButtonProps {
@@ -10,7 +10,7 @@ interface ButtonProps {
   linkTo?: string;
 }
 
-const PrimaryButton: React.FC<ButtonProps> = ({
+const SecondaryButton: React.FC<ButtonProps> = ({
   label,
   onClick,
   disabled,
@@ -19,7 +19,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
 }) => {
   if (linkTo) {
     return (
-      <Link to={linkTo} className="button w-2/3 md:w-72" viewTransition>
+      <Link to={linkTo} className="button-secondary w-2/3 md:w-72" viewTransition>
         {label}
         {icon}
       </Link>
@@ -27,7 +27,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   }
   return (
     <button
-      className="button w-2/3 md:w-72"
+      className="button-secondary w-2/3 md:w-72"
       onClick={onClick}
       disabled={disabled}
     >
@@ -37,4 +37,4 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   );
 };
 
-export default PrimaryButton;
+export default SecondaryButton;

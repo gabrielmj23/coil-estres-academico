@@ -1,8 +1,6 @@
-
 export interface PointsByIndicator {
-    [idIndicador: number]: number;
-  }
-  
+  [nombreIndicador: string]: number;
+}
 
 /**
  * Calculates the total points from all answers
@@ -11,15 +9,17 @@ export interface PointsByIndicator {
  * @returns {number} Total points
  */
 export const calculatePointsSISCO = (answers: StoredAnswer[]): number => {
-    return answers.reduce((total, answer) => total + answer.points, 0);
-}
+  return answers.reduce((total, answer) => total + answer.points, 0);
+};
 
-export const calculatePointsGoldberg = (answers: StoredAnswer[]): PointsByIndicator => {
-    return answers.reduce((acc, answer) => {
-        if(!acc[answer.indicatorId]) {
-            acc[answer.indicatorId] = 0;
-        }
-        acc[answer.indicatorId] += answer.points;
-        return acc;
-    }, {} as PointsByIndicator)
-}
+export const calculatePointsGoldberg = (
+  answers: StoredAnswer[]
+): PointsByIndicator => {
+  return answers.reduce((acc, answer) => {
+    if (!acc[answer.indicatorName]) {
+      acc[answer.indicatorName] = 0;
+    }
+    acc[answer.indicatorName] += answer.points;
+    return acc;
+  }, {} as PointsByIndicator);
+};

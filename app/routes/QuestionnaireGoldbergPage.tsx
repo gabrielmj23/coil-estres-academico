@@ -7,6 +7,7 @@ import { getPreguntasGoldBerg } from "~/api/controllers/preguntas";
 import { calculatePointsGoldberg } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
+import { useNavigate } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -29,11 +30,14 @@ export default function QuestionnaireGoldbergPage({
   const [answers, setAnswers] = useState<StoredAnswer[]>([]);
   const [showInstructions, setShowInstructions] = useState(true);
 
+  const navigate = useNavigate();
+
   const sections = loaderData.sections;
   const currentSection = sections[sectionIndex];
   const currentQuestion = currentSection.preguntas[questionIndex];
 
   const TOTAL_QUESTIONS = 12;
+
   /**
    * Saves an answer and advances to next question/section
    * @author Gabriel
@@ -47,6 +51,7 @@ export default function QuestionnaireGoldbergPage({
         sectionId: currentSection.idSeccion,
         questionId: currentQuestion.idPregunta,
         indicatorId: currentQuestion.idIndicador,
+        indicatorName: currentQuestion.nombreIndicador,
         optionId: selectedOption || 0,
         points:
           currentQuestion.opciones.find((op) => op.idOpcion === selectedOption)
@@ -60,9 +65,20 @@ export default function QuestionnaireGoldbergPage({
     // Continue
     if (questionIndex + 1 === currentSection.preguntas.length) {
       if (sectionIndex + 1 === sections.length) {
-        console.log("END");
-        console.log(answers);
+        // Test has finished
+        const results = calculatePointsGoldberg(answers);
+        localStorage.setItem("testType", "Goldberg");
+        localStorage.setItem(
+          "scoreAnxiety",
+          String(results["Ansiedad/Depresión"])
+        );
+        localStorage.setItem(
+          "scoreSocial",
+          String(results["Disfunción Social"])
+        );
+        navigate("/cuestionario-completado");
       } else {
+        // Go to next section
         setSectionIndex((prev) => prev + 1);
         setQuestionIndex(0);
         setShowInstructions(true);
@@ -71,8 +87,6 @@ export default function QuestionnaireGoldbergPage({
       setQuestionIndex((prev) => prev + 1);
     }
   };
-
-  console.log(calculatePointsGoldberg(answers));
 
   if (showInstructions) {
     return (

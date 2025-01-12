@@ -5,6 +5,7 @@ import { and, asc, eq } from "drizzle-orm";
 import { opciones } from "../tables/opciones";
 import { secciones } from "../tables/secciones";
 import { cuestionarios } from "../tables/cuestionarios";
+import { indicadores } from "../tables/indicadores";
 
 /**
  * Get full list of questions, with their options, from a questionnaire
@@ -24,6 +25,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
         imagenSeccion: secciones.imagen,
         contenidoPregunta: preguntas.contenido,
         indicadorPregunta: preguntas.idIndicador,
+        nombreIndicador: indicadores.nombre,
         contenidoOpcion: opciones.contenido,
         puntajeOpcion: opciones.puntaje,
         posicionSeccion: secciones.posicion,
@@ -38,6 +40,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
           eq(secciones.id, preguntas.idSeccion)
         )
       )
+      .innerJoin(indicadores, eq(indicadores.id, preguntas.idIndicador))
       .innerJoin(
         opciones,
         and(
@@ -71,6 +74,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
             {
               idPregunta: seccion.idPregunta,
               idIndicador: seccion.indicadorPregunta || 0,
+              nombreIndicador: seccion.nombreIndicador || "",
               contenido: seccion.contenidoPregunta,
               posicion: seccion.posicionPregunta,
               opciones: [
@@ -93,6 +97,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
           parsedSections[seccionIndex].preguntas.push({
             idPregunta: seccion.idPregunta,
             idIndicador: seccion.indicadorPregunta || 0,
+            nombreIndicador: seccion.nombreIndicador || "",
             contenido: seccion.contenidoPregunta,
             posicion: seccion.posicionPregunta,
             opciones: [

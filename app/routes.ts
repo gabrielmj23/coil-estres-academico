@@ -11,7 +11,7 @@ export default [
   route("cuestionario-goldberg", "./routes/QuestionnaireGoldbergPage.tsx"), // Ruta "/cuestionario-goldberg"
 
   // Completado del cuestionario
-  route("completado-cuestionario", "./routes/QuestionnaireCompletionPage.tsx"), // Ruta "/completado-cuestionario"
+  route("cuestionario-completado", "./routes/QuestionnaireCompletionPage.tsx"), // Ruta "/cuestionario-completado"
 
   // Página de recomendaciones y aviso psicológico
   route("recomendaciones", "./routes/RecommendationsPage.tsx"), // Ruta "/recomendaciones"
