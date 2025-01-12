@@ -12,8 +12,8 @@ import { useNavigate } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Cuestionario SISCO" },
-    { name: "description", content: "Responde al cuestionario SISCO." },
+    { title: "Cuestionario Estrés Académico" },
+    { name: "description", content: "Responde al cuestionario de Estrés Académico." },
   ];
 }
 

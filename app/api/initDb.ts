@@ -29,14 +29,14 @@ await db.transaction(async (tx) => {
   console.log("init-db: Creando cuestionarios...");
   const predefinedCuestionarios = [
     {
-      nombre: "SISCO",
+      nombre: "Estrés Académico",
       resumen: "Cuestionario para medir el nivel de estrés académico",
       descripcion:
         "Cuestionario para medir el nivel de estrés académico en estudiantes",
       icono: "/siscoIcono.svg",
     },
     {
-      nombre: "Goldberg",
+      nombre: "Salud Mental",
       resumen:
         "Cuestionario para medir el nivel de Ansiedad/Depresión y Disfunción Social",
       descripcion:
@@ -76,14 +76,14 @@ await db.transaction(async (tx) => {
   const siscoIdList = await tx
     .select({ id: cuestionarios.id })
     .from(cuestionarios)
-    .where(eq(cuestionarios.nombre, "SISCO"))
+    .where(eq(cuestionarios.nombre, "Estrés Académico"))
     .limit(1);
   const siscoId = siscoIdList[0].id;
 
   const ghqIdList = await tx
     .select({ id: cuestionarios.id })
     .from(cuestionarios)
-    .where(eq(cuestionarios.nombre, "Goldberg"))
+    .where(eq(cuestionarios.nombre, "Salud Mental"))
     .limit(1);
   const goldbergId = ghqIdList[0].id;
 

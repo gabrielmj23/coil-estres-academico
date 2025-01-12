@@ -27,7 +27,7 @@ export default function TestSelectionPage({
 
   const selectedTest = questionnaires.find((test) => test.id === selectedId);
   const url = selectedTest
-    ? selectedTest.nombre === "SISCO"
+    ? selectedTest.nombre === "Estrés Académico"
       ? "/cuestionario-sisco"
       : "/cuestionario-goldberg"
     : "";
