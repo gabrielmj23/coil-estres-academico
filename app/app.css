@@ -29,3 +29,7 @@ header.questionnaire {
   -webkit-clip-path: ellipse(85% 100% at 50% -15%);
   clip-path: ellipse(85% 100% at 50% -15%);
 }
+
+header.primary {
+  @apply bg-coilterracota h-24;
+}

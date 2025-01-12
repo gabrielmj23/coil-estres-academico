@@ -5,7 +5,7 @@ import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import { useState } from "react";
 import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasSISCO } from "~/api/controllers/preguntas";
-import { calculateTotalPoints } from "~/api/utils/utils";
+import { calculatePointsSISCO } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
 import ProgressBar from '../components/ProgressBar/ProgressBar';
 
@@ -74,8 +74,8 @@ export default function QuestionnaireSiscoPage({
     }
   };
 
-  console.log(calculateTotalPoints(answers));
-
+  console.log(calculatePointsSISCO(answers));
+  console.log(answers)
   if (showInstructions) {
     return (
       <SectionPage
