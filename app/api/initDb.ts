@@ -400,10 +400,10 @@ await db.transaction(async (tx) => {
       posicion: 1,
       idIndicador: disfuncionId,
       opciones: [
-        { contenido: "Mejor que lo habitual", puntaje: 1, posicion: 1 },
-        { contenido: "Igual que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Menos que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho menos que lo habitual", puntaje: 4, posicion: 4 },
+        { contenido: "Mejor que lo habitual", puntaje: 0, posicion: 1 },
+        { contenido: "Igual que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Menos que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho menos que lo habitual", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -411,10 +411,10 @@ await db.transaction(async (tx) => {
       posicion: 2,
       idIndicador: ansiedadId,
       opciones: [
-        { contenido: "No, en absoluto", puntaje: 1, posicion: 1 },
-        { contenido: "No más que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Bastante más que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho más", puntaje: 4, posicion: 4 },
+        { contenido: "No, en absoluto", puntaje: 0, posicion: 1 },
+        { contenido: "No más que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho más", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -422,10 +422,10 @@ await db.transaction(async (tx) => {
       posicion: 3,
       idIndicador: disfuncionId,
       opciones: [
-        { contenido: "Más que lo habitual", puntaje: 1, posicion: 1 },
-        { contenido: "Igual que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Menos útil que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho menos", puntaje: 4, posicion: 4 },
+        { contenido: "Más que lo habitual", puntaje: 0, posicion: 1 },
+        { contenido: "Igual que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Menos útil que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho menos", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -433,10 +433,10 @@ await db.transaction(async (tx) => {
       posicion: 4,
       idIndicador: disfuncionId,
       opciones: [
-        { contenido: "Más capaz que lo habitual", puntaje: 1, posicion: 1 },
-        { contenido: "Igual que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Menos capaz que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho menos", puntaje: 4, posicion: 4 },
+        { contenido: "Más capaz que lo habitual", puntaje: 0, posicion: 1 },
+        { contenido: "Igual que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Menos capaz que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho menos", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -444,10 +444,10 @@ await db.transaction(async (tx) => {
       posicion: 5,
       idIndicador: ansiedadId,
       opciones: [
-        { contenido: "No, en absoluto", puntaje: 1, posicion: 1 },
-        { contenido: "No más que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Bastante más que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho más", puntaje: 4, posicion: 4 },
+        { contenido: "No, en absoluto", puntaje: 0, posicion: 1 },
+        { contenido: "No más que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho más", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -455,10 +455,10 @@ await db.transaction(async (tx) => {
       posicion: 6,
       idIndicador: ansiedadId,
       opciones: [
-        { contenido: "No, en absoluto", puntaje: 1, posicion: 1 },
-        { contenido: "No más que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Bastante más que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho más", puntaje: 4, posicion: 4 },
+        { contenido: "No, en absoluto", puntaje: 0, posicion: 1 },
+        { contenido: "No más que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho más", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -467,10 +467,10 @@ await db.transaction(async (tx) => {
       posicion: 7,
       idIndicador: disfuncionId,
       opciones: [
-        { contenido: "Más que lo habitual", puntaje: 1, posicion: 1 },
-        { contenido: "Igual que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Menos que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho menos", puntaje: 4, posicion: 4 },
+        { contenido: "Más que lo habitual", puntaje: 0, posicion: 1 },
+        { contenido: "Igual que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Menos que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho menos", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -478,10 +478,10 @@ await db.transaction(async (tx) => {
       posicion: 8,
       idIndicador: disfuncionId,
       opciones: [
-        { contenido: "Más capaz que lo habitual", puntaje: 1, posicion: 1 },
-        { contenido: "Igual que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Menos capaz que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho menos", puntaje: 4, posicion: 4 },
+        { contenido: "Más capaz que lo habitual", puntaje: 0, posicion: 1 },
+        { contenido: "Igual que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Menos capaz que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho menos", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -489,10 +489,10 @@ await db.transaction(async (tx) => {
       posicion: 9,
       idIndicador: ansiedadId,
       opciones: [
-        { contenido: "No, en absoluto", puntaje: 1, posicion: 1 },
-        { contenido: "No más que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Bastante más que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho más", puntaje: 4, posicion: 4 },
+        { contenido: "No, en absoluto", puntaje: 0, posicion: 1 },
+        { contenido: "No más que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho más", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -500,10 +500,10 @@ await db.transaction(async (tx) => {
       posicion: 10,
       idIndicador: ansiedadId,
       opciones: [
-        { contenido: "No, en absoluto", puntaje: 1, posicion: 1 },
-        { contenido: "No más que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Bastante más que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho más", puntaje: 4, posicion: 4 },
+        { contenido: "No, en absoluto", puntaje: 0, posicion: 1 },
+        { contenido: "No más que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho más", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -511,10 +511,10 @@ await db.transaction(async (tx) => {
       posicion: 11,
       idIndicador: ansiedadId,
       opciones: [
-        { contenido: "No, en absoluto", puntaje: 1, posicion: 1 },
-        { contenido: "No más que lo habitual", puntaje: 2, posicion: 2 },
-        { contenido: "Bastante más que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho más", puntaje: 4, posicion: 4 },
+        { contenido: "No, en absoluto", puntaje: 0, posicion: 1 },
+        { contenido: "No más que lo habitual", puntaje: 1, posicion: 2 },
+        { contenido: "Bastante más que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho más", puntaje: 3, posicion: 4 },
       ],
     },
     {
@@ -523,14 +523,14 @@ await db.transaction(async (tx) => {
       posicion: 12,
       idIndicador: disfuncionId,
       opciones: [
-        { contenido: "Más feliz que lo habitual", puntaje: 1, posicion: 1 },
+        { contenido: "Más feliz que lo habitual", puntaje: 0, posicion: 1 },
         {
           contenido: "Aproximadamente lo mismo que lo habitual",
-          puntaje: 2,
+          puntaje: 1,
           posicion: 2,
         },
-        { contenido: "Menos feliz que lo habitual", puntaje: 3, posicion: 3 },
-        { contenido: "Mucho menos que lo habitual", puntaje: 4, posicion: 4 },
+        { contenido: "Menos feliz que lo habitual", puntaje: 2, posicion: 3 },
+        { contenido: "Mucho menos que lo habitual", puntaje: 3, posicion: 4 },
       ],
     },
   ];
