@@ -14,6 +14,7 @@ type OpcionesReturn = {
 type PreguntasReturn = {
   idPregunta: number;
   idIndicador: number;
+  nombreIndicador: string;
   contenido: string;
   posicion: number;
   opciones: OpcionesReturn[];
@@ -38,5 +39,6 @@ type StoredAnswer = {
   questionId: number;
   optionId: number;
   indicatorId: number;
+  indicatorName: string;
   points: number;
 };

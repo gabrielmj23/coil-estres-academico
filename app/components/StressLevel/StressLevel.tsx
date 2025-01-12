@@ -22,22 +22,23 @@ export const StressLevel: React.FC<StressLevelProps> = ({ percentage }) => {
   const circleStyle: React.CSSProperties = {
     backgroundColor: getbgcolor(percentage),
     color: getColor(percentage),
-    width: "150px",
-    height: "150px",
+    width: "225px",
+    height: "225px",
     borderRadius: "50%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: "36px",
+    fontSize: "3.25rem",
     fontWeight: "bold",
-    margin: "20px auto",
+    marginInline: "auto",
+    marginTop: "40px",
     border: "5px solid",
     borderColor: getColor(percentage),
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
-      <h3>Nivel de Estrés Académico</h3>
+    <div className="text-center pt-12">
+      <h1 className="text-3xl">Nivel de Estrés Académico</h1>
       <div style={circleStyle}>{percentage}%</div>
     </div>
   );

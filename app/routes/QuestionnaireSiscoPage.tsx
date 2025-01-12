@@ -7,7 +7,8 @@ import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasSISCO } from "~/api/controllers/preguntas";
 import { calculatePointsSISCO } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
-import ProgressBar from '../components/ProgressBar/ProgressBar';
+import ProgressBar from "../components/ProgressBar/ProgressBar";
+import { useNavigate } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -30,12 +31,14 @@ export default function QuestionnaireSiscoPage({
   const [answers, setAnswers] = useState<StoredAnswer[]>([]);
   const [showInstructions, setShowInstructions] = useState(true);
 
+  const navigate = useNavigate();
+
   const sections = loaderData.sections;
 
   const currentSection = sections[sectionIndex];
   const currentQuestion = currentSection.preguntas[questionIndex];
   const TOTAL_QUESTIONS = 29;
-  
+
   /**
    * Saves an answer and advances to next question/section
    * @author Gabriel
@@ -49,6 +52,7 @@ export default function QuestionnaireSiscoPage({
         sectionId: currentSection.idSeccion,
         questionId: currentQuestion.idPregunta,
         indicatorId: currentQuestion.idIndicador,
+        indicatorName: currentQuestion.nombreIndicador,
         optionId: selectedOption || 0,
         points:
           currentQuestion.opciones.find((op) => op.idOpcion === selectedOption)
@@ -62,9 +66,15 @@ export default function QuestionnaireSiscoPage({
     // Continue
     if (questionIndex + 1 === currentSection.preguntas.length) {
       if (sectionIndex + 1 === sections.length) {
-        console.log("END");
-        console.log(answers);
+        // Test has ended
+        localStorage.setItem("testType", "SISCO");
+        localStorage.setItem(
+          "scoreStress",
+          String(calculatePointsSISCO(answers))
+        );
+        navigate("/cuestionario-completado");
       } else {
+        // Go to next section
         setSectionIndex((prev) => prev + 1);
         setQuestionIndex(0);
         setShowInstructions(true);
@@ -74,8 +84,6 @@ export default function QuestionnaireSiscoPage({
     }
   };
 
-  console.log(calculatePointsSISCO(answers));
-  console.log(answers)
   if (showInstructions) {
     return (
       <SectionPage
@@ -105,8 +113,10 @@ export default function QuestionnaireSiscoPage({
             disabled={selectedOption === null}
             icon={<ArrowRight className="w-6" />}
           />
-          
-          <ProgressBar progress={globalIndex*100/TOTAL_QUESTIONS}></ProgressBar>
+
+          <ProgressBar
+            progress={(globalIndex * 100) / TOTAL_QUESTIONS}
+          ></ProgressBar>
         </div>
       </main>
     </>
