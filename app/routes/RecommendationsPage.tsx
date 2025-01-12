@@ -1,9 +1,8 @@
+import { Link } from "react-router";
 import type { Route } from "./+types/RecommendationsPage";
 import { getejercios } from "~/api/controllers/ejercicios";
 import Card from "~/components/SelectorCuestionario/SelectorCuestionario";
-import { useState } from "react";
-import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
-import ArrowRight from "~/icons/ArrowRight";
+import ArrowLeft from "~/icons/ArrowLeft";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,16 +15,22 @@ export async function loader() {
   return getejercios();
 }
 
-
-export default function RecommendationsPage({loaderData}:Route.ComponentProps) {
+export default function RecommendationsPage({
+  loaderData,
+}: Route.ComponentProps) {
   const { ejercicios } = loaderData;
-  const [selectedId, setSelectedId] = useState(0);
-  const selectedTest = ejercicios.find((ejercicio) => ejercicio.id === selectedId);
-  const url = selectedTest
-  return <div className="h-[100dvh]">
-          <header className="primary rounded-b-[32px] mb-12"></header>
-            <main className="flex flex-col gap-5">
-            <h1 className="text-3xl text-center">Ejercicios Recomendados</h1>
+
+  return (
+    <div className="h-[100dvh]">
+      <header className="questionnaire"></header>
+      <Link
+        to="/cuestionario-completado"
+        className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
+      >
+        <ArrowLeft />
+      </Link>
+      <main className="flex flex-col gap-5 pb-12">
+        <h1 className="text-3xl text-center">Ejercicios Recomendados</h1>
         {!ejercicios.length && <p>No hay recomendaciones para mostrar.</p>}
         <div className="px-6 flex flex-col gap-5">
           {ejercicios.map((questionnaire) => (
@@ -34,12 +39,12 @@ export default function RecommendationsPage({loaderData}:Route.ComponentProps) {
               title={questionnaire.nombre}
               description={questionnaire.descripcion}
               image={questionnaire.icono}
-              selected={selectedId === questionnaire.id}
-              onClick={() => setSelectedId(questionnaire.id)}
+              selected={false}
               imageWidth="40%"
             />
           ))}
         </div>
-            </main>
-        </div>;
+      </main>
+    </div>
+  );
 }

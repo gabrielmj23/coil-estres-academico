@@ -3,11 +3,18 @@ interface CardProps {
   description: string;
   image: string;
   selected: boolean;
-  onClick: () => void;
+  onClick?: () => void;
   imageWidth?: string;
 }
 
-function Card({ title, description, image, selected, onClick,imageWidth = "w-40" }: CardProps) {
+function Card({
+  title,
+  description,
+  image,
+  selected,
+  onClick,
+  imageWidth = "10rem",
+}: CardProps) {
   return (
     <div
       style={{
@@ -49,7 +56,7 @@ function Card({ title, description, image, selected, onClick,imageWidth = "w-40"
           src={image}
           alt={title}
           className="absolute bottom-0 right-0 w-40"
-          style={{width: imageWidth}}
+          style={{ width: imageWidth }}
         />
       </div>
     </div>
