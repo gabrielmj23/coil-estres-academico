@@ -19,9 +19,10 @@ const getbgcolor = (percentage: number) => {
 
 export const StressLevel: React.FC<StressLevelProps> = ({ percentage }) => {
   // Aplicar el estilo dinámico
+  const roundedPercentage = Math.round(percentage * 100)
   const circleStyle: React.CSSProperties = {
-    backgroundColor: getbgcolor(percentage),
-    color: getColor(percentage),
+    backgroundColor: getbgcolor(roundedPercentage),
+    color: getColor(roundedPercentage),
     width: "225px",
     height: "225px",
     borderRadius: "50%",
@@ -33,10 +34,9 @@ export const StressLevel: React.FC<StressLevelProps> = ({ percentage }) => {
     marginInline: "auto",
     marginTop: "40px",
     border: "5px solid",
-    borderColor: getColor(percentage),
+    borderColor: getColor(roundedPercentage),
   };
 
-  const roundedPercentage = Math.round(percentage * 100)
 
   return (
     <div className="text-center pt-12">
