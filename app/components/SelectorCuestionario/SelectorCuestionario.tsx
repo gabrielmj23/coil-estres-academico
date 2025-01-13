@@ -55,7 +55,7 @@ function Card({
         <img
           src={image}
           alt={title}
-          className="absolute bottom-0 right-0 w-40"
+          className="absolute bottom-0 right-0 w-40 max-h-full"
           style={{ width: imageWidth }}
         />
       </div>

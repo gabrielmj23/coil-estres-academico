@@ -11,8 +11,8 @@ import { useNavigate } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Cuestionario Goldberg" },
-    { name: "description", content: "Responde al cuestionario Goldberg." },
+    { title: "Cuestionario Salud Mental" },
+    { name: "description", content: "Responde al cuestionario de Salud Mental." },
   ];
 }
 
