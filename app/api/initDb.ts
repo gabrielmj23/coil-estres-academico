@@ -485,7 +485,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Se ha sentido un poco feliz y deprimido?",
+      contenido: "¿Se ha sentido poco feliz y deprimido?",
       posicion: 9,
       idIndicador: ansiedadId,
       opciones: [
