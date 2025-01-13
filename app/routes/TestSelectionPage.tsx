@@ -46,6 +46,7 @@ export default function TestSelectionPage({
               description={questionnaire.resumen}
               image={questionnaire.icono}
               selected={selectedId === questionnaire.id}
+              imageWidth="40%"
               onClick={() => setSelectedId(questionnaire.id)}
             />
           ))}
