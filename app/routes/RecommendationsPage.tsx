@@ -21,6 +21,10 @@ export default function RecommendationsPage({
 }: Route.ComponentProps) {
   const { ejercicios } = loaderData;
 
+  const handleDownload = () => {
+    console.log("Botón de descarga presionado");
+  };
+
   return (
     <div className="h-[100dvh]">
       <header className="questionnaire"></header>
@@ -35,6 +39,7 @@ export default function RecommendationsPage({
         <div className="flex justify-center">
         <button
       className="flex items-center gap-2 text-[var(--coilterracota)] text-lg font-semibold underline decoration-2 decoration-[var(--coilterracota)] hover:text-opacity-80 transition duration-300"
+      onClick={handleDownload}
     >
       Descargar Manual
       <svg
