@@ -2,10 +2,8 @@
   "rewrites": [
     {"source": "/(.*)", "destination": "/"}
   ],
-  "routes": [
-    {
-      "src": "/manual.pdf",
-      "dest": "/public/manual.pdf"
-    }
-  ]
+  "static": {
+    "src": "/public/manual.pdf",
+    "dest": "/manual.pdf"
+  }
 }
