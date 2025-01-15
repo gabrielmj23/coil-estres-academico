@@ -1,9 +1,19 @@
 {
   "rewrites": [
-    {"source": "/(.*)", "destination": "/"}
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
   ],
-  "static": {
-    "src": "/public/manual.pdf",
-    "dest": "/manual.pdf"
-  }
+  "headers": [
+    {
+      "source": "/manual.pdf",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
 }
