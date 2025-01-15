@@ -141,7 +141,7 @@ export const getPreguntasSISCO = async () => {
     const siscoId = await db
       .select({ id: cuestionarios.id })
       .from(cuestionarios)
-      .where(eq(cuestionarios.nombre, "SISCO"));
+      .where(eq(cuestionarios.nombre, "Estrés Académico"));
     return await getPreguntasPorCuestionario(siscoId[0].id);
   } catch (error) {
     // En caso de error, responder con un mensaje de error
@@ -158,7 +158,7 @@ export const getPreguntasGoldBerg = async () => {
     const goldbergId = await db
       .select({ id: cuestionarios.id })
       .from(cuestionarios)
-      .where(eq(cuestionarios.nombre, "Goldberg"));
+      .where(eq(cuestionarios.nombre, "Salud Mental"));
     return await getPreguntasPorCuestionario(goldbergId[0].id);
   } catch (error) {
     // En caso de error, responder con un mensaje de error
