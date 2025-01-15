@@ -14,7 +14,7 @@
     "@react-router/express": "^7.1.1",
     "@react-router/node": "^7.1.1",
     "@react-router/serve": "^7.1.1",
-    "@vercel/node": "^4.0.0",
+    "@vercel/node": "^5.0.2",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.3",
     "express": "^4.21.2",
