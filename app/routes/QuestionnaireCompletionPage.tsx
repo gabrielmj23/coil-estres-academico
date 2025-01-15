@@ -53,7 +53,9 @@ export default function QuestionnaireCompletionPage({
   if (testType === "SISCO") {
     return (
       <>
-        <header className="questionnaire"></header>
+        <header className="questionnaire">
+        <img src="/logo-light.svg" alt="Logo" className="logo" />
+        </header>
         <main className="flex flex-col h-[75dvh] justify-between">
           <StressLevel percentage={Number(loaderData.scoreStress)/116} />
           <div className="flex flex-col gap-3 items-center">
@@ -68,7 +70,9 @@ export default function QuestionnaireCompletionPage({
   if (testType === "Goldberg") {
     return (
       <>
-        <header className="questionnaire"></header>
+        <header className="questionnaire">
+        <img src="/logo-light.svg" alt="Logo" className="logo" />
+        </header>
         <main className="flex flex-col h-[75dvh] justify-between">
           <ResultScreen
             hasSymptoms={

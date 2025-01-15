@@ -28,7 +28,11 @@ header.questionnaire {
   @apply bg-coilterracota h-32;
   -webkit-clip-path: ellipse(85% 100% at 50% -15%);
   clip-path: ellipse(85% 100% at 50% -15%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 header.primary {
   @apply bg-coilterracota h-24;
