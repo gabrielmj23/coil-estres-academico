@@ -23,5 +23,8 @@
 }
 
 .button:disabled {
-  @apply bg-coilgray-dark;
+  --tw-bg-opacity: -1;
+  color: var(--coilgray-light);
+  box-shadow: none;
+  background-color: rgb(115 107 102 / var(--tw-bg-opacity, 1));
 }
