@@ -19,21 +19,14 @@
 }
 
 .button:hover {
+  background-color: var(--coilorange-dark); /* Darker maroon on hover */
+}
+
+.button:disabled {
   background-color: var(--coilgray-light);
   color: var(--coilgray-dark);
   padding: 8px 14px;
   border: 4px solid var(--coilorange-dark);
   border-radius: 30px;
-  font-weight: bold;
   cursor: pointer;
-  text-align: center;
-  display: inline-block;
-  margin: 0 10px;
-}
-
-.button:disabled {
-  --tw-bg-opacity: -1;
-  color: var(--coilgray-light);
-  box-shadow: none;
-  background-color: rgb(115 107 102 / var(--tw-bg-opacity, 1));
 }
