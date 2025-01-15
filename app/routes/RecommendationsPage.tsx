@@ -22,6 +22,12 @@ export default function RecommendationsPage({
   const { ejercicios } = loaderData;
 
   const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/manual.pdf';
+    link.download = 'manual.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     console.log("Botón de descarga presionado");
   };
 

@@ -1,5 +1,11 @@
 {
-  "rewrites":  [
+  "rewrites": [
     {"source": "/(.*)", "destination": "/"}
+  ],
+  "routes": [
+    {
+      "src": "/manual.pdf",
+      "dest": "/public/manual.pdf"
+    }
   ]
 }
