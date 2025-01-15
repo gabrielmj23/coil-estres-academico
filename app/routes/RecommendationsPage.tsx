@@ -33,7 +33,9 @@ export default function RecommendationsPage({
 
   return (
     <div className="h-[100dvh]">
-      <header className="questionnaire"></header>
+      <header className="questionnaire">
+        <img src="/logo-light.svg" alt="Logo" className="logo" />
+      </header>
       <Link
         to="/cuestionario-completado"
         className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
