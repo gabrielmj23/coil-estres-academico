@@ -9,13 +9,13 @@ export const ResultCard: React.FC<ResultCardProps> = ({ hasSymptoms }) => {
   const data = hasSymptoms
     ? {
         title: "Resultado",
-        message: "Presenta síntomas de Ansiedad/Depresión y Disfunción Social.",
+        message: "Presentas síntomas de Ansiedad/Depresión y Disfunción Social.",
         imageSrc: "/con-sintomas.svg",
       }
     : {
         title: "Resultado",
         message:
-          "No presenta síntomas de Ansiedad/Depresión ni Disfunción Social.",
+          "No presentas síntomas de Ansiedad/Depresión ni Disfunción Social.",
         imageSrc: "/sin-sintomas.svg",
       };
 
