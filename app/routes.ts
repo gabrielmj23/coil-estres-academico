@@ -1,7 +1,7 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
-  index("./routes/RecommendationsPage.tsx"), // Ruta principal "/"
+  index("./routes/LandingPage.tsx"), // Ruta principal "/"
   route("iniciar-sesion", "./routes/LoginPage.tsx"), // Ruta "/iniciar-sesion"
   route("registrarse", "./routes/RegisterPage.tsx"), // Ruta "/registrarse"
   route("seleccion-de-prueba", "./routes/TestSelectionPage.tsx"), // Ruta "/seleccion-de-prueba"
@@ -14,6 +14,6 @@ export default [
   route("cuestionario-completado", "./routes/QuestionnaireCompletionPage.tsx"), // Ruta "/cuestionario-completado"
 
   // Página de recomendaciones y aviso psicológico
- // route("recomendaciones", "./routes/RecommendationsPage.tsx"), // Ruta "/recomendaciones"
+  route("recomendaciones", "./routes/RecommendationsPage.tsx"), // Ruta "/recomendaciones"
   route("aviso-psicologico", "./routes/PsychologicalWarningPage.tsx"), // Ruta "/aviso-psicologico"
 ] satisfies RouteConfig;
