@@ -1,18 +1,22 @@
 import type { Route } from "./+types/QuestionnaireGoldbergPage";
 import { SurveyOption } from "~/components/SurveyOption/SurveyOption";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowRight from "~/icons/ArrowRight";
 import { getPreguntasGoldBerg } from "~/api/controllers/preguntas";
 import { calculatePointsGoldberg } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
 import { useNavigate } from "react-router";
+import RestoreProgressModal from "~/components/RestoreProgressModal/RestoreProgressModal";
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Cuestionario Salud Mental" },
-    { name: "description", content: "Responde al cuestionario de Salud Mental." },
+    {
+      name: "description",
+      content: "Responde al cuestionario de Salud Mental.",
+    },
   ];
 }
 
@@ -23,6 +27,7 @@ export async function loader() {
 export default function QuestionnaireGoldbergPage({
   loaderData,
 }: Route.ComponentProps) {
+  // For questionnaire
   const [sectionIndex, setSectionIndex] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
@@ -32,6 +37,37 @@ export default function QuestionnaireGoldbergPage({
 
   const navigate = useNavigate();
 
+  // Modal
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    const storedGoldberg = localStorage.getItem("goldbergProgress");
+    if (storedGoldberg) {
+      setOpenModal(true);
+    }
+  }, []);
+
+  const cancelProgress = () => {
+    localStorage.removeItem("goldbergProgress");
+    setOpenModal(false);
+  };
+
+  const restoreProgress = () => {
+    const progress = localStorage.getItem("goldbergProgress");
+    if (progress) {
+      const parsed = JSON.parse(progress);
+      console.log(parsed);
+      setSectionIndex(Number(parsed.sectionIndex));
+      setQuestionIndex(Number(parsed.questionIndex));
+      setGlobalIndex(Number(parsed.globalIndex));
+      setAnswers(parsed.answers as StoredAnswer[]);
+      setShowInstructions(Boolean(parsed.showInstructions));
+      setOpenModal(false);
+      localStorage.removeItem("goldbergProgress");
+    }
+  };
+
+  // Extract data
   const sections = loaderData.sections;
   const currentSection = sections[sectionIndex];
   const currentQuestion = currentSection.preguntas[questionIndex];
@@ -43,10 +79,9 @@ export default function QuestionnaireGoldbergPage({
    * @author Gabriel
    */
   const saveAnswer = () => {
-    setGlobalIndex(globalIndex + 1);
-    // Store answer
-    setAnswers((prev) => [
-      ...prev,
+    const newGlobalIndex = globalIndex + 1;
+    const newAnswers = [
+      ...answers,
       {
         sectionId: currentSection.idSeccion,
         questionId: currentQuestion.idPregunta,
@@ -57,12 +92,20 @@ export default function QuestionnaireGoldbergPage({
           currentQuestion.opciones.find((op) => op.idOpcion === selectedOption)
             ?.puntaje ?? 0,
       },
-    ]);
+    ];
+
+    // Store answer
+    setGlobalIndex(newGlobalIndex);
+    setAnswers(newAnswers);
 
     // Clear selection
     setSelectedOption(null);
 
     // Continue
+    let newSectionIndex = sectionIndex;
+    let newQuestionIndex = questionIndex + 1;
+    let newShowInstructions = false;
+
     if (questionIndex + 1 === currentSection.preguntas.length) {
       if (sectionIndex + 1 === sections.length) {
         // Test has finished
@@ -76,25 +119,46 @@ export default function QuestionnaireGoldbergPage({
           "scoreSocial",
           String(results["Disfunción Social"])
         );
+        localStorage.removeItem("goldbergProgress");
         navigate("/cuestionario-completado");
       } else {
         // Go to next section
-        setSectionIndex((prev) => prev + 1);
-        setQuestionIndex(0);
-        setShowInstructions(true);
+        newSectionIndex += 1;
+        setSectionIndex(newSectionIndex);
+        newQuestionIndex = 0;
+        setQuestionIndex(newQuestionIndex);
+        newShowInstructions = true;
+        setShowInstructions(newShowInstructions);
       }
     } else {
-      setQuestionIndex((prev) => prev + 1);
+      setQuestionIndex(newQuestionIndex);
     }
+
+    // Save in local storage
+    const progress = {
+      sectionIndex: newSectionIndex,
+      questionIndex: newQuestionIndex,
+      globalIndex: newGlobalIndex,
+      answers: newAnswers,
+      showInstructions: newShowInstructions,
+    };
+    localStorage.setItem("goldbergProgress", JSON.stringify(progress));
   };
 
   if (showInstructions) {
     return (
-      <SectionPage
-        image={currentSection.imagen}
-        instruction={currentSection.instruccion}
-        onContinue={() => setShowInstructions(false)}
-      />
+      <>
+        <SectionPage
+          image={currentSection.imagen}
+          instruction={currentSection.instruccion}
+          onContinue={() => setShowInstructions(false)}
+        />
+        <RestoreProgressModal
+          isOpen={openModal}
+          onClose={cancelProgress}
+          onContinue={restoreProgress}
+        />
+      </>
     );
   }
 
