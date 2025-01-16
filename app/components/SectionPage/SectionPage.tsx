@@ -3,6 +3,7 @@ import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import "./SectionPage.css";
 import ArrowRight from "~/icons/ArrowRight";
 import RoundButton from "../RoundButton/RoundButton";
+import ArrowLeft from "~/icons/ArrowLeft";
 
 interface SectionPageProps {
   // props which come from parent to child
@@ -29,7 +30,11 @@ export const SectionPage: React.FC<SectionPageProps> = ({
       {/* Top Bar */}
       <div className="top-bar">
         <div>
-          <PrimaryButton label="←" linkTo="/" />
+          <PrimaryButton
+            label=""
+            linkTo="/seleccion-de-prueba"
+            icon={<ArrowLeft className="w-9" />}
+          />
         </div>
       </div>
 
