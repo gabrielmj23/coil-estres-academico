@@ -56,7 +56,6 @@ export default function QuestionnaireGoldbergPage({
     const progress = localStorage.getItem("goldbergProgress");
     if (progress) {
       const parsed = JSON.parse(progress);
-      console.log(parsed);
       setSectionIndex(Number(parsed.sectionIndex));
       setQuestionIndex(Number(parsed.questionIndex));
       setGlobalIndex(Number(parsed.globalIndex));
@@ -109,7 +108,7 @@ export default function QuestionnaireGoldbergPage({
     if (questionIndex + 1 === currentSection.preguntas.length) {
       if (sectionIndex + 1 === sections.length) {
         // Test has finished
-        const results = calculatePointsGoldberg(answers);
+        const results = calculatePointsGoldberg(newAnswers);
         localStorage.setItem("testType", "Goldberg");
         localStorage.setItem(
           "scoreAnxiety",
@@ -119,7 +118,6 @@ export default function QuestionnaireGoldbergPage({
           "scoreSocial",
           String(results["Disfunción Social"])
         );
-        localStorage.removeItem("goldbergProgress");
         navigate("/cuestionario-completado");
       } else {
         // Go to next section

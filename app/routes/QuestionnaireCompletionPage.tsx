@@ -27,9 +27,11 @@ export async function clientLoader() {
   const scoreSocial = localStorage.getItem("scoreSocial") as string | undefined;
 
   if (testType === "SISCO") {
+    localStorage.removeItem("siscoProgress");
     return { testType, scoreStress };
   }
   if (testType === "Goldberg") {
+    localStorage.removeItem("goldbergProgress");
     return { testType, scoreAnxiety, scoreSocial };
   }
   return null;
@@ -54,10 +56,10 @@ export default function QuestionnaireCompletionPage({
     return (
       <>
         <header className="questionnaire">
-        <img src="/logo-light.svg" alt="Logo" className="logo" />
+          <img src="/logo-light.svg" alt="Logo" className="logo" />
         </header>
         <main className="flex flex-col h-[75dvh] justify-between">
-          <StressLevel percentage={Number(loaderData.scoreStress)/116} />
+          <StressLevel percentage={Number(loaderData.scoreStress) / 116} />
           <div className="flex flex-col gap-3 items-center">
             <PrimaryButton label="Recomendaciones" linkTo="/recomendaciones" />
             <SecondaryButton label="Volver a Inicio" linkTo="/" />
@@ -71,7 +73,7 @@ export default function QuestionnaireCompletionPage({
     return (
       <>
         <header className="questionnaire">
-        <img src="/logo-light.svg" alt="Logo" className="logo" />
+          <img src="/logo-light.svg" alt="Logo" className="logo" />
         </header>
         <main className="flex flex-col h-[75dvh] justify-between">
           <ResultScreen
