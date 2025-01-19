@@ -1,0 +1,29 @@
+.input-style {
+  border-radius: 1234px;
+  font-size: 16px;
+  color: #736B66;
+}
+
+.label-input-style {
+  font-size: 14px;
+}
+
+.ok-input-style:focus {
+  border: 1px solid #fde0b5; /* coilbeige color */
+  box-shadow: 0 0 5px rgba(253, 224, 181, 0.5); /* coilbeige shadow */
+  outline: none; /* Remove default outline */
+}
+.error-style {
+  font-size: 14px;
+}
+
+/* styles.css */
+.field-error {
+  box-shadow: 0 0 10px rgba(254, 139, 89, 0.75); 
+  background-color:#F7E8E2 ;
+}
+
+.field-error:focus {
+  border: 1px solid #fe8659; /* coilbeige color */
+  outline: none; /* Remove default outline */
+}
