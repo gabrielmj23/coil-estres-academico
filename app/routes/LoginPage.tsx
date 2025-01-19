@@ -2,8 +2,9 @@ import { Link } from "react-router";
 import type { Route } from "./+types/LoginPage";
 import ArrowLeft from "~/icons/ArrowLeft";
 import Field from "~/components/Field/Field";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
+import ArrowRight from "~/icons/ArrowRight";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+  const [url, setUrl] = useState("");
 
   // Función para validar correo electrónico
   const isValidEmail = (email: string) => {
@@ -57,6 +59,20 @@ export default function LoginPage() {
     }
   };
 
+  // Update canLogin state whenever email or password changes
+  useEffect(() => {
+    if (isValidEmail(email) && isValidPassword(password)) {
+      setUrl("/registrarse");
+    } else {
+      setUrl("");
+    }
+  }, [email, password]);
+  const handleLogin = () => {
+    if (!url.length) {
+      // Logic to handle successful login (e.g., redirection)
+    }
+  };
+
   return (
     <div className="h-[100dvh]">
       <header className="primary rounded-b-[32px] mb-12"></header>
@@ -89,7 +105,11 @@ export default function LoginPage() {
             error={errorPassword}
           />
 
-          <PrimaryButton label={"Inciar Sesión"} linkTo="seleccion-de-prueba" />
+          <PrimaryButton
+            label={"Inciar Sesión"}
+            linkTo={url}
+            disabled={!url.length}
+          />
         </div>
         <div>
           <p className="login-text text-center">
