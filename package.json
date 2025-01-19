@@ -15,6 +15,7 @@
     "@react-router/node": "^7.1.1",
     "@react-router/serve": "^7.1.1",
     "@vercel/node": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.38.3",
     "express": "^4.21.2",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@react-router/dev": "^7.1.1",
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.0",
     "@types/node": "^20",
     "@types/pg": "^8.11.10",
