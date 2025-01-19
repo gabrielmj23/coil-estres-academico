@@ -42,3 +42,22 @@ type StoredAnswer = {
   indicatorName: string;
   points: number;
 };
+
+/**
+ * Questionnaire history item from backend
+ */
+interface HistoryItem {
+  id: number;
+  questionnaireId: number;
+  questionnaireName: string;
+  date: string;
+}
+
+interface SiscoHistoryItem extends HistoryItem {
+  scoreStress: number;
+}
+
+interface GoldbergHistoryItem extends HistoryItem {
+  scoreAnxiety: number;
+  scoreSocial: number;
+}

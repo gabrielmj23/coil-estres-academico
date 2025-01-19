@@ -14,10 +14,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function LandingPage() {
-  const handleButtonClick = () => {
-    console.log("activado");
-  };
-
   return (
     <div className="welcome-screen">
       <div className="header">
@@ -25,9 +21,7 @@ export default function LandingPage() {
       </div>
       <h1 className="title">Cuerpos y mentes</h1>
       <h2 className="subtitle">en equilibrio</h2>
-      <p className="tagline">
-        "Chequea tu salud, abraza tu bienestar"
-      </p>
+      <p className="tagline">"Chequea tu salud, abraza tu bienestar"</p>
       <div className="illustration">
         <img src="/health-home.svg" alt="Ilustración" />
       </div>
