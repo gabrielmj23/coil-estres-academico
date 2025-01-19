@@ -19,9 +19,9 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
     const usuarioData = { nombre, correo, contraseña, fechaNacimiento, sexo };
 
     try {
-      const respuesta = await registrarUsuario(usuarioData);
+      //const respuesta = await registrarUsuario(usuarioData);
       setMensaje("Registro exitoso");
-      console.log(respuesta); // Aquí puedes manejar lo que pasa después del registro (como redirigir al login)
+     // console.log(respuesta); // Aquí puedes manejar lo que pasa después del registro (como redirigir al login)
       if (onSuccess) {
         onSuccess(); // Llamar a la función onSuccess si está definida
       }
