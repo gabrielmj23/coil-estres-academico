@@ -26,8 +26,7 @@ export default function LandingPage() {
       <h1 className="title">Cuerpos y mentes</h1>
       <h2 className="subtitle">en equilibrio</h2>
       <p className="tagline">
-        "Chequea tu salud, abraza tu{" "}
-        <span className="highlight-green">bienestar</span>"
+        "Chequea tu salud, abraza tu bienestar"
       </p>
       <div className="illustration">
         <img src="/health-home.svg" alt="Ilustración" />

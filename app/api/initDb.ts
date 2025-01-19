@@ -93,21 +93,21 @@ await db.transaction(async (tx) => {
     {
       idCuestionario: siscoId,
       instruccion:
-        "Señala con qué Frecuencia te Inquietaron las Siguientes Situaciones",
+        "Señala con qué frecuencia te inquietaron las siguientes situaciones",
       posicion: 1,
       imagen: "/sisco1.svg",
     },
     {
       idCuestionario: siscoId,
       instruccion:
-        "Señala con qué Frecuencia Tuviste las Siguientes Reacciones Cuando Estabas Preocupado o Nervioso",
+        "Señala con qué frecuencia tuviste las siguientes reacciones cuando estabas preocupado o nervioso",
       posicion: 2,
       imagen: "/sisco1.svg",
     },
     {
       idCuestionario: siscoId,
       instruccion:
-        "Señala con qué Frecuencia Utilizaste las Siguientes Estrategias para Enfrentar la Situación que te Preocupó",
+        "Señala con qué frecuencia utilizaste las siguientes estrategias para enfrentar la situación que te preocupó",
       posicion: 3,
       imagen: "/sisco1.svg",
     },
@@ -160,7 +160,7 @@ await db.transaction(async (tx) => {
   seccionesSisco.forEach(async (seccion) => {
     if (
       seccion.instruccion ===
-      "Señala con qué Frecuencia te Inquietaron las Siguientes Situaciones"
+      "Señala con qué frecuencia te inquietaron las siguientes situaciones"
     ) {
       const opcionesSisco = [
         { contenido: "Nunca", puntaje: 0, posicion: 1 },
@@ -226,7 +226,7 @@ await db.transaction(async (tx) => {
       }
     } else if (
       seccion.instruccion ===
-      "Señala con qué Frecuencia Tuviste las Siguientes Reacciones Cuando Estabas Preocupado o Nervioso"
+      "Señala con qué frecuencia tuviste las siguientes reacciones cuando estabas preocupado o nervioso"
     ) {
       const opcionesSisco = [
         { contenido: "Nunca", puntaje: 0, posicion: 1 },
@@ -305,7 +305,7 @@ await db.transaction(async (tx) => {
       }
     } else if (
       seccion.instruccion ===
-      "Señala con qué Frecuencia Utilizaste las Siguientes Estrategias para Enfrentar la Situación que te Preocupó"
+      "Señala con qué frecuencia utilizaste las siguientes estrategias para enfrentar la situación que te preocupó"
     ) {
       const opcionesSisco = [
         { contenido: "Nunca", puntaje: 0, posicion: 1 },
@@ -396,7 +396,7 @@ await db.transaction(async (tx) => {
 
   const preguntasGoldberg = [
     {
-      contenido: "¿Ha podido concentrarse bien en lo que hace?",
+      contenido: "¿Has podido concentrarte bien en lo que haces?",
       posicion: 1,
       idIndicador: disfuncionId,
       opciones: [
@@ -407,7 +407,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Sus preocupaciones le han hecho perder mucho sueño?",
+      contenido: "¿Tus preocupaciones te han hecho perder mucho sueño?",
       posicion: 2,
       idIndicador: ansiedadId,
       opciones: [
@@ -418,7 +418,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Ha sentido que está jugando un papel útil en la vida?",
+      contenido: "¿Has sentido que estás jugando un papel útil en la vida?",
       posicion: 3,
       idIndicador: disfuncionId,
       opciones: [
@@ -429,7 +429,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Se ha sentido capaz de tomar decisiones?",
+      contenido: "¿Te has sentido capaz de tomar decisiones?",
       posicion: 4,
       idIndicador: disfuncionId,
       opciones: [
@@ -440,7 +440,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Se ha sentido constantemente agobiado y en tensión?",
+      contenido: "¿Te has sentido constantemente agobiado y en tensión?",
       posicion: 5,
       idIndicador: ansiedadId,
       opciones: [
@@ -451,7 +451,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Ha sentido que no puede superar sus dificultades?",
+      contenido: "¿Has sentido que no puedes superar tus dificultades?",
       posicion: 6,
       idIndicador: ansiedadId,
       opciones: [
@@ -463,7 +463,7 @@ await db.transaction(async (tx) => {
     },
     {
       contenido:
-        "¿Ha sido capaz de disfrutar sus actividades normales de cada día?",
+        "¿Has sido capaz de disfrutar tus actividades normales de cada día?",
       posicion: 7,
       idIndicador: disfuncionId,
       opciones: [
@@ -474,7 +474,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Ha sido capaz de hacer frente a sus problemas?",
+      contenido: "¿Has sido capaz de hacer frente a tus problemas?",
       posicion: 8,
       idIndicador: disfuncionId,
       opciones: [
@@ -485,7 +485,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Se ha sentido poco feliz y deprimido?",
+      contenido: "¿Te has sentido poco feliz y deprimido?",
       posicion: 9,
       idIndicador: ansiedadId,
       opciones: [
@@ -496,7 +496,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Ha perdido confianza en sí mismo?",
+      contenido: "¿Has perdido la confianza en ti mismo?",
       posicion: 10,
       idIndicador: ansiedadId,
       opciones: [
@@ -507,7 +507,7 @@ await db.transaction(async (tx) => {
       ],
     },
     {
-      contenido: "¿Ha pensado que usted es una persona que no vale para nada?",
+      contenido: "¿Has pensado que eres es una persona que no vale para nada?",
       posicion: 11,
       idIndicador: ansiedadId,
       opciones: [
@@ -519,7 +519,7 @@ await db.transaction(async (tx) => {
     },
     {
       contenido:
-        "¿Se siente razonablemente feliz considerando todas las circunstancias?",
+        "¿Te sientes razonablemente feliz considerando todas las circunstancias?",
       posicion: 12,
       idIndicador: disfuncionId,
       opciones: [
@@ -596,7 +596,7 @@ await db.transaction(async (tx) => {
     },
   ];
   await tx.insert(ejercicios).values(ejerciciosList);
-  console.log("init-db: Ejercicios creados")
+  console.log("init-db: Ejercicios creados");
   // #endregion
 
   console.log("init-db: Ejecutando transacción...");
