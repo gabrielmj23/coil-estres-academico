@@ -1,3 +1,11 @@
+
+/* Force password input to inherit the same styling */
+input[type="password"] {
+  font-size: 16px !important; /* Ensure password text is same size */
+  font-weight: bold !important; /* Ensure password text is bold */
+  color: #736B66 !important; /* Ensure password text color is same */
+}
+
 .input-style {
   border-radius: 1234px;
   font-size: 16px;

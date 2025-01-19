@@ -1,10 +1,10 @@
 import "./Field.css"; // Archivo CSS para estilos
-import React, {useState} from 'react';
+import React, { useState } from "react";
 
 interface FieldProps {
   label: string;
   placeholder: string;
-  type: string; // text || date || number
+  type: string; // text || date || number || password
   value: string;
   iconSrc: string;
   error?: string;
@@ -20,8 +20,9 @@ const Field: React.FC<{
   placeholder: string;
   error: string;
 }> = ({ label, iconSrc, type, value, onChange, placeholder, error }) => {
-
   const [touched, setTouched] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleBlur = () => {
     setTouched(true);
@@ -29,31 +30,51 @@ const Field: React.FC<{
 
   const handleFocus = () => {
     setTouched(false);
-  }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const isPasswordField = type === "password";
+
   return (
     <div className="mx-auto w-11/12">
       <label className="block mb-1 font-bold text-coilterracota label-input-style">
         {label}
       </label>
       <div className="relative">
-        <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+        <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
           <img src={iconSrc} alt="Email Icon" />
         </div>
-      <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        className={`block w-full ps-12 p-3.5 input-style text-coilgray-light font-bold ${
-          (error != "" && touched)
-            ? 'bg-F7E8E2 border-1 border-coilorange-light field-error'
-            : 'border-none focus:border-coilbeige focus:shadow-md ok-input-style'
-        }`}
-        placeholder={placeholder}
-      />
+        <input
+          type={isPasswordField && showPassword ? "text" : type}
+          value={value}
+          onChange={onChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          className={`block w-full ps-14 p-3.5 input-style text-coilgray-light font-bold ${
+            error != "" && touched
+              ? "bg-F7E8E2 border-1 border-coilorange-light field-error"
+              : "border-none focus:border-coilbeige focus:shadow-md ok-input-style"
+          }`}
+          placeholder={placeholder}
+        />
+
+        {isPasswordField && (
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-0 end-0 flex items-center pe-4"
+          >
+            <img
+              src={showPassword ? "/eye-closed-icon.svg" : "/eye-icon.svg"}
+              alt={showPassword ? "Esconder Contraseña" : "Mostrar Contraseña"}
+            />
+          </button>
+        )}
       </div>
-      {(error != "" && touched) && (
+      {error != "" && touched && (
         <p className="text-center text-size-14 text-coilorange-light">
           {error}
         </p>
