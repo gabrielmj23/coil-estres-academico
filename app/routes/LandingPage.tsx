@@ -25,13 +25,17 @@ export default function LandingPage() {
       </div>
       <h1 className="title">Cuerpos y mentes</h1>
       <h2 className="subtitle">en equilibrio</h2>
-      <p className="tagline">
-        "Chequea tu salud, abraza tu bienestar"
-      </p>
+      <p className="tagline">"Chequea tu salud, abraza tu bienestar"</p>
       <div className="illustration">
         <img src="/health-home.svg" alt="Ilustración" />
       </div>
       <PrimaryButton label={"Continuar"} linkTo="seleccion-de-prueba" />
+      <p className="login-text">
+        ¿Ya tienes una cuenta?{" "}
+        <a href="/iniciar-sesion" className="login-link">
+          Inicia Sesión
+        </a>
+      </p>
     </div>
   );
 }

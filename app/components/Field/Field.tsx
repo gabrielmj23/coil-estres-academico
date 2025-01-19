@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "./Field.css"; // Archivo CSS para estilos
 
-function App() {
+function Field() {
   return (
     <div className="form-container">
       <label htmlFor="email" className="form-label">
@@ -20,4 +20,4 @@ function App() {
     </div>
   );
 }
-export default App;
+export default Field;
