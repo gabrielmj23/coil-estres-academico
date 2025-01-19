@@ -35,3 +35,16 @@ input[type="password"] {
   border: 1px solid #fe8659; /* coilbeige color */
   outline: none; /* Remove default outline */
 }
+
+.login-text {
+  font-size: 14px;
+  color: #646464;
+  margin-top: 10px;
+}
+
+.login-link {
+  color: #b2775c;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: bold;
+}
