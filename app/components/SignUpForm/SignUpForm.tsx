@@ -1,43 +1,23 @@
 import React, { useState } from "react";
-import { registrarUsuario } from "~/api/controllers/usuarios"; // Asegúrate de importar correctamente la función de registro
+import { Form, useActionData } from "react-router";
 
-interface SignUpFormProps {
-  onSuccess?: () => void; // Callback opcional después de un registro exitoso
-}
-
-export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
+export const SignUpForm: React.FC = () => {
+  const actionData = useActionData();
   const [nombre, setNombre] = useState<string>("");
   const [correo, setCorreo] = useState<string>("");
   const [contraseña, setContraseña] = useState<string>("");
   const [fechaNacimiento, setFechaNacimiento] = useState<string>("");
   const [sexo, setSexo] = useState<string>("");
-  const [mensaje, setMensaje] = useState<string>("");
-
-  const manejarRegistro = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const usuarioData = { nombre, correo, contraseña, fechaNacimiento, sexo };
-
-    try {
-      //const respuesta = await registrarUsuario(usuarioData);
-      setMensaje("Registro exitoso");
-     // console.log(respuesta); // Aquí puedes manejar lo que pasa después del registro (como redirigir al login)
-      if (onSuccess) {
-        onSuccess(); // Llamar a la función onSuccess si está definida
-      }
-    } catch (error) {
-      setMensaje((error as Error).message);
-    }
-  };
 
   return (
     <div className="signup-form">
       <h1 className="text-3xl text-center">Registro de Usuario</h1>
-      <form onSubmit={manejarRegistro} className="form-container">
+      <Form method="post" >
         <div>
           <label>Nombre</label>
           <input
             type="text"
+            name="nombre"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             required
@@ -47,6 +27,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
           <label>Correo</label>
           <input
             type="email"
+            name="correo"
             value={correo}
             onChange={(e) => setCorreo(e.target.value)}
             required
@@ -56,6 +37,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
           <label>Contraseña</label>
           <input
             type="password"
+            name="contraseña"
             value={contraseña}
             onChange={(e) => setContraseña(e.target.value)}
             required
@@ -65,6 +47,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
           <label>Fecha de Nacimiento</label>
           <input
             type="date"
+            name="fechaNacimiento"
             value={fechaNacimiento}
             onChange={(e) => setFechaNacimiento(e.target.value)}
             required
@@ -73,6 +56,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
         <div>
           <label>Sexo</label>
           <select
+            name="sexo"
             value={sexo}
             onChange={(e) => setSexo(e.target.value)}
             required
@@ -84,8 +68,10 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSuccess }) => {
           </select>
         </div>
         <button type="submit">Registrar</button>
-      </form>
-      {mensaje && <p>{mensaje}</p>}
+      </Form>
+      {actionData && (
+        <p>{actionData.success ? actionData.message : `Error: ${actionData.message}`}</p>
+      )}
     </div>
   );
 };
