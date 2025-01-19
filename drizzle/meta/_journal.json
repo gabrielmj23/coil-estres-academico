@@ -15,6 +15,13 @@
       "when": 1736457420664,
       "tag": "0001_watery_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737271882550,
+      "tag": "0002_steep_maginty",
+      "breakpoints": true
     }
   ]
 }
