@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useActionData, Link, Form } from "react-router";
 import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowLeft from "~/icons/ArrowLeft";
 import { iniciarSesion } from "~/api/controllers/usuarios";
+import {useCookies} from "react-cookie";
 
 export function meta() {
   return [
@@ -21,12 +22,13 @@ export async function action({ request }: { request: Request }) {
 
   try {
     const respuesta = await iniciarSesion(loginData);
-    // Retornar la respuesta correcta dependiendo del éxito del inicio de sesión
-    if (respuesta.usuario) {
+
+    // Verificar que la respuesta tenga el campo 'usuario' y 'token'
+    if (respuesta.usuario && respuesta.token) {
       return {
         success: true,
         message: "Inicio de sesión exitoso",
-        data: respuesta.usuario,
+        data: { usuario: respuesta.usuario, token: respuesta.token, idUsuario: respuesta.idUsuario },
       };
     } else {
       return {
@@ -42,7 +44,9 @@ export async function action({ request }: { request: Request }) {
   }
 }
 
+
 export default function LoginPage() {
+  const [cookies, setCookie] = useCookies(["token", "idUsuario"])
   const actionData = useActionData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -84,7 +88,15 @@ export default function LoginPage() {
     }
   };
 
-  
+  // UseEffect to handle successful login and set cookies
+  useEffect(() => {
+    if (actionData?.success && actionData?.data) {
+      const { token, idUsuario } = actionData.data;
+      console.log(actionData.data);
+      setCookie("token", token, { path: "/", maxAge: 60 * 60 * 12 }); // Guardamos el token en una cookie
+      setCookie("idUsuario", idUsuario, { path: "/", maxAge: 60 * 60 * 12 }); // Guardamos el ID del usuario en una cookie
+    }
+  }, [actionData, setCookie]);
 
   return (
     <div className="h-[100dvh]">

@@ -3,6 +3,8 @@ import { data } from "react-router";
 import bcrypt from "bcryptjs"; // Necesitamos bcrypt para encriptar la contraseña
 import { eq } from "drizzle-orm";
 import db from "../db"; // Importamos la instancia de db que has configurado
+import jwt from 'jsonwebtoken';
+import "dotenv/config";
 
 /**
  * Registra un nuevo usuario en la base de datos
@@ -66,10 +68,7 @@ export const registrarUsuario = async (userData: {
  * @author Karim
  */
 
-export const iniciarSesion = async (loginData: {
-  correo: string;
-  contraseña: string;
-}) => {
+export const iniciarSesion = async (loginData: { correo: string; contraseña: string }) => {
   try {
     const { correo, contraseña } = loginData;
 
@@ -92,20 +91,21 @@ export const iniciarSesion = async (loginData: {
       throw new Error("Correo o Contraseña Incorrecta.");
     }
 
+    // // Crea un token (usando jsonwebtoken)
+    const token = jwt.sign({ idUsuario: usuario[0].id }, process.env.JWT_SECRET_KEY!, { expiresIn: '12h' });
+
     // Eliminar la contraseña del objeto usuario antes de devolver la respuesta
     const { contraseña: _contraseña, ...usuarioSinContraseña } = usuario[0];
 
-    // Responder con el usuario sin la contraseña
-    console.log("usuario inicio sesion")
-    return { usuario: usuarioSinContraseña };  // Return the user data without password
+    // Responder con los datos del usuario y el token
+    console.log({ token:token, idUsuario: usuario[0].id, usuario: usuarioSinContraseña })
+    return {  idUsuario: usuario[0].id, usuario: usuarioSinContraseña,token:token,};
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error al iniciar sesión:", error.message);
-      return { message: error.message || "Error al iniciar sesión." }; // Return an object with an error message
+      return { message: error.message || "Error al iniciar sesión." };
     }
-
-    // Si el error no es una instancia de Error, lo manejamos genéricamente
     console.error("Error inesperado:", error);
-    return { message: "Error inesperado al iniciar sesión." }; // Handle unexpected errors
+    return { message: "Error inesperado al iniciar sesión." };
   }
 };
