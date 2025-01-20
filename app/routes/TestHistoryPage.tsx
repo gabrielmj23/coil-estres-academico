@@ -48,8 +48,16 @@ export default function TestHistoryPage({
   
   
   const {resultados} = loaderData;
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+
+  const handleYearChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
+    setSelectedYear(event.target.value || null);
+  };
+
   console.log(resultados)
-  
+  const filteredResultados = selectedYear
+  ? resultados.filter((item) => new Date(item.date).getFullYear().toString() === selectedYear)
+  : resultados;
   console.log("Rendering component..."); // Agregar un log para verificar el renderizado
   return (
     <>
@@ -58,11 +66,16 @@ export default function TestHistoryPage({
       <main className="mt-3">
         <h1 className="text-3xl text-center">Histórico de Pruebas</h1>
         <div className="px-4 mt-3">
-          <Select options={[{ value: "2024", label: "2024" }]} />
+          <Select 
+            options={[
+              { value: "2024", label: "2024" },
+              { value: "2025", label: "2025"}]}
+            onChange={handleYearChange}    
+          />
         </div>
         <div className="px-4 mt-6 flex flex-col items-center gap-3">
           { 
-          resultados.map((item) => (
+          filteredResultados.map((item) => (
             <HistoryCard key={item.id} item={item} />
           ))
           
