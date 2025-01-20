@@ -61,3 +61,11 @@ interface GoldbergHistoryItem extends HistoryItem {
   scoreAnxiety: number;
   scoreSocial: number;
 }
+
+interface ResultadosCuestionario {
+  id: number;
+  questionnaireId: number;
+  questionnaireName: string;
+  date: string;
+  scores: { [key: string]: number };
+}

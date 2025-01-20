@@ -1,6 +1,8 @@
 import Select from "~/components/Select/Select";
 import type { Route } from "./+types/TestHistoryPage";
 import HistoryCard from "~/components/HistoryCard/HistoryCard";
+import { getResultadosCuestionario } from "~/api/controllers/cuestionario_historico";
+import { useEffect, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,8 +11,14 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export default function TestHistoryPage() {
-  const history = [
+export async function loader() {
+  return getResultadosCuestionario(1);
+}
+
+export default function TestHistoryPage({
+  loaderData,
+} : Route.ComponentProps) {
+  /*const history = [
     {
       id: 1,
       questionnaireId: 1,
@@ -34,7 +42,14 @@ export default function TestHistoryPage() {
       scoreAnxiety: 12,
       scoreSocial: 10,
     },
-  ];
+  ];*/
+
+  
+  
+  const resultados = loaderData;
+  console.log(resultados)
+  
+  console.log("Rendering component..."); // Agregar un log para verificar el renderizado
   return (
     <>
       <header className="questionnaire"></header>
@@ -45,9 +60,12 @@ export default function TestHistoryPage() {
           <Select options={[{ value: "2024", label: "2024" }]} />
         </div>
         <div className="px-4 mt-6 flex flex-col items-center gap-3">
-          {history.map((item) => (
+          { 
+          resultados.map((item) => (
             <HistoryCard key={item.id} item={item} />
-          ))}
+          ))
+          
+          }
         </div>
       </main>
     </>
