@@ -4,6 +4,7 @@ import { cuestionario_historico } from "../tables/cuestionario_historico"
 import { resultados } from "../tables/Resultados";
 import { cuestionarios } from "../tables/cuestionarios";
 import { indicadores } from "../tables/indicadores";
+import { data } from "react-router";
 
 export const getResultadosCuestionario = async (idUsuario: number) => {
     try {
@@ -62,7 +63,7 @@ export const getResultadosCuestionario = async (idUsuario: number) => {
 
             }
             console.log(resultadosFinales)
-            return resultadosFinales;
+            return data({resultados: resultadosFinales},{status: 200});
 
     } catch (error) {
         console.error("Error al obtener los resultados del cuestionario:", error);

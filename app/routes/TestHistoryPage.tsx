@@ -12,7 +12,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader() {
-  return getResultadosCuestionario(1);
+  const userID = 1; //Reemplazar con la id del usuario
+  return getResultadosCuestionario(userID);
 }
 
 export default function TestHistoryPage({
@@ -46,7 +47,7 @@ export default function TestHistoryPage({
 
   
   
-  const resultados = loaderData;
+  const {resultados} = loaderData;
   console.log(resultados)
   
   console.log("Rendering component..."); // Agregar un log para verificar el renderizado
