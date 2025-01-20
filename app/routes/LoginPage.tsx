@@ -116,6 +116,7 @@ export default function LoginPage() {
       <Link
         to="/"
         className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
+        viewTransition
       >
         <ArrowLeft />
       </Link>

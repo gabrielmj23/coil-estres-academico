@@ -1,6 +1,7 @@
 import type { Route } from "./+types/LandingPage";
 import "./LandingPage.css";
 import PrimaryButton from "../components/PrimaryButton/PrimaryButton";
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -32,9 +33,9 @@ export default function LandingPage() {
       <PrimaryButton label={"Continuar"} linkTo="seleccion-de-prueba" />
       <p className="login-text">
         ¿Ya tienes una cuenta?{" "}
-        <a href="/iniciar-sesion" className="login-link">
+        <Link to="/iniciar-sesion" className="login-link" viewTransition>
           Inicia Sesión
-        </a>
+        </Link>
       </p>
     </div>
   );
