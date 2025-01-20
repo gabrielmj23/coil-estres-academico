@@ -98,7 +98,6 @@ export const iniciarSesion = async (loginData: { correo: string; contraseña: st
     const { contraseña: _contraseña, ...usuarioSinContraseña } = usuario[0];
 
     // Responder con los datos del usuario y el token
-    console.log({ token:token, idUsuario: usuario[0].id, usuario: usuarioSinContraseña })
     return {  idUsuario: usuario[0].id, usuario: usuarioSinContraseña,token:token,};
   } catch (error: unknown) {
     if (error instanceof Error) {

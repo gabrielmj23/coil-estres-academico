@@ -4,7 +4,8 @@ import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowLeft from "~/icons/ArrowLeft";
 import { iniciarSesion } from "~/api/controllers/usuarios";
-import {useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
 
 export function meta() {
   return [
@@ -28,7 +29,11 @@ export async function action({ request }: { request: Request }) {
       return {
         success: true,
         message: "Inicio de sesión exitoso",
-        data: { usuario: respuesta.usuario, token: respuesta.token, idUsuario: respuesta.idUsuario },
+        data: {
+          usuario: respuesta.usuario,
+          token: respuesta.token,
+          idUsuario: respuesta.idUsuario,
+        },
       };
     } else {
       return {
@@ -44,14 +49,15 @@ export async function action({ request }: { request: Request }) {
   }
 }
 
-
 export default function LoginPage() {
-  const [cookies, setCookie] = useCookies(["token", "idUsuario"])
+  const [cookies, setCookie] = useCookies(["token", "idUsuario"]);
   const actionData = useActionData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); //error que aparece en el modal
 
   // Validation functions
   const isValidEmail = (email: string) => {
@@ -92,9 +98,15 @@ export default function LoginPage() {
   useEffect(() => {
     if (actionData?.success && actionData?.data) {
       const { token, idUsuario } = actionData.data;
-      console.log(actionData.data);
-      setCookie("token", token, { path: "/", maxAge: 60 * 60 * 12 }); // Guardamos el token en una cookie
-      setCookie("idUsuario", idUsuario, { path: "/", maxAge: 60 * 60 * 12 }); // Guardamos el ID del usuario en una cookie
+      setCookie("token", token, { path: "/", maxAge: 60 * 60 * 12 });
+      setCookie("idUsuario", idUsuario, { path: "/", maxAge: 60 * 60 * 12 });
+    } else if (actionData?.message && !actionData?.success) {
+      setErrorMessage(actionData.message);
+      setIsModalOpen(true);
+      // Hide modal after 5 seconds
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 4000);
     }
   }, [actionData, setCookie]);
 
@@ -152,11 +164,14 @@ export default function LoginPage() {
           </p>
         </div>
       </main>
+      <ModalAlert
+        isOpen={isModalOpen}
+        message={errorMessage}
+        onClose={() => setIsModalOpen(false)}
+      />
+
       {actionData?.success && (
         <div className="text-green-600">{actionData.message}</div>
-      )}
-      {actionData?.message && !actionData?.success && (
-        <div className="text-red-600">{actionData.message}</div>
       )}
     </div>
   );
