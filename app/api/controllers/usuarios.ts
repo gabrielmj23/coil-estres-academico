@@ -58,3 +58,54 @@ export const registrarUsuario = async (userData: {
     throw data({ message: "Error al registrar usuario." }, { status: 500 });
   }
 };
+
+
+/**
+ * Inicia sesión con un usuario registrado
+ * @param loginData Datos del usuario para iniciar sesión
+ * @author Karim
+ */
+
+export const iniciarSesion = async (loginData: {
+  correo: string;
+  contraseña: string;
+}) => {
+  try {
+    const { correo, contraseña } = loginData;
+
+    // Buscar el usuario por correo
+    const usuario = await db
+      .select()
+      .from(usuarios)
+      .where(eq(usuarios.correo, correo)) // Filtrar por correo
+      .limit(1)
+      .execute();
+
+    if (usuario.length === 0) {
+      throw new Error("Correo o Contraseña Incorrecta.");
+    }
+
+    // Comparar la contraseña proporcionada con la almacenada en la base de datos
+    const esContraseñaValida = await bcrypt.compare(contraseña, usuario[0].contraseña);
+
+    if (!esContraseñaValida) {
+      throw new Error("Correo o Contraseña Incorrecta.");
+    }
+
+    // Eliminar la contraseña del objeto usuario antes de devolver la respuesta
+    const { contraseña: _contraseña, ...usuarioSinContraseña } = usuario[0];
+
+    // Responder con el usuario sin la contraseña
+    console.log("usuario inicio sesion")
+    return { usuario: usuarioSinContraseña };  // Return the user data without password
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error al iniciar sesión:", error.message);
+      return { message: error.message || "Error al iniciar sesión." }; // Return an object with an error message
+    }
+
+    // Si el error no es una instancia de Error, lo manejamos genéricamente
+    console.error("Error inesperado:", error);
+    return { message: "Error inesperado al iniciar sesión." }; // Handle unexpected errors
+  }
+};

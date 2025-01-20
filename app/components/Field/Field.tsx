@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 interface FieldProps {
   label: string;
+  name: string;
   placeholder: string;
   type: string; // text || date || number || password
   value: string;
@@ -13,13 +14,14 @@ interface FieldProps {
 
 const Field: React.FC<{
   label: string;
+  name: string;
   iconSrc: string;
   type: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
   error: string;
-}> = ({ label, iconSrc, type, value, onChange, placeholder, error }) => {
+}> = ({ label,name, iconSrc, type, value, onChange, placeholder, error }) => {
   const [touched, setTouched] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +50,7 @@ const Field: React.FC<{
           <img src={iconSrc} alt="Email Icon" />
         </div>
         <input
+          name={name}
           type={isPasswordField && showPassword ? "text" : type}
           value={value}
           onChange={onChange}

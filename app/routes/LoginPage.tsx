@@ -1,42 +1,69 @@
-import { Link } from "react-router";
-import type { Route } from "./+types/LoginPage";
-import ArrowLeft from "~/icons/ArrowLeft";
+import { useState } from "react";
+import { useActionData, Link, Form } from "react-router";
 import Field from "~/components/Field/Field";
-import React, { useState, useEffect } from "react";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
-import ArrowRight from "~/icons/ArrowRight";
+import ArrowLeft from "~/icons/ArrowLeft";
+import { iniciarSesion } from "~/api/controllers/usuarios";
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return [
     { title: "Iniciar Sesión" },
     { name: "description", content: "Página de inicio de sesión." },
   ];
 }
 
+export async function action({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const correo = formData.get("correo") as string;
+  const contraseña = formData.get("contraseña") as string;
+
+  const loginData = { correo, contraseña };
+
+  try {
+    const respuesta = await iniciarSesion(loginData);
+    // Retornar la respuesta correcta dependiendo del éxito del inicio de sesión
+    if (respuesta.usuario) {
+      return {
+        success: true,
+        message: "Inicio de sesión exitoso",
+        data: respuesta.usuario,
+      };
+    } else {
+      return {
+        success: false,
+        message: respuesta.message || "Error desconocido",
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message || "Error al intentar iniciar sesión",
+    };
+  }
+}
+
 export default function LoginPage() {
+  const actionData = useActionData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
-  const [url, setUrl] = useState("");
 
-  // Función para validar correo electrónico
+  // Validation functions
   const isValidEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex estándar para validar correos
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // Función para validar contraseña
   const isValidPassword = (password: string) => {
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,}$/;
-    // Regex corregida que permite el punto (.) además de los caracteres especiales
     return passwordRegex.test(password);
   };
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    if (isValidEmail(email) || email === "") {
+    if (isValidEmail(e.target.value) || e.target.value === "") {
       setErrorEmail("");
     } else {
       setErrorEmail("El correo electrónico no tiene un formato válido");
@@ -46,12 +73,10 @@ export default function LoginPage() {
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-
-    // Aquí validamos la contraseña correctamente
     if (newPassword === "") {
-      setErrorPassword(""); // Limpiar el error si el campo está vacío
+      setErrorPassword("");
     } else if (isValidPassword(newPassword)) {
-      setErrorPassword(""); // Limpiar el error si la contraseña es válida
+      setErrorPassword("");
     } else {
       setErrorPassword(
         "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial."
@@ -59,19 +84,7 @@ export default function LoginPage() {
     }
   };
 
-  // Update canLogin state whenever email or password changes
-  useEffect(() => {
-    if (isValidEmail(email) && isValidPassword(password)) {
-      setUrl("/registrarse");
-    } else {
-      setUrl("");
-    }
-  }, [email, password]);
-  const handleLogin = () => {
-    if (!url.length) {
-      // Logic to handle successful login (e.g., redirection)
-    }
-  };
+  
 
   return (
     <div className="h-[100dvh]">
@@ -84,33 +97,35 @@ export default function LoginPage() {
       </Link>
       <main className="flex flex-col gap-[3.125rem] mt-5">
         <h1 className="text-3xl text-center">Iniciar Sesión</h1>
-        <div className="space-y-6">
-          <Field
-            label="Correo Electrónico"
-            placeholder="example@ucab.com"
-            type="text"
-            onChange={onChangeEmail}
-            value={email}
-            iconSrc="/email-icon.svg"
-            error={errorEmail}
-          />
-
-          <Field
-            label="Contraseña"
-            placeholder="Ingrese su contraseña.."
-            type="password"
-            onChange={onChangePassword}
-            value={password}
-            iconSrc="/lock-icon.svg"
-            error={errorPassword}
-          />
-
-          <PrimaryButton
-            label={"Inciar Sesión"}
-            linkTo={url}
-            disabled={!url.length}
-          />
-        </div>
+        <Form method="post">
+          <div className="space-y-6">
+            <Field
+              label="Correo Electrónico"
+              name={"correo"}
+              placeholder="example@ucab.com"
+              type="text"
+              onChange={onChangeEmail}
+              value={email}
+              iconSrc="/email-icon.svg"
+              error={errorEmail}
+            />
+            <Field
+              label="Contraseña"
+              name="contraseña"
+              placeholder="Ingrese su contraseña.."
+              type="password"
+              onChange={onChangePassword}
+              value={password}
+              iconSrc="/lock-icon.svg"
+              error={errorPassword}
+            />
+            <PrimaryButton
+              type="submit"
+              label="Iniciar Sesión"
+              disabled={!isValidEmail(email) || !isValidPassword(password)}
+            />
+          </div>
+        </Form>
         <div>
           <p className="login-text text-center">
             ¿No tienes una cuenta?{" "}
@@ -125,6 +140,12 @@ export default function LoginPage() {
           </p>
         </div>
       </main>
+      {actionData?.success && (
+        <div className="text-green-600">{actionData.message}</div>
+      )}
+      {actionData?.message && !actionData?.success && (
+        <div className="text-red-600">{actionData.message}</div>
+      )}
     </div>
   );
 }

@@ -8,6 +8,7 @@ interface ButtonProps {
   disabled?: boolean;
   icon?: React.JSX.Element;
   linkTo?: string;
+  type?: 'submit' | 'reset' | 'button';
 }
 
 const PrimaryButton: React.FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   disabled,
   icon,
   linkTo,
+  type = 'button' //Default if not provided
 }) => {
   if (linkTo) {
     return (
@@ -30,6 +32,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
       className="button w-2/3 md:w-72"
       onClick={onClick}
       disabled={disabled}
+      type={type}
     >
       {label}
       {icon}
