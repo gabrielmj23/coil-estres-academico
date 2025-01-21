@@ -162,6 +162,9 @@ export default function QuestionnaireSiscoPage({
       <header className="questionnaire"></header>
       <main>
         <div>
+          <h1 className="text-center text-2xl font-bold text-coilterracota mb-4 px-2">
+            {currentSection.instruccion}:
+          </h1>
           <h2 className="text-center text-xl font-bold text-coilterracota px-3 py-5 pb-2">
             {currentQuestion.contenido}
           </h2>
