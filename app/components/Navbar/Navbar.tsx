@@ -1,15 +1,28 @@
+import { useCookies } from "react-cookie";
 import "./Navbar.css"
 import { Link, useLocation } from "react-router"
+import { useEffect, useState } from "react";
+import { getUsuario } from "~/api/controllers/usuarios";
+
+interface usuario{
+  id: number,
+  nombre: string,
+  correo: string,
+  fechaNacimiento: string,
+  sexo: string,
+}
 
 interface NavbarProps {
     usuario: {
-        nombre: string;
+      nombre: string;
     };
-}
+  }
 
-const Navbar: React.FC<NavbarProps> = ({usuario}) => {
+const Navbar: React.FC<NavbarProps>= ({usuario}) => {
     const location = useLocation();
-    console.log(location.pathname)
+    const [cookies, setCookie] = useCookies(["token", "idUsuario"]);
+    const userID = cookies.idUsuario;
+    console.log(cookies)
     return (
         <nav className="navbar">
             <div className="navbar-message">
