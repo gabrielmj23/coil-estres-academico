@@ -3,7 +3,7 @@ import { data } from "react-router";
 import bcrypt from "bcryptjs"; // Necesitamos bcrypt para encriptar la contraseña
 import { eq } from "drizzle-orm";
 import db from "../db"; // Importamos la instancia de db que has configurado
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 /**
@@ -56,11 +56,10 @@ export const registrarUsuario = async (userData: {
     // Responder con el usuario creado
     return data({ usuario: usuarioSinContraseña }, { status: 201 });
   } catch (error) {
-    console.error("Error al registrar usuario:", error);
+    console.error(error, "hola en back");
     throw data({ message: "Error al registrar usuario." }, { status: 500 });
   }
 };
-
 
 /**
  * Inicia sesión con un usuario registrado
@@ -68,7 +67,10 @@ export const registrarUsuario = async (userData: {
  * @author Karim
  */
 
-export const iniciarSesion = async (loginData: { correo: string; contraseña: string }) => {
+export const iniciarSesion = async (loginData: {
+  correo: string;
+  contraseña: string;
+}) => {
   try {
     const { correo, contraseña } = loginData;
 
@@ -85,20 +87,31 @@ export const iniciarSesion = async (loginData: { correo: string; contraseña: st
     }
 
     // Comparar la contraseña proporcionada con la almacenada en la base de datos
-    const esContraseñaValida = await bcrypt.compare(contraseña, usuario[0].contraseña);
+    const esContraseñaValida = await bcrypt.compare(
+      contraseña,
+      usuario[0].contraseña
+    );
 
     if (!esContraseñaValida) {
       throw new Error("Correo o Contraseña Incorrecta.");
     }
 
     // // Crea un token (usando jsonwebtoken)
-    const token = jwt.sign({ idUsuario: usuario[0].id }, process.env.JWT_SECRET_KEY!, { expiresIn: '12h' });
+    const token = jwt.sign(
+      { idUsuario: usuario[0].id },
+      process.env.JWT_SECRET_KEY!,
+      { expiresIn: "12h" }
+    );
 
     // Eliminar la contraseña del objeto usuario antes de devolver la respuesta
     const { contraseña: _contraseña, ...usuarioSinContraseña } = usuario[0];
 
     // Responder con los datos del usuario y el token
-    return {  idUsuario: usuario[0].id, usuario: usuarioSinContraseña,token:token,};
+    return {
+      idUsuario: usuario[0].id,
+      usuario: usuarioSinContraseña,
+      token: token,
+    };
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error al iniciar sesión:", error.message);

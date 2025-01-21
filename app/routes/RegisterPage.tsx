@@ -4,6 +4,7 @@ import type { Route } from "./+types/RegisterPage";
 import { registrarUsuario } from "~/api/controllers/usuarios";
 import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
 import ArrowLeft from "~/icons/ArrowLeft";
 
 export function meta({}: Route.MetaArgs) {
@@ -25,8 +26,10 @@ export async function action({ request }: Route.ActionArgs) {
   console.log(usuarioData)
   try {
     const respuesta = await registrarUsuario(usuarioData);
+    
     return { success: true, message: "Registro exitoso", data: respuesta };
   } catch (error) {
+    console.log(error, "hola en front")
     return { success: false, message: (error as Error).message };
   }
 }
@@ -44,6 +47,9 @@ export default function RegisterPage() {
   const [errorContraseña, setErrorContraseña] = useState<string>("");
   const [errorFechaNacimiento, setErrorFechaNacimiento] = useState<string>("");
   const [errorSexo, setErrorSexo] = useState<string>("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
 
   // Validation functions
   const isValidEmail = (email: string) => {
@@ -217,6 +223,11 @@ export default function RegisterPage() {
         <div>
         </div>
       </main>
+      <ModalAlert
+        isOpen={isModalOpen}
+        message={modalMessage}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
