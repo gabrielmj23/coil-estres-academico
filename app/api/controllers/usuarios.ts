@@ -108,3 +108,37 @@ export const iniciarSesion = async (loginData: { correo: string; contraseña: st
     return { message: "Error inesperado al iniciar sesión." };
   }
 };
+
+/**
+ * Devuelve los datos de un usuario a partir de su id
+ * @param idUsuario id del usuario
+ * @author Andrés
+*/
+export const getUsuario = async (idUsuario: number) => {
+  try {
+    // Buscar el usuario por id
+    const usuario = await db
+      .select()
+      .from(usuarios)
+      .where(eq(usuarios.id, idUsuario)) // Filtrar por id
+      .limit(1)
+      .execute();
+
+    if (usuario.length === 0) {
+      throw new Error("Usuario no encontrado.");
+    }
+
+    // Eliminar la contraseña del objeto usuario antes de devolver la respuesta
+    const { contraseña: _contraseña, ...usuarioSinContraseña } = usuario[0];
+
+    // Responder con los datos del usuario
+    return usuarioSinContraseña;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Error al obtener usuario:", error.message);
+      return { message: error.message || "Error al obtener usuario." };
+    }
+    console.error("Error inesperado:", error);
+    return { message: "Error inesperado al obtener usuario." };
+  }
+};
