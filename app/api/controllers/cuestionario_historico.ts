@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import db from "../db"
 import { cuestionario_historico } from "../tables/cuestionario_historico"
-import { resultados } from "../tables/Resultados";
+import { resultados } from "../tables/resultados";
 import { cuestionarios } from "../tables/cuestionarios";
 import { indicadores } from "../tables/indicadores";
 import { data } from "react-router";
