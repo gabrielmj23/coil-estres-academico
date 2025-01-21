@@ -14,18 +14,17 @@ interface FieldProps {
   options?: { value: string; label: string }[]; // Only for select type
 }
 
-const Field: React.FC<{
-  label: string;
-  name: string;
-  iconSrc: string;
-  type: string;
-  value: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement> ) => void;
-  onChangeSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  placeholder: string;
-  error: string;
-  options?: { value: string; label: string }[]; 
-}> = ({ label,name, iconSrc, type, value, onChange, onChangeSelect, placeholder, error, options }) => {
+const Field: React.FC<FieldProps> = ({ 
+  label,
+  name, 
+  iconSrc, 
+  type, 
+  value, 
+  onChange, 
+  onChangeSelect, 
+  placeholder, 
+  error,
+  options }) => {
   const [touched, setTouched] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
