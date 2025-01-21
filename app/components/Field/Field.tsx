@@ -5,11 +5,13 @@ interface FieldProps {
   label: string;
   name: string;
   placeholder: string;
-  type: string; // text || date || number || password
+  type: string; // text || date || number || password || select
   value: string;
   iconSrc: string;
   error?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void; // Only for select type
+  options?: { value: string; label: string }[]; // Only for select type
 }
 
 const Field: React.FC<{
@@ -18,10 +20,12 @@ const Field: React.FC<{
   iconSrc: string;
   type: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement> ) => void;
+  onChangeSelect?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder: string;
   error: string;
-}> = ({ label,name, iconSrc, type, value, onChange, placeholder, error }) => {
+  options?: { value: string; label: string }[]; 
+}> = ({ label,name, iconSrc, type, value, onChange, onChangeSelect, placeholder, error, options }) => {
   const [touched, setTouched] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -39,6 +43,7 @@ const Field: React.FC<{
   };
 
   const isPasswordField = type === "password";
+  const isSelectField = type === "select";
 
   return (
     <div className="mx-auto w-11/12">
@@ -47,22 +52,43 @@ const Field: React.FC<{
       </label>
       <div className="relative">
         <div className="absolute inset-y-0 start-0 flex items-center ps-4 pointer-events-none">
-          <img src={iconSrc} alt="Email Icon" />
+          <img src={iconSrc} alt="Icon" />
         </div>
-        <input
-          name={name}
-          type={isPasswordField && showPassword ? "text" : type}
-          value={value}
-          onChange={onChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          className={`block w-full ps-14 p-3.5 input-style text-coilgray-light font-bold ${
-            error != "" && touched
-              ? "bg-F7E8E2 border-1 border-coilorange-light field-error"
-              : "border-none focus:border-coilbeige focus:shadow-md ok-input-style"
-          }`}
-          placeholder={placeholder}
-        />
+        {isSelectField ? (
+          <select
+            name={name}
+            value={value}
+            onChange={onChangeSelect}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            className={`block w-full ps-14 p-3.5 input-style text-coilgray-light font-bold ${
+              error && touched
+                ? "bg-F7E8E2 border-1 border-coilorange-light field-error"
+                : "border-none focus:border-coilbeige focus:shadow-md ok-input-style"
+            }`}
+          >
+            {options?.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            name={name}
+            type={isPasswordField && showPassword ? "text" : type}
+            value={value}
+            onChange={onChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            className={`block w-full ps-14 p-3.5 input-style text-coilgray-light font-bold ${
+              error && touched
+                ? "bg-F7E8E2 border-1 border-coilorange-light field-error"
+                : "border-none focus:border-coilbeige focus:shadow-md ok-input-style"
+            }`}
+            placeholder={placeholder}
+          />
+          )}
 
         {isPasswordField && (
           <button

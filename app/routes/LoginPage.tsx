@@ -154,14 +154,22 @@ export default function LoginPage() {
         <div>
           <p className="login-text text-center">
             ¿No tienes una cuenta?{" "}
-            <a href="/registrarse" className="login-link">
+            <Link
+             to="/registrarse"
+             className="login-link"
+             viewTransition
+            >
               Regístrate.
-            </a>
+            </Link>
           </p>
           <p className="text-center">
-            <a href="/olvide-mi-contraseña" className="login-link">
+            <Link 
+              to="/olvide-mi-contraseña" 
+              className="login-link"
+              viewTransition
+            >
               Olvidé mi contraseña
-            </a>
+            </Link>
           </p>
         </div>
       </main>
