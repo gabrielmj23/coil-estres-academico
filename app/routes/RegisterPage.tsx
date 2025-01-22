@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, useActionData, Link } from "react-router";
+import { Form, useActionData, Link, redirect } from "react-router";
 import type { Route } from "./+types/RegisterPage";
-import { registrarUsuario } from "~/api/controllers/usuarios";
+import { iniciarSesion, registrarUsuario } from "~/api/controllers/usuarios";
 import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowLeft from "~/icons/ArrowLeft";
 import { getSexoIconSrc, isValidEmail, isValidPassword } from "~/utils";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
+import { commitSession, getSession } from "~/sessions.server";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -26,6 +28,20 @@ export async function action({ request }: Route.ActionArgs) {
   console.log(usuarioData);
   try {
     const respuesta = await registrarUsuario(usuarioData);
+
+    // Iniciar sesión y redirigir
+    const loginResponse = await iniciarSesion({ correo, contraseña });
+    if (loginResponse.idUsuario) {
+      const session = await getSession(request.headers.get("Cookie"));
+      session.set("userId", String(loginResponse.idUsuario));
+      session.set("userName", loginResponse.userName);
+
+      return redirect("/seleccion-de-prueba", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
+        },
+      });
+    }
     return { success: true, message: "Registro exitoso", data: respuesta };
   } catch (error) {
     return { success: false, message: (error as Error).message };
@@ -34,12 +50,19 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function RegisterPage() {
   const actionData = useActionData<{ success: boolean; message: string }>();
+
+  // Form data
   const [nombre, setNombre] = useState<string>("");
   const [correo, setCorreo] = useState<string>("");
   const [contraseña, setContraseña] = useState<string>("");
   const [fechaNacimiento, setFechaNacimiento] = useState<string>("");
   const [sexo, setSexo] = useState<string>("");
 
+  // Modal
+  const [modalMessage, setModalMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Errors
   const [errorNombre, setErrorNombre] = useState<string>("");
   const [errorCorreo, setErrorCorreo] = useState<string>("");
   const [errorContraseña, setErrorContraseña] = useState<string>("");
@@ -96,6 +119,18 @@ export default function RegisterPage() {
     }
   };
 
+  // UseEffect to handle response
+  useEffect(() => {
+    if (actionData?.message) {
+      setModalMessage(actionData.message);
+      setIsModalOpen(true);
+      // Hide modal after 5 seconds
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 4000);
+    }
+  }, [actionData]);
+
   return (
     <div className="h-[100dvh]">
       <header className="primary rounded-b-[32px] mb-12"></header>
@@ -106,7 +141,7 @@ export default function RegisterPage() {
       >
         <ArrowLeft />
       </Link>
-      <main className="flex flex-col gap-[3.125rem] mt-5">
+      <main className="flex flex-col gap-8 mt-5">
         <h1 className="text-3xl text-center">Registro de Usuario</h1>
         <Form method="post" className="space-y-6">
           <Field
@@ -116,7 +151,7 @@ export default function RegisterPage() {
             type="text"
             value={nombre}
             onChange={onChangeNombre}
-            error=""
+            error={errorNombre}
             iconSrc="/user-icon.svg"
           />
           <Field
@@ -168,21 +203,19 @@ export default function RegisterPage() {
           <div></div>
           <PrimaryButton type="submit" label="Registrar" disabled={false} />
         </Form>
-        {actionData && (
-          <p className="text-center">
-            {actionData.success
-              ? actionData.message
-              : `Error: ${actionData.message}`}
-          </p>
-        )}
         <p className="login-text text-center">
           ¿Ya tienes una cuenta?{" "}
           <Link to="/iniciar-sesion" className="login-link" viewTransition>
             Inicia Sesión
           </Link>
         </p>
-        <div></div>
       </main>
+      <ModalAlert
+        type="error"
+        message={modalMessage}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
