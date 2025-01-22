@@ -2,17 +2,15 @@ import "./Navbar.css";
 import { Link, useLocation } from "react-router";
 
 interface NavbarProps {
-  usuario: {
-    nombre: string;
-  };
+  nombre: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ usuario }) => {
+const Navbar: React.FC<NavbarProps> = ({ nombre }) => {
   const location = useLocation();
   return (
     <nav className="navbar h-28">
       <div className="navbar-message">
-        <a>¡Bienvenido, {usuario.nombre}!</a>
+        <a>¡Bienvenido, {nombre}!</a>
       </div>
       <ul className="navbar-links">
         <li>

@@ -2,6 +2,8 @@ import type { Route } from "./+types/DashboardRecommendations";
 import { getejercios } from "~/api/controllers/ejercicios";
 import Card from "~/components/SelectorCuestionario/SelectorCuestionario";
 import Navbar from "~/components/Navbar/Navbar";
+import { getSession } from "~/sessions.server";
+import { redirect } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -14,14 +16,22 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
-  return getejercios();
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("userId")) {
+    return redirect("/iniciar-sesion");
+  }
+  const ejercicios = await getejercios();
+  return {
+    userName: session.get("userName")!,
+    ejercicios,
+  };
 }
 
 export default function DashboardRecommendationsPage({
   loaderData,
 }: Route.ComponentProps) {
-  const { ejercicios } = loaderData;
+  const { userName, ejercicios } = loaderData;
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -35,7 +45,7 @@ export default function DashboardRecommendationsPage({
 
   return (
     <div className="h-[100dvh]">
-      <Navbar usuario={{ nombre: "Chacon" }} />
+      <Navbar nombre={userName} />
       <main className="flex flex-col gap-5 pb-12">
         <h1 className="text-3xl text-center">Ejercicios Recomendados</h1>
         <div className="flex justify-center">

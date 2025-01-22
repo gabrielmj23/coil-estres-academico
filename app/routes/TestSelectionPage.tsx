@@ -5,6 +5,7 @@ import { useState } from "react";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowRight from "~/icons/ArrowRight";
 import Navbar from "~/components/Navbar/Navbar";
+import { getSession } from "~/sessions.server";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,14 +17,19 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
-  return getCuestionarios();
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const cuestionarios = await getCuestionarios();
+  return {
+    userName: session.get("userName"),
+    questionnaires: cuestionarios,
+  };
 }
 
 export default function TestSelectionPage({
   loaderData,
 }: Route.ComponentProps) {
-  const { questionnaires } = loaderData;
+  const { userName, questionnaires } = loaderData;
   const [selectedId, setSelectedId] = useState(0);
 
   const selectedTest = questionnaires.find((test) => test.id === selectedId);
@@ -35,7 +41,11 @@ export default function TestSelectionPage({
 
   return (
     <div className="h-[100dvh]">
-      <Navbar usuario={{nombre: "Gabriel"}}/>
+      {userName ? (
+        <Navbar nombre={userName} />
+      ) : (
+        <header className="primary"></header>
+      )}
       <main className="flex flex-col gap-5">
         <h1 className="text-3xl text-center">Pruebas Disponibles</h1>
         {!questionnaires.length && <p>No hay pruebas disponibles</p>}
