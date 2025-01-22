@@ -8,6 +8,7 @@ export default [
 
   // Perfil de usuario
   route("configurar-perfil", "./routes/ProfileConfigurationPage.tsx"), // Ruta "/configurar-perfil"
+  route("recomendaciones-dashboard", "./routes/DashboardRecommendations.tsx"), // Ruta "/recomendaciones-dashboard"
 
   // Cuestionarios: Sisco y Goldberg
   route("cuestionario-sisco", "./routes/QuestionnaireSiscoPage.tsx"), // Ruta "/cuestionario-sisco"

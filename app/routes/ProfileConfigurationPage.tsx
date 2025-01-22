@@ -12,6 +12,7 @@ import ArrowLeft from "~/icons/ArrowLeft";
 import { getSession } from "~/sessions.server";
 import { getSexoIconSrc, isValidEmail, isValidPassword } from "~/utils";
 import ModalAlert from "~/components/ModalAlert/ModalAlert";
+import Navbar from "~/components/Navbar/Navbar";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -165,14 +166,7 @@ export default function ProfileConfigurationPage({
 
   return (
     <div className="h-[100dvh]">
-      <header className="primary rounded-b-[32px] mb-12"></header>
-      <Link
-        to="/"
-        className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
-        viewTransition
-      >
-        <ArrowLeft />
-      </Link>
+      <Navbar usuario={{ nombre: "Chacon" }} />
       <main className="flex flex-col gap-[3.125rem] mt-5">
         <h1 className="text-3xl text-center">Configuración de Usuario</h1>
         <Form method="post" className="space-y-6">
