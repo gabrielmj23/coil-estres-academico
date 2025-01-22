@@ -22,7 +22,7 @@ export async function action({ request }: Route.ActionArgs) {
   const sexo = formData.get("sexo") as string;
 
   const usuarioData = { nombre, correo, contraseña, fechaNacimiento, sexo };
-  console.log(usuarioData)
+  console.log(usuarioData);
   try {
     const respuesta = await registrarUsuario(usuarioData);
     return { success: true, message: "Registro exitoso", data: respuesta };
@@ -84,7 +84,7 @@ export default function RegisterPage() {
       setErrorContraseña(""); // Limpiar el error si la contraseña es válida
     } else {
       setErrorContraseña(
-        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial."
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial de los siguientes (!@#$%^&*,.)."
       );
     }
   };
@@ -110,7 +110,7 @@ export default function RegisterPage() {
   const getSexoIconSrc = (sexo: string) => {
     switch (sexo) {
       case "":
-        return "/check-icon.svg"
+        return "/check-icon.svg";
       case "M":
         return "/male-icon.svg";
       case "F":
@@ -137,7 +137,7 @@ export default function RegisterPage() {
         <Form method="post" className="space-y-6">
           <Field
             label="Nombre"
-            name= "nombre"
+            name="nombre"
             placeholder="Ingrese su nombre"
             type="text"
             value={nombre}
@@ -147,7 +147,7 @@ export default function RegisterPage() {
           />
           <Field
             label="Correo Electrónico"
-            name = "correo"
+            name="correo"
             placeholder="example@ucab.com"
             type="email"
             value={correo}
@@ -158,7 +158,7 @@ export default function RegisterPage() {
           <Field
             label="Contraseña"
             placeholder="Ingrese su contraseña"
-            name = "contraseña"
+            name="contraseña"
             type="password"
             value={contraseña}
             onChange={onChangeContraseña}
@@ -191,31 +191,23 @@ export default function RegisterPage() {
               { value: "Otro", label: "Otro" },
             ]}
           />
-          <div>
-          </div>
-          <PrimaryButton
-              type="submit"
-              label="Registrar"
-              disabled={false}
-            />
+          <div></div>
+          <PrimaryButton type="submit" label="Registrar" disabled={false} />
         </Form>
         {actionData && (
           <p className="text-center">
-            {actionData.success ? actionData.message : `Error: ${actionData.message}`}
+            {actionData.success
+              ? actionData.message
+              : `Error: ${actionData.message}`}
           </p>
         )}
-         <p className="login-text text-center">
-            ¿Ya tienes una cuenta?{" "}
-            <Link
-              to= "/iniciar-sesion"
-              className="login-link"
-              viewTransition
-            >
-              Inicia Sesión
-            </Link>
-          </p>
-        <div>
-        </div>
+        <p className="login-text text-center">
+          ¿Ya tienes una cuenta?{" "}
+          <Link to="/iniciar-sesion" className="login-link" viewTransition>
+            Inicia Sesión
+          </Link>
+        </p>
+        <div></div>
       </main>
     </div>
   );
