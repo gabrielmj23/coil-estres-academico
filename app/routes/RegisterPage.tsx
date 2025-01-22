@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, useActionData, Link } from "react-router";
+import { Form, useActionData, Link, data } from "react-router";
 import type { Route } from "./+types/RegisterPage";
 import { registrarUsuario } from "~/api/controllers/usuarios";
 import Field from "~/components/Field/Field";
@@ -23,15 +23,17 @@ export async function action({ request }: Route.ActionArgs) {
   const sexo = formData.get("sexo") as string;
 
   const usuarioData = { nombre, correo, contraseña, fechaNacimiento, sexo };
-  console.log(usuarioData)
-  try {
-    const respuesta = await registrarUsuario(usuarioData);
-    
-    return { success: true, message: "Registro exitoso", data: respuesta };
-  } catch (error) {
-    console.log(error, "hola en front")
-    return { success: false, message: (error as Error).message };
+  console.log(usuarioData);
+  const respuesta = await registrarUsuario(usuarioData);
+  if ("usuario" in respuesta) {
+    return data({
+      success: true,
+      message: "Registro exitoso",
+      data: respuesta,
+    });
   }
+
+  return data({ success: false, message: respuesta.message });
 }
 
 export default function RegisterPage() {
@@ -116,7 +118,7 @@ export default function RegisterPage() {
   const getSexoIconSrc = (sexo: string) => {
     switch (sexo) {
       case "":
-        return "/check-icon.svg"
+        return "/check-icon.svg";
       case "M":
         return "/male-icon.svg";
       case "F":
@@ -143,7 +145,7 @@ export default function RegisterPage() {
         <Form method="post" className="space-y-6">
           <Field
             label="Nombre"
-            name= "nombre"
+            name="nombre"
             placeholder="Ingrese su nombre"
             type="text"
             value={nombre}
@@ -153,7 +155,7 @@ export default function RegisterPage() {
           />
           <Field
             label="Correo Electrónico"
-            name = "correo"
+            name="correo"
             placeholder="example@ucab.com"
             type="email"
             value={correo}
@@ -164,7 +166,7 @@ export default function RegisterPage() {
           <Field
             label="Contraseña"
             placeholder="Ingrese su contraseña"
-            name = "contraseña"
+            name="contraseña"
             type="password"
             value={contraseña}
             onChange={onChangeContraseña}
@@ -197,31 +199,23 @@ export default function RegisterPage() {
               { value: "Otro", label: "Otro" },
             ]}
           />
-          <div>
-          </div>
-          <PrimaryButton
-              type="submit"
-              label="Registrar"
-              disabled={false}
-            />
+          <div></div>
+          <PrimaryButton type="submit" label="Registrar" disabled={false} />
         </Form>
         {actionData && (
           <p className="text-center">
-            {actionData.success ? actionData.message : `Error: ${actionData.message}`}
+            {actionData.success
+              ? actionData.message
+              : `Error: ${actionData.message}`}
           </p>
         )}
-         <p className="login-text text-center">
-            ¿Ya tienes una cuenta?{" "}
-            <Link
-              to= "/iniciar-sesion"
-              className="login-link"
-              viewTransition
-            >
-              Inicia Sesión
-            </Link>
-          </p>
-        <div>
-        </div>
+        <p className="login-text text-center">
+          ¿Ya tienes una cuenta?{" "}
+          <Link to="/iniciar-sesion" className="login-link" viewTransition>
+            Inicia Sesión
+          </Link>
+        </p>
+        <div></div>
       </main>
       <ModalAlert
         isOpen={isModalOpen}
