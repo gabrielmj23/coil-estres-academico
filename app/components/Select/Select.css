@@ -1,0 +1,10 @@
+.coil-select {
+  @apply rounded-full border-solid border-[1px] border-coilterracota text-coilterracota font-semibold;
+  background: url("data:image/svg+xml,<svg width='32' height='32' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M17.7956 10.5529C17.4537 11.8287 16.7004 12.9561 15.6526 13.7601C14.6047 14.5642 13.3208 15 12 15C10.6792 15 9.3953 14.5642 8.34743 13.7601C7.29957 12.9561 6.5463 11.8287 6.20445 10.5529' stroke='%23582828' stroke-width='2' stroke-linejoin='round'/></svg>")
+    no-repeat !important;
+  background-position: 100% center !important;
+  -moz-appearance: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding-right: 2rem !important;
+}

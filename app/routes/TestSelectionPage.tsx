@@ -4,6 +4,7 @@ import Card from "~/components/SelectorCuestionario/SelectorCuestionario";
 import { useState } from "react";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowRight from "~/icons/ArrowRight";
+import Navbar from "~/components/Navbar/Navbar";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -34,7 +35,7 @@ export default function TestSelectionPage({
 
   return (
     <div className="h-[100dvh]">
-      <header className="primary rounded-b-[32px] mb-12"></header>
+      <Navbar usuario={{nombre: "Gabriel"}}/>
       <main className="flex flex-col gap-5">
         <h1 className="text-3xl text-center">Pruebas Disponibles</h1>
         {!questionnaires.length && <p>No hay pruebas disponibles</p>}

@@ -1,0 +1,45 @@
+.navbar {
+    background-color: #582828;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    border-bottom-right-radius: 32px;
+    border-bottom-left-radius: 32px;
+    margin-bottom: 3rem
+}
+
+.navbar-message {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.navbar-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.navbar-links li {
+    margin: 0;
+}
+
+.navbar-links a{
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+.navbar-links a.active-link {
+  color: #FDE0B5; /* Cambia el color a beige */
+}

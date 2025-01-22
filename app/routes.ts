@@ -19,4 +19,7 @@ export default [
   // Página de recomendaciones y aviso psicológico
   route("recomendaciones", "./routes/RecommendationsPage.tsx"), // Ruta "/recomendaciones"
   route("aviso-psicologico", "./routes/PsychologicalWarningPage.tsx"), // Ruta "/aviso-psicologico"
+
+  // Historial de cuestionarios
+  route("historial", "./routes/TestHistoryPage.tsx"),
 ] satisfies RouteConfig;

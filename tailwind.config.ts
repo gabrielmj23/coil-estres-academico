@@ -24,10 +24,13 @@ export default {
       },
       colors: {
         coilterracota: "#582828",
-        coilbeige: "#fde0b5",
         coilgreen: {
           light: "#f2f4eb",
           dark: "#9bb168",
+        },
+        coilbeige: {
+          light: "#fdefd9",
+          dark: "#fde0b5",
         },
         coilorange: {
           light: "#fe8659",
