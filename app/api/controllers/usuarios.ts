@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import db from "../db"; // Importamos la instancia de db que has configurado
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
+import isaac from "isaac";
 import "dotenv/config";
 
 /**
@@ -33,6 +34,12 @@ export const registrarUsuario = async (userData: {
     if (usuarioExistente.length > 0) {
       throw new Error("El correo ya está registrado.");
     }
+
+    bcrypt.setRandomFallback((len) => {
+      const buf = new Uint8Array(len);
+
+      return Array.from(buf.map(() => Math.floor(isaac.random() * 256)));
+    });
 
     // Encriptar la contraseña
     console.log("Contraseña: ", contraseña);
@@ -90,6 +97,12 @@ export const iniciarSesion = async (loginData: {
     if (usuario.length === 0) {
       throw new Error("Correo o Contraseña Incorrecta.");
     }
+
+    bcrypt.setRandomFallback((len) => {
+      const buf = new Uint8Array(len);
+
+      return Array.from(buf.map(() => Math.floor(isaac.random() * 256)));
+    });
 
     // Comparar la contraseña proporcionada con la almacenada en la base de datos
     const esContraseñaValida = await bcrypt.compare(
