@@ -66,7 +66,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const respuesta = await actualizarUsuario(usuarioData);
-    return { success: true, message: "Actualizacion exitosa", data: respuesta };
+    return { success: true, message: "Actualización exitosa", data: respuesta };
   } catch (error) {
     return { success: false, message: (error as Error).message };
   }
@@ -214,7 +214,7 @@ export default function ProfileConfigurationPage({
             iconSrc="/calendar-icon.svg"
           />
           <Field
-            label="Sexo"
+            label="Género"
             placeholder="Seleccione su sexo"
             name="sexo"
             type="select"
@@ -223,7 +223,7 @@ export default function ProfileConfigurationPage({
             error={errorSexo}
             iconSrc={getSexoIconSrc(formState.sexo)}
             options={[
-              { value: "", label: "Selecciona sexo" },
+              { value: "", label: "Selecciona tu género" },
               { value: "M", label: "Masculino" },
               { value: "F", label: "Femenino" },
               { value: "Otro", label: "Otro" },
