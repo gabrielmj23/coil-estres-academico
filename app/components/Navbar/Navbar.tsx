@@ -10,7 +10,7 @@ const Navbar: React.FC<NavbarProps> = ({ nombre }) => {
   return (
     <nav className="navbar h-28">
       <div className="navbar-message">
-        <a>¡Bienvenido, {nombre}!</a>
+        <a>¡Bienvenid@, {nombre}!</a>
       </div>
       <ul className="navbar-links">
         <li>
