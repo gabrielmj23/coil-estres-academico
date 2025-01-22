@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import db from "../db";
 import { cuestionario_historico } from "../tables/cuestionario_historico";
 import { resultados } from "../tables/resultados";
@@ -17,7 +17,8 @@ export const getResultadosCuestionario = async (idUsuario: number) => {
     const cuestionariosHistoricos = await db
       .select()
       .from(cuestionario_historico)
-      .where(eq(cuestionario_historico.idUsuario, idUsuario));
+      .where(eq(cuestionario_historico.idUsuario, idUsuario))
+      .orderBy(desc(cuestionario_historico.id));
 
     const resultadosFinales: (SiscoHistoryItem | GoldbergHistoryItem)[] = [];
 
@@ -82,8 +83,7 @@ export const getResultadosCuestionario = async (idUsuario: number) => {
 
       resultadosFinales.push(response);
     }
-    console.log(resultadosFinales);
-    return data({ resultados: resultadosFinales }, { status: 200 });
+    return { resultados: resultadosFinales };
   } catch (error) {
     console.error("Error al obtener los resultados del cuestionario:", error);
     throw new Error("Error al obtener los resultados del cuestionario.");

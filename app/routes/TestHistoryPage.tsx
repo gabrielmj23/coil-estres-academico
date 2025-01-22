@@ -3,6 +3,9 @@ import type { Route } from "./+types/TestHistoryPage";
 import HistoryCard from "~/components/HistoryCard/HistoryCard";
 import { getResultadosCuestionario } from "~/api/controllers/cuestionario_historico";
 import { useEffect, useState } from "react";
+import { getSession } from "~/sessions.server";
+import { redirect } from "react-router";
+import Navbar from "~/components/Navbar/Navbar";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,75 +14,55 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
-  const userID = 1; //Reemplazar con la id del usuario
-  return getResultadosCuestionario(userID);
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (session.has("userId")) {
+    const userID = session.get("userId");
+    const userName = session.get("userName")!;
+    const resultadosCuestionario = await getResultadosCuestionario(
+      Number(userID)
+    );
+    return { ...resultadosCuestionario, userName };
+  }
+  return redirect("/iniciar-sesion");
 }
 
-export default function TestHistoryPage({
-  loaderData,
-} : Route.ComponentProps) {
-  /*const history = [
-    {
-      id: 1,
-      questionnaireId: 1,
-      questionnaireName: "Estrés Académico",
-      date: new Date().toDateString(),
-      scoreStress: 74,
-    },
-    {
-      id: 2,
-      questionnaireId: 2,
-      questionnaireName: "Salud Mental",
-      date: new Date().toDateString(),
-      scoreAnxiety: 8,
-      scoreSocial: 10,
-    },
-    {
-      id: 3,
-      questionnaireId: 2,
-      questionnaireName: "Salud Mental",
-      date: new Date().toDateString(),
-      scoreAnxiety: 12,
-      scoreSocial: 10,
-    },
-  ];*/
+export default function TestHistoryPage({ loaderData }: Route.ComponentProps) {
+  const { resultados, userName } = loaderData;
+  const [selectedYear, setSelectedYear] = useState<string>("2025");
 
-  
-  
-  const {resultados} = loaderData;
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
-
-  const handleYearChange: React.ChangeEventHandler<HTMLSelectElement> = (event) => {
-    setSelectedYear(event.target.value || null);
+  const handleYearChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    event
+  ) => {
+    setSelectedYear(event.target.value);
   };
 
-  console.log(resultados)
   const filteredResultados = selectedYear
-  ? resultados.filter((item) => new Date(item.date).getFullYear().toString() === selectedYear)
-  : resultados;
-  console.log("Rendering component..."); // Agregar un log para verificar el renderizado
+    ? resultados.filter(
+        (item) => new Date(item.date).getFullYear().toString() === selectedYear
+      )
+    : resultados;
+
   return (
     <>
-      <header className="questionnaire"></header>
+      <Navbar nombre={userName} />
 
-      <main className="mt-3">
+      <main className="mt-3 mb-10">
         <h1 className="text-3xl text-center">Histórico de Pruebas</h1>
         <div className="px-4 mt-3">
-          <Select 
+          <Select
             options={[
               { value: "2024", label: "2024" },
-              { value: "2025", label: "2025"}]}
-            onChange={handleYearChange}    
+              { value: "2025", label: "2025" },
+            ]}
+            selected={selectedYear}
+            onChange={handleYearChange}
           />
         </div>
         <div className="px-4 mt-6 flex flex-col items-center gap-3">
-          { 
-          filteredResultados.map((item) => (
+          {filteredResultados.map((item) => (
             <HistoryCard key={item.id} item={item} />
-          ))
-          
-          }
+          ))}
         </div>
       </main>
     </>
