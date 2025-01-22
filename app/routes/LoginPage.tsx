@@ -2,75 +2,75 @@ import { useState, useEffect } from "react";
 import { useActionData, Link, Form } from "react-router";
 import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
-import ModalAlert from "~/components/ModalAlert/ModalAlert";
 import ArrowLeft from "~/icons/ArrowLeft";
-import {
-  generarCodigoRecuperacion,
-  verificarCodigo,
-} from "~/api/controllers/usuarios";
-import { useCookies } from "react-cookie"; // Importa useCookies
+import { iniciarSesion } from "~/api/controllers/usuarios";
+import { useCookies } from "react-cookie";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
 
 export function meta() {
   return [
-    { title: "Olvidé Mi Contraseña" },
-    { name: "description", content: "Página de recuperación de contraseña." },
+    { title: "Iniciar Sesión" },
+    { name: "description", content: "Página de inicio de sesión." },
   ];
 }
 
 export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
   const correo = formData.get("correo") as string;
-  const codigo = formData.get("codigo") as string;
+  const contraseña = formData.get("contraseña") as string;
+
+  const loginData = { correo, contraseña };
 
   try {
-    if (codigo) {
-      const respuesta = await verificarCodigo(correo, codigo);
-      if (respuesta?.message === "Código verificado correctamente.") {
-        return { success: true, message: "Código verificado correctamente" };
-      } else {
-        return {
-          success: false,
-          message: respuesta.message || "Código incorrecto o expirado",
-        };
-      }
+    const respuesta = await iniciarSesion(loginData);
+
+    // Verificar que la respuesta tenga el campo 'usuario' y 'token'
+    if (respuesta.usuario && respuesta.token) {
+      return {
+        success: true,
+        message: "Inicio de sesión exitoso",
+        data: {
+          usuario: respuesta.usuario,
+          token: respuesta.token,
+          idUsuario: respuesta.idUsuario,
+        },
+      };
     } else {
-      const respuesta = await generarCodigoRecuperacion(correo);
-      if (respuesta?.message === "Código de recuperación enviado.") {
-        return { success: true, message: "Código enviado correctamente" };
-      } else {
-        return {
-          success: false,
-          message: respuesta.message || "Error al enviar el código",
-        };
-      }
+      return {
+        success: false,
+        message: respuesta.message || "Error desconocido",
+      };
     }
   } catch (error) {
     return {
       success: false,
-      message: (error as Error).message || "Error desconocido",
+      message: (error as Error).message || "Error al intentar iniciar sesión",
     };
   }
 }
 
-export default function ForgotPasswordPage() {
-  const [cookies, setCookie] = useCookies(["email"]); // Define la cookie "email"
+export default function LoginPage() {
+  const [cookies, setCookie] = useCookies(["token", "idUsuario"]);
   const actionData = useActionData();
   const [email, setEmail] = useState("");
-  const [codigo, setCodigo] = useState("");
+  const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
-  const [errorCodigo, setErrorCodigo] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [codigoEnviado, setCodigoEnviado] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); //error que aparece en el modal
 
-  // Verificación del formato del correo
+  // Validation functions
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // Función para manejar el cambio de email
+  const isValidPassword = (password: string) => {
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (isValidEmail(e.target.value) || e.target.value === "") {
@@ -80,39 +80,35 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  // Función para manejar el cambio de código
-  const onChangeCodigo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCodigo(e.target.value);
-    if (e.target.value === "") {
-      setErrorCodigo("");
+  const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    if (newPassword === "") {
+      setErrorPassword("");
+    } else if (isValidPassword(newPassword)) {
+      setErrorPassword("");
+    } else {
+      setErrorPassword(
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial de los siguientes (!@#$%^&*,.)."
+      );
     }
   };
 
-  // Guardar el correo en la cookie al enviar el formulario
+  // UseEffect to handle successful login and set cookies
   useEffect(() => {
-    if (email && isValidEmail(email)) {
-      setCookie("email", email, { path: "/", maxAge: 900 }); // 15 minutos
-    }
-  }, [email, setCookie]);
-
-  // Manejo de la respuesta de la acción
-  useEffect(() => {
-    if (actionData?.success) {
-      setSuccessMessage(actionData.message || "Código enviado con éxito");
-      setCodigoEnviado(true);
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setSuccessMessage("");
-      }, 4000);
-    } else if (!actionData?.success && actionData?.message) {
+    if (actionData?.success && actionData?.data) {
+      const { token, idUsuario } = actionData.data;
+      setCookie("token", token, { path: "/", maxAge: 60 * 60 * 12 });
+      setCookie("idUsuario", idUsuario, { path: "/", maxAge: 60 * 60 * 12 });
+    } else if (actionData?.message && !actionData?.success) {
       setErrorMessage(actionData.message);
       setIsModalOpen(true);
+      // Hide modal after 5 seconds
       setTimeout(() => {
         setIsModalOpen(false);
-        setErrorMessage("");
       }, 4000);
     }
-  }, [actionData]);
+  }, [actionData, setCookie]);
 
   return (
     <div className="h-[100dvh]">
@@ -125,56 +121,57 @@ export default function ForgotPasswordPage() {
         <ArrowLeft />
       </Link>
       <main className="flex flex-col gap-[3.125rem] mt-5">
-        <h1 className="text-3xl text-center">¿Olvidaste tu contraseña?</h1>
-        <p className="text-coilterracota text-center" style={{ fontSize: "18px" }}>
-          {codigoEnviado ? "Ingresa el código de recuperación" : "Ingresa tu correo para recibir un código de recuperación"}
-        </p>
-
-        {/* Formulario para el correo, solo si no se ha enviado el código */}
-        {!codigoEnviado && (
-          <Form method="post">
-            <div className="space-y-6">
-              <Field
-                label="Correo Electrónico"
-                name="correo"
-                placeholder="example@ucab.com"
-                type="text"
-                onChange={onChangeEmail}
-                value={email}
-                iconSrc="/email-icon.svg"
-                error={errorEmail}
-              />
-              <PrimaryButton
-                type="submit"
-                label="Enviar Código"
-                disabled={!isValidEmail(email)}
-              />
-            </div>
-          </Form>
-        )}
-
-        {/* Formulario para ingresar el código de verificación */}
-        {codigoEnviado && (
-          <Form method="post" className="mt-6">
-            <div className="space-y-6">
-              <Field
-                iconSrc=""
-                label="Código de Recuperación"
-                name="codigo"
-                placeholder="Ingrese el código"
-                type="number"
-                onChange={onChangeCodigo}
-                value={codigo}
-                error={errorCodigo}
-              />
-              <PrimaryButton
-                type="submit"
-                label="Verificar Código"
-                disabled={codigo.length < 4}
-              />
-            </div>
-          </Form>
-        )}
+        <h1 className="text-3xl text-center">Iniciar Sesión</h1>
+        <Form method="post">
+          <div className="space-y-6">
+            <Field
+              label="Correo Electrónico"
+              name={"correo"}
+              placeholder="example@ucab.com"
+              type="text"
+              onChange={onChangeEmail}
+              value={email}
+              iconSrc="/email-icon.svg"
+              error={errorEmail}
+            />
+            <Field
+              label="Contraseña"
+              name="contraseña"
+              placeholder="Ingrese su contraseña.."
+              type="password"
+              onChange={onChangePassword}
+              value={password}
+              iconSrc="/lock-icon.svg"
+              error={errorPassword}
+            />
+            <PrimaryButton
+              type="submit"
+              label="Iniciar Sesión"
+              disabled={!isValidEmail(email) || !isValidPassword(password)}
+            />
+          </div>
+        </Form>
+        <div>
+          <p className="login-text text-center">
+            ¿No tienes una cuenta?{" "}
+            <Link
+             to="/registrarse"
+             className="login-link"
+             viewTransition
+            >
+              Regístrate.
+            </Link>
+          </p>
+          <p className="text-center">
+            <Link 
+              to="/olvide-mi-contraseña" 
+              className="login-link"
+              viewTransition
+            >
+              Olvidé mi contraseña
+            </Link>
+          </p>
+        </div>
       </main>
       <ModalAlert
         isOpen={isModalOpen}

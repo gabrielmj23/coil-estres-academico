@@ -110,15 +110,62 @@ export const iniciarSesion = async (loginData: { correo: string; contraseña: st
   }
 };
 
-const codigosRecuperacion: { [correo: string]: { codigo: string; expiracion: Date } } = {};
+/**
+ * Genera una contraseña aleatoria segura.
+ * La contraseña cumple con los siguientes criterios:
+ * - Longitud mínima de 12 caracteres.
+ * - Al menos una letra mayúscula.
+ * - Al menos una letra minúscula.
+ * - Al menos un número.
+ * - Al menos un carácter especial.
+ * 
+ * @returns Una contraseña generada aleatoriamente que cumple con los requisitos de seguridad.
+ * @author Karim
+ */
+const generarContraseñaAleatoria = (): string => {
+  const longitud = 12; // Longitud mínima de la contraseña
+  const caracteresMayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const caracteresMinusculas = 'abcdefghijklmnopqrstuvwxyz';
+  const caracteresNumeros = '0123456789';
+  const caracteresEspeciales = '!@#$%^&*,.';
+  const todosCaracteres = caracteresMayusculas + caracteresMinusculas + caracteresNumeros + caracteresEspeciales;
 
+  // Garantizar que la contraseña cumpla con los requisitos mínimos
+  let contraseña = '';
+  contraseña += caracteresMayusculas.charAt(Math.floor(Math.random() * caracteresMayusculas.length));
+  contraseña += caracteresMinusculas.charAt(Math.floor(Math.random() * caracteresMinusculas.length));
+  contraseña += caracteresNumeros.charAt(Math.floor(Math.random() * caracteresNumeros.length));
+  contraseña += caracteresEspeciales.charAt(Math.floor(Math.random() * caracteresEspeciales.length));
+
+  // Completar el resto de la contraseña con caracteres aleatorios
+  for (let i = contraseña.length; i < longitud; i++) {
+    contraseña += todosCaracteres.charAt(Math.floor(Math.random() * todosCaracteres.length));
+  }
+
+  // Mezclar los caracteres para que no sigan un patrón predecible
+  contraseña = contraseña.split('').sort(() => Math.random() - 0.5).join('');
+
+  return contraseña;
+};
+
+
+/**
+ * Genera una nueva contraseña aleatoria para un usuario registrado y la envía por correo.
+ * La contraseña se actualiza en la base de datos de forma segura (hasheada).
+ * 
+ * @param correo - Correo electrónico del usuario para enviar la nueva contraseña.
+ * @returns Un objeto con un mensaje indicando si la contraseña fue enviada exitosamente,
+ *          o un mensaje de error si el correo no está registrado.
+ * @throws Error si ocurre un problema al generar o enviar la nueva contraseña.
+ * @author Karim
+ */
 export const generarCodigoRecuperacion = async (correo: string) => {
   try {
     // Verifica si el usuario existe
     const usuario = await db
       .select()
       .from(usuarios)
-      .where(eq(usuarios.correo, correo))
+      .where(eq(usuarios.correo, correo)) // Filtrar por correo
       .limit(1)
       .execute();
 
@@ -126,14 +173,18 @@ export const generarCodigoRecuperacion = async (correo: string) => {
       throw new Error("El correo no está registrado.");
     }
 
-    // Generar un código de 4 dígitos
-    const codigo = Math.floor(1000 + Math.random() * 9000).toString();
+    // Generar una nueva contraseña aleatoria
+    const nuevaContraseña = generarContraseñaAleatoria();
 
-    // Guardar en la variable global con un tiempo de expiración de 15 minutos
-    codigosRecuperacion[correo] = {
-      codigo,
-      expiracion: new Date(Date.now() + 15 * 60 * 1000), // 15 minutos
-    };
+    // Hashear la nueva contraseña
+    const hashContraseña = await bcrypt.hash(nuevaContraseña, 10);
+
+    // Actualizar la contraseña del usuario en la base de datos
+    await db
+      .update(usuarios)
+      .set({ contraseña: hashContraseña })
+      .where(eq(usuarios.correo, correo)) // Filtrar por correo
+      .execute();
 
     // Configuración del transportador para Gmail
     const transporter = nodemailer.createTransport({
@@ -147,86 +198,18 @@ export const generarCodigoRecuperacion = async (correo: string) => {
     const mailOptions = {
       from: process.env.EMAIL_USER, // Dirección del remitente (tu correo de Gmail)
       to: correo, // Dirección del destinatario
-      subject: "Código de verificación para cambiar tu contraseña",
-      text: `Tu código de verificación es: ${codigo}`, // Mensaje del correo
+      subject: "Tu nueva contraseña de acceso",
+      text: `Tu nueva contraseña es: ${nuevaContraseña}`, // Mensaje del correo
     };
 
     // Enviar el correo
     await transporter.sendMail(mailOptions);
 
-    console.log(`Código enviado a ${correo}: ${codigo}`);
+    console.log(`Nueva contraseña enviada a ${correo}: ${nuevaContraseña}`);
 
-    return { message: "Código de recuperación enviado." };
+    return { message: "La nueva contraseña ha sido enviada al correo." };
   } catch (error: any) {
-    console.error("Error al generar el código de recuperación:", error.message);
-    return { message: error.message };
-  }
-};
-
-/**
- * Verifica el codigo ingresado para ese correo en la variable global codigosRecuperacion
- * @param correo del usuario que quiere actualizar su correo
- * @param codigoIngresado codigo generado que el usuario obtuvo del correo
- * @author Karim
- */
-
-// Verificar el código
-export const verificarCodigo = (correo: string, codigoIngresado: string) => {
-  try {
-    console.log(correo, 'correo');
-    console.log(codigoIngresado, 'codigoIngresado')
-    console.log(codigosRecuperacion);
-    const datosCodigo = codigosRecuperacion[correo];
-
-    if (!datosCodigo) {
-      throw new Error("No se encontró un código para este correo.");
-    }
-
-    if (datosCodigo.expiracion < new Date()) {
-      throw new Error("El código ha expirado.");
-    }
-
-    if (datosCodigo.codigo !== codigoIngresado) {
-      throw new Error("El código ingresado es incorrecto.");
-    }
-
-    // Si el código es válido, eliminarlo
-    delete codigosRecuperacion[correo];
-
-    return { message: "Código verificado correctamente." };
-  } catch (error: any) {
-    console.error("Error al verificar el código:", error.message);
-    return { message: error.message };
-  }
-};
-
-/**
- * Actualiza la nueva contraseña al usuario
- * @param correo del usuario que quiere actualizar su correo
- * @param nuevaContraseña  nueva contraseña que ingresó el usuario 
- * @author Karim
- */
-
-export const actualizarContraseña = async (correo: string, nuevaContraseña: string) => {
-  try {
-    // Verifica si ya no existe un código asociado al correo
-    if (codigosRecuperacion[correo]) {
-      throw new Error("Debe verificar el código antes de actualizar la contraseña.");
-    }
-
-    // Hashear la nueva contraseña
-    const hashContraseña = await bcrypt.hash(nuevaContraseña, 10);
-
-    // Actualizar la contraseña en la base de datos
-    await db
-      .update(usuarios)
-      .set({ contraseña: hashContraseña })
-      .where(eq(usuarios.correo, correo))
-      .execute();
-
-    return { message: "Contraseña actualizada correctamente." };
-  } catch (error: any) {
-    console.error("Error al actualizar la contraseña:", error.message);
+    console.error("Error al generar la nueva contraseña:", error.message);
     return { message: error.message };
   }
 };
