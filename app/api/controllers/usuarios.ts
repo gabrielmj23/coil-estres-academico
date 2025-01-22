@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs"; // Necesitamos bcrypt para encriptar la contrase�
 import { eq } from "drizzle-orm";
 import db from "../db"; // Importamos la instancia de db que has configurado
 import jwt from "jsonwebtoken";
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
+import isaac from "isaac";
 import "dotenv/config";
 
 /**
@@ -34,8 +35,18 @@ export const registrarUsuario = async (userData: {
       throw new Error("El correo ya está registrado.");
     }
 
+    bcrypt.setRandomFallback((len) => {
+      const buf = new Uint8Array(len);
+
+      return Array.from(buf.map(() => Math.floor(isaac.random() * 256)));
+    });
+
     // Encriptar la contraseña
-    const contraseñaEncriptada = await bcrypt.hash(contraseña, 10);
+    console.log("Contraseña: ", contraseña);
+    const salt = await bcrypt.genSalt(10);
+    console.log("Salt: ", salt);
+    const contraseñaEncriptada = await bcrypt.hash(contraseña, salt);
+    console.log("Encriptada: ", contraseñaEncriptada);
 
     // Insertar el nuevo usuario
     const nuevoUsuario = await db
@@ -87,6 +98,12 @@ export const iniciarSesion = async (loginData: {
       throw new Error("Correo o Contraseña Incorrecta.");
     }
 
+    bcrypt.setRandomFallback((len) => {
+      const buf = new Uint8Array(len);
+
+      return Array.from(buf.map(() => Math.floor(isaac.random() * 256)));
+    });
+
     // Comparar la contraseña proporcionada con la almacenada en la base de datos
     const esContraseñaValida = await bcrypt.compare(
       contraseña,
@@ -132,41 +149,57 @@ export const iniciarSesion = async (loginData: {
  * - Al menos una letra minúscula.
  * - Al menos un número.
  * - Al menos un carácter especial.
- * 
+ *
  * @returns Una contraseña generada aleatoriamente que cumple con los requisitos de seguridad.
  * @author Karim
  */
 const generarContraseñaAleatoria = (): string => {
   const longitud = 12; // Longitud mínima de la contraseña
-  const caracteresMayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const caracteresMinusculas = 'abcdefghijklmnopqrstuvwxyz';
-  const caracteresNumeros = '0123456789';
-  const caracteresEspeciales = '!@#$%^&*,.';
-  const todosCaracteres = caracteresMayusculas + caracteresMinusculas + caracteresNumeros + caracteresEspeciales;
+  const caracteresMayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const caracteresMinusculas = "abcdefghijklmnopqrstuvwxyz";
+  const caracteresNumeros = "0123456789";
+  const caracteresEspeciales = "!@#$%^&*,.";
+  const todosCaracteres =
+    caracteresMayusculas +
+    caracteresMinusculas +
+    caracteresNumeros +
+    caracteresEspeciales;
 
   // Garantizar que la contraseña cumpla con los requisitos mínimos
-  let contraseña = '';
-  contraseña += caracteresMayusculas.charAt(Math.floor(Math.random() * caracteresMayusculas.length));
-  contraseña += caracteresMinusculas.charAt(Math.floor(Math.random() * caracteresMinusculas.length));
-  contraseña += caracteresNumeros.charAt(Math.floor(Math.random() * caracteresNumeros.length));
-  contraseña += caracteresEspeciales.charAt(Math.floor(Math.random() * caracteresEspeciales.length));
+  let contraseña = "";
+  contraseña += caracteresMayusculas.charAt(
+    Math.floor(Math.random() * caracteresMayusculas.length)
+  );
+  contraseña += caracteresMinusculas.charAt(
+    Math.floor(Math.random() * caracteresMinusculas.length)
+  );
+  contraseña += caracteresNumeros.charAt(
+    Math.floor(Math.random() * caracteresNumeros.length)
+  );
+  contraseña += caracteresEspeciales.charAt(
+    Math.floor(Math.random() * caracteresEspeciales.length)
+  );
 
   // Completar el resto de la contraseña con caracteres aleatorios
   for (let i = contraseña.length; i < longitud; i++) {
-    contraseña += todosCaracteres.charAt(Math.floor(Math.random() * todosCaracteres.length));
+    contraseña += todosCaracteres.charAt(
+      Math.floor(Math.random() * todosCaracteres.length)
+    );
   }
 
   // Mezclar los caracteres para que no sigan un patrón predecible
-  contraseña = contraseña.split('').sort(() => Math.random() - 0.5).join('');
+  contraseña = contraseña
+    .split("")
+    .sort(() => Math.random() - 0.5)
+    .join("");
 
   return contraseña;
 };
 
-
 /**
  * Genera una nueva contraseña aleatoria para un usuario registrado y la envía por correo.
  * La contraseña se actualiza en la base de datos de forma segura (hasheada).
- * 
+ *
  * @param correo - Correo electrónico del usuario para enviar la nueva contraseña.
  * @returns Un objeto con un mensaje indicando si la contraseña fue enviada exitosamente,
  *          o un mensaje de error si el correo no está registrado.
@@ -202,7 +235,7 @@ export const generarCodigoRecuperacion = async (correo: string) => {
 
     // Configuración del transportador para Gmail
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // Utiliza el servicio de Gmail
+      service: "gmail", // Utiliza el servicio de Gmail
       auth: {
         user: process.env.EMAIL_USER, // Tu correo de Gmail
         pass: process.env.EMAIL_PASSWORD, // Contraseña de aplicación generada
