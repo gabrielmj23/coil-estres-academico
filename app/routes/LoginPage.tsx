@@ -1,17 +1,28 @@
+import type { Route } from "./+types/LoginPage";
 import { useState, useEffect } from "react";
-import { useActionData, Link, Form } from "react-router";
+import { useActionData, Link, Form, redirect } from "react-router";
 import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowLeft from "~/icons/ArrowLeft";
 import { iniciarSesion } from "~/api/controllers/usuarios";
-import { useCookies } from "react-cookie";
 import ModalAlert from "~/components/ModalAlert/ModalAlert";
+import { commitSession, getSession } from "~/sessions.server";
+import { isValidEmail, isValidPassword } from "~/utils";
 
 export function meta() {
   return [
     { title: "Iniciar Sesión" },
     { name: "description", content: "Página de inicio de sesión." },
   ];
+}
+
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+
+  if (session.has("userId")) {
+    // Redirect to test selection if they are already signed in.
+    return redirect("/seleccion-de-prueba");
+  }
 }
 
 export async function action({ request }: { request: Request }) {
@@ -26,15 +37,15 @@ export async function action({ request }: { request: Request }) {
 
     // Verificar que la respuesta tenga el campo 'usuario' y 'token'
     if (respuesta.usuario && respuesta.token) {
-      return {
-        success: true,
-        message: "Inicio de sesión exitoso",
-        data: {
-          usuario: respuesta.usuario,
-          token: respuesta.token,
-          idUsuario: respuesta.idUsuario,
+      const session = await getSession(request.headers.get("Cookie"));
+      session.set("userId", String(respuesta.idUsuario));
+      session.set("userName", respuesta.userName);
+
+      return redirect("/seleccion-de-prueba", {
+        headers: {
+          "Set-Cookie": await commitSession(session),
         },
-      };
+      });
     } else {
       return {
         success: false,
@@ -50,7 +61,6 @@ export async function action({ request }: { request: Request }) {
 }
 
 export default function LoginPage() {
-  const [cookies, setCookie] = useCookies(["token", "idUsuario"]);
   const actionData = useActionData();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,18 +68,6 @@ export default function LoginPage() {
   const [errorPassword, setErrorPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(""); //error que aparece en el modal
-
-  // Validation functions
-  const isValidEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const isValidPassword = (password: string) => {
-    const passwordRegex =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*.,])[A-Za-z\d!@#$%^&*.,]{8,}$/;
-    return passwordRegex.test(password);
-  };
 
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -94,13 +92,9 @@ export default function LoginPage() {
     }
   };
 
-  // UseEffect to handle successful login and set cookies
+  // UseEffect to handle login error
   useEffect(() => {
-    if (actionData?.success && actionData?.data) {
-      const { token, idUsuario } = actionData.data;
-      setCookie("token", token, { path: "/", maxAge: 60 * 60 * 12 });
-      setCookie("idUsuario", idUsuario, { path: "/", maxAge: 60 * 60 * 12 });
-    } else if (actionData?.message && !actionData?.success) {
+    if (actionData?.message && !actionData?.success) {
       setErrorMessage(actionData.message);
       setIsModalOpen(true);
       // Hide modal after 5 seconds
@@ -108,7 +102,7 @@ export default function LoginPage() {
         setIsModalOpen(false);
       }, 4000);
     }
-  }, [actionData, setCookie]);
+  }, [actionData]);
 
   return (
     <div className="h-[100dvh]">
@@ -154,17 +148,13 @@ export default function LoginPage() {
         <div>
           <p className="login-text text-center">
             ¿No tienes una cuenta?{" "}
-            <Link
-             to="/registrarse"
-             className="login-link"
-             viewTransition
-            >
+            <Link to="/registrarse" className="login-link" viewTransition>
               Regístrate.
             </Link>
           </p>
           <p className="text-center">
-            <Link 
-              to="/olvide-mi-contraseña" 
+            <Link
+              to="/olvide-mi-contraseña"
               className="login-link"
               viewTransition
             >
@@ -177,6 +167,7 @@ export default function LoginPage() {
         isOpen={isModalOpen}
         message={errorMessage}
         onClose={() => setIsModalOpen(false)}
+        type="error"
       />
 
       {actionData?.success && (

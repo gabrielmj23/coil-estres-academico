@@ -5,6 +5,8 @@ export default [
   route("iniciar-sesion", "./routes/LoginPage.tsx"), // Ruta "/iniciar-sesion"
   route("registrarse", "./routes/RegisterPage.tsx"), // Ruta "/registrarse"
   route("seleccion-de-prueba", "./routes/TestSelectionPage.tsx"), // Ruta "/seleccion-de-prueba"
+
+  // Perfil de usuario
   route("configurar-perfil", "./routes/ProfileConfigurationPage.tsx"), // Ruta "/configurar-perfil"
 
   // Cuestionarios: Sisco y Goldberg
