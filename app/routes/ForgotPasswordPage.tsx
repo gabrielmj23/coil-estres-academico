@@ -47,8 +47,8 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [modalType, setModalType] = useState<"success" | "error">("error"); // Default to "error"
+  const [message, setMessage] = useState("");
 
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -66,21 +66,24 @@ export default function ForgotPasswordPage() {
 
   useEffect(() => {
     if (actionData?.success) {
-      setSuccessMessage(
-        actionData.message || "Nueva contraseña enviada con éxito"
-      );
-      setTimeout(() => {
-        setIsModalOpen(false);
-        setSuccessMessage("");
-      }, 4000);
-    } else if (!actionData?.success && actionData?.message) {
-      setErrorMessage(actionData.message);
+      setModalType("success");
+      setMessage(actionData.message || "Nueva contraseña enviada con éxito");
       setIsModalOpen(true);
 
       setTimeout(() => {
         setIsModalOpen(false);
-        setErrorMessage("");
-      }, 4000);
+        setMessage("");
+        window.location.href = "/iniciar-sesion"; // Redirigir a inicio de sesión
+      }, 3000); // 3 segundos
+    } else if (!actionData?.success && actionData?.message) {
+      setModalType("error");
+      setMessage(actionData.message);
+      setIsModalOpen(true);
+
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setMessage("");
+      }, 4000); // 3 segundos
     }
   }, [actionData]);
 
@@ -88,7 +91,7 @@ export default function ForgotPasswordPage() {
     <div className="h-[100dvh]">
       <header className="primary rounded-b-[32px] mb-12"></header>
       <Link
-        to="/"
+        to="/iniciar-sesion"
         className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
         viewTransition
       >
@@ -124,14 +127,11 @@ export default function ForgotPasswordPage() {
         </Form>
       </main>
       <ModalAlert
+        type={modalType} // Ahora modalType es siempre "success" o "error"
         isOpen={isModalOpen}
-        message={errorMessage}
+        message={message}
         onClose={() => setIsModalOpen(false)}
       />
-
-      {actionData?.success && (
-        <div className="text-green-600">{actionData.message}</div>
-      )}
     </div>
   );
 }

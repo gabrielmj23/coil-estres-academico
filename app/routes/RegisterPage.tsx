@@ -203,8 +203,6 @@ export default function RegisterPage() {
           />
           <div></div>
           <PrimaryButton type="submit" label="Registrar" disabled={false} />
-          <div></div>
-          <PrimaryButton type="submit" label="Registrar" disabled={false} />
         </Form>
         <p className="login-text text-center">
           ¿Ya tienes una cuenta?{" "}
