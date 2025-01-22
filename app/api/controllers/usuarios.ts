@@ -36,7 +36,7 @@ export const registrarUsuario = async (userData: {
 
     // Encriptar la contraseña
     console.log("Contraseña: ", contraseña);
-    const contraseñaEncriptada = await bcrypt.hash(contraseña, 10);
+    const contraseñaEncriptada = bcrypt.hashSync(contraseña, 10);
     console.log("Encriptada: ", contraseñaEncriptada);
 
     // Insertar el nuevo usuario
