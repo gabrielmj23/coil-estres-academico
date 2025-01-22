@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs"; // Necesitamos bcrypt para encriptar la contrase�
 import { eq } from "drizzle-orm";
 import db from "../db"; // Importamos la instancia de db que has configurado
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import "dotenv/config";
 
 /**
@@ -109,36 +110,123 @@ export const iniciarSesion = async (loginData: { correo: string; contraseña: st
   }
 };
 
-/**
- * Devuelve los datos de un usuario a partir de su id
- * @param idUsuario id del usuario
- * @author Andrés
-*/
-export const getUsuario = async (idUsuario: number) => {
+const codigosRecuperacion: { [correo: string]: { codigo: string; expiracion: Date } } = {};
+
+export const generarCodigoRecuperacion = async (correo: string) => {
   try {
-    // Buscar el usuario por id
+    // Verifica si el usuario existe
     const usuario = await db
       .select()
       .from(usuarios)
-      .where(eq(usuarios.id, idUsuario)) // Filtrar por id
+      .where(eq(usuarios.correo, correo))
       .limit(1)
       .execute();
 
     if (usuario.length === 0) {
-      throw new Error("Usuario no encontrado.");
+      throw new Error("El correo no está registrado.");
     }
 
-    // Eliminar la contraseña del objeto usuario antes de devolver la respuesta
-    const { contraseña: _contraseña, ...usuarioSinContraseña } = usuario[0];
+    // Generar un código de 4 dígitos
+    const codigo = Math.floor(1000 + Math.random() * 9000).toString();
 
-    // Responder con los datos del usuario
-    return usuarioSinContraseña;
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Error al obtener usuario:", error.message);
-      return { message: error.message || "Error al obtener usuario." };
+    // Guardar en la variable global con un tiempo de expiración de 15 minutos
+    codigosRecuperacion[correo] = {
+      codigo,
+      expiracion: new Date(Date.now() + 15 * 60 * 1000), // 15 minutos
+    };
+
+    // Configuración del transportador para Gmail
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Utiliza el servicio de Gmail
+      auth: {
+        user: process.env.EMAIL_USER, // Tu correo de Gmail
+        pass: process.env.EMAIL_PASSWORD, // Contraseña de aplicación generada
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER, // Dirección del remitente (tu correo de Gmail)
+      to: correo, // Dirección del destinatario
+      subject: "Código de verificación para cambiar tu contraseña",
+      text: `Tu código de verificación es: ${codigo}`, // Mensaje del correo
+    };
+
+    // Enviar el correo
+    await transporter.sendMail(mailOptions);
+
+    console.log(`Código enviado a ${correo}: ${codigo}`);
+
+    return { message: "Código de recuperación enviado." };
+  } catch (error: any) {
+    console.error("Error al generar el código de recuperación:", error.message);
+    return { message: error.message };
+  }
+};
+
+/**
+ * Verifica el codigo ingresado para ese correo en la variable global codigosRecuperacion
+ * @param correo del usuario que quiere actualizar su correo
+ * @param codigoIngresado codigo generado que el usuario obtuvo del correo
+ * @author Karim
+ */
+
+// Verificar el código
+export const verificarCodigo = (correo: string, codigoIngresado: string) => {
+  try {
+    console.log(correo, 'correo');
+    console.log(codigoIngresado, 'codigoIngresado')
+    console.log(codigosRecuperacion);
+    const datosCodigo = codigosRecuperacion[correo];
+
+    if (!datosCodigo) {
+      throw new Error("No se encontró un código para este correo.");
     }
-    console.error("Error inesperado:", error);
-    return { message: "Error inesperado al obtener usuario." };
+
+    if (datosCodigo.expiracion < new Date()) {
+      throw new Error("El código ha expirado.");
+    }
+
+    if (datosCodigo.codigo !== codigoIngresado) {
+      throw new Error("El código ingresado es incorrecto.");
+    }
+
+    // Si el código es válido, eliminarlo
+    delete codigosRecuperacion[correo];
+
+    return { message: "Código verificado correctamente." };
+  } catch (error: any) {
+    console.error("Error al verificar el código:", error.message);
+    return { message: error.message };
+  }
+};
+
+/**
+ * Actualiza la nueva contraseña al usuario
+ * @param correo del usuario que quiere actualizar su correo
+ * @param nuevaContraseña  nueva contraseña que ingresó el usuario 
+ * @author Karim
+ */
+
+export const actualizarContraseña = async (correo: string, nuevaContraseña: string) => {
+  try {
+    // Verifica si ya no existe un código asociado al correo
+    if (codigosRecuperacion[correo]) {
+      throw new Error("Debe verificar el código antes de actualizar la contraseña.");
+    }
+
+    // Hashear la nueva contraseña
+    const hashContraseña = await bcrypt.hash(nuevaContraseña, 10);
+
+    // Actualizar la contraseña en la base de datos
+    await db
+      .update(usuarios)
+      .set({ contraseña: hashContraseña })
+      .where(eq(usuarios.correo, correo))
+      .execute();
+
+    return { message: "Contraseña actualizada correctamente." };
+  } catch (error: any) {
+    console.error("Error al actualizar la contraseña:", error.message);
+    return { message: error.message };
   }
 };

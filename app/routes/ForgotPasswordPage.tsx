@@ -4,11 +4,7 @@ import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ModalAlert from "~/components/ModalAlert/ModalAlert";
 import ArrowLeft from "~/icons/ArrowLeft";
-import {
-  generarCodigoRecuperacion,
-  verificarCodigo,
-} from "~/api/controllers/usuarios";
-import { useCookies } from "react-cookie"; // Importa useCookies
+import { generarCodigoRecuperacion, verificarCodigo } from "~/api/controllers/usuarios";
 
 export function meta() {
   return [
@@ -19,41 +15,35 @@ export function meta() {
 
 export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
-  const correo = formData.get("correo") as string;
+  const correo = formData.get("correo") as string; // Aquí se obtiene el correo del formulario
   const codigo = formData.get("codigo") as string;
+
+  console.log("Correo recibido en el backend:", correo); // Añadir un log para ver si el correo llega correctamente
 
   try {
     if (codigo) {
+      // Verificar el código
       const respuesta = await verificarCodigo(correo, codigo);
       if (respuesta?.message === "Código verificado correctamente.") {
         return { success: true, message: "Código verificado correctamente" };
       } else {
-        return {
-          success: false,
-          message: respuesta.message || "Código incorrecto o expirado",
-        };
+        return { success: false, message: respuesta.message || "Código incorrecto o expirado" };
       }
     } else {
+      // Generar el código
       const respuesta = await generarCodigoRecuperacion(correo);
       if (respuesta?.message === "Código de recuperación enviado.") {
         return { success: true, message: "Código enviado correctamente" };
       } else {
-        return {
-          success: false,
-          message: respuesta.message || "Error al enviar el código",
-        };
+        return { success: false, message: respuesta.message || "Error al enviar el código" };
       }
     }
   } catch (error) {
-    return {
-      success: false,
-      message: (error as Error).message || "Error desconocido",
-    };
+    return { success: false, message: (error as Error).message || "Error desconocido" };
   }
 }
 
 export default function ForgotPasswordPage() {
-  const [cookies, setCookie] = useCookies(["email"]); // Define la cookie "email"
   const actionData = useActionData();
   const [email, setEmail] = useState("");
   const [codigo, setCodigo] = useState("");
@@ -62,15 +52,13 @@ export default function ForgotPasswordPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [codigoEnviado, setCodigoEnviado] = useState(false);
+  const [codigoEnviado, setCodigoEnviado] = useState(false); // Nuevo estado para verificar si el código fue enviado
 
-  // Verificación del formato del correo
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  // Función para manejar el cambio de email
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (isValidEmail(e.target.value) || e.target.value === "") {
@@ -80,7 +68,6 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  // Función para manejar el cambio de código
   const onChangeCodigo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCodigo(e.target.value);
     if (e.target.value === "") {
@@ -88,18 +75,12 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  // Guardar el correo en la cookie al enviar el formulario
-  useEffect(() => {
-    if (email && isValidEmail(email)) {
-      setCookie("email", email, { path: "/", maxAge: 900 }); // 15 minutos
-    }
-  }, [email, setCookie]);
-
-  // Manejo de la respuesta de la acción
   useEffect(() => {
     if (actionData?.success) {
       setSuccessMessage(actionData.message || "Código enviado con éxito");
-      setCodigoEnviado(true);
+      setCodigoEnviado(true); // Cambiar estado cuando se envíe el código
+        
+      // Cerrar el modal después de 4 segundos
       setTimeout(() => {
         setIsModalOpen(false);
         setSuccessMessage("");
@@ -107,6 +88,8 @@ export default function ForgotPasswordPage() {
     } else if (!actionData?.success && actionData?.message) {
       setErrorMessage(actionData.message);
       setIsModalOpen(true);
+
+      // Cerrar el modal después de 4 segundos
       setTimeout(() => {
         setIsModalOpen(false);
         setErrorMessage("");
@@ -126,7 +109,10 @@ export default function ForgotPasswordPage() {
       </Link>
       <main className="flex flex-col gap-[3.125rem] mt-5">
         <h1 className="text-3xl text-center">¿Olvidaste tu contraseña?</h1>
-        <p className="text-coilterracota text-center" style={{ fontSize: "18px" }}>
+        <p
+          className="text-coilterracota text-center"
+          style={{ fontSize: "18px" }}
+        >
           {codigoEnviado ? "Ingresa el código de recuperación" : "Ingresa tu correo para recibir un código de recuperación"}
         </p>
 
@@ -136,7 +122,7 @@ export default function ForgotPasswordPage() {
             <div className="space-y-6">
               <Field
                 label="Correo Electrónico"
-                name="correo"
+                name="correo" // Asegúrate de que este sea el mismo nombre que esperas en el backend
                 placeholder="example@ucab.com"
                 type="text"
                 onChange={onChangeEmail}
@@ -158,11 +144,11 @@ export default function ForgotPasswordPage() {
           <Form method="post" className="mt-6">
             <div className="space-y-6">
               <Field
-                iconSrc=""
+              iconSrc=""
                 label="Código de Recuperación"
                 name="codigo"
                 placeholder="Ingrese el código"
-                type="number"
+                type="number" // Cambiar el tipo a number
                 onChange={onChangeCodigo}
                 value={codigo}
                 error={errorCodigo}
@@ -170,7 +156,7 @@ export default function ForgotPasswordPage() {
               <PrimaryButton
                 type="submit"
                 label="Verificar Código"
-                disabled={codigo.length < 4}
+                disabled={codigo.length < 4} // Asegurarse de que el código tenga 4 caracteres
               />
             </div>
           </Form>

@@ -11,6 +11,8 @@ Página web para cuestionarios que miden el estrés académico e indicadores aso
 ```bash
 DATABASE_URL="postgres://usuario:contraseña@localhost:5432/estresBD"
 JWT_SECRET_KEY=brawlstars
+EMAIL_USER=cuerposymentesenequilibrio@gmail.com
+EMAIL_PASSWORD=Cuerpos123.
 ```
 
 3. Crea el esquema de la base de datos ejecutando `npx drizzle-kit push`

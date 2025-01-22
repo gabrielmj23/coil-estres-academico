@@ -5,6 +5,7 @@ export default [
   route("iniciar-sesion", "./routes/LoginPage.tsx"), // Ruta "/iniciar-sesion"
   route("registrarse", "./routes/RegisterPage.tsx"), // Ruta "/registrarse"
   route("seleccion-de-prueba", "./routes/TestSelectionPage.tsx"), // Ruta "/seleccion-de-prueba"
+  route("olvide-mi-contraseña","./routes/ForgotPasswordPage.tsx"), // Ruta  "/olvide-mi-contraseña"
 
   // Cuestionarios: Sisco y Goldberg
   route("cuestionario-sisco", "./routes/QuestionnaireSiscoPage.tsx"), // Ruta "/cuestionario-sisco"
