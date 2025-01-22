@@ -166,7 +166,7 @@ export default function ProfileConfigurationPage({
 
   return (
     <div className="h-[100dvh]">
-      <Navbar nombre={usuarioOriginal.nombre} />
+      <Navbar nombre={usuarioOriginal.nombre ? usuarioOriginal.nombre.split(" ")[0] : ""} />
       <main className="flex flex-col gap-[3.125rem] mt-5">
         <h1 className="text-3xl text-center">Configuración de Usuario</h1>
         <Form method="post" className="space-y-6">

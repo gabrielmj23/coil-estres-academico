@@ -45,7 +45,7 @@ export default function DashboardRecommendationsPage({
 
   return (
     <div className="h-[100dvh]">
-      <Navbar nombre={userName} />
+      <Navbar nombre={userName ? userName.split(" ")[0] : ""} />
       <main className="flex flex-col gap-5 pb-12">
         <h1 className="text-3xl text-center">Ejercicios Recomendados</h1>
         <div className="flex justify-center">

@@ -42,7 +42,7 @@ export default function TestSelectionPage({
   return (
     <div className="h-[100dvh]">
       {userName ? (
-        <Navbar nombre={userName} />
+        <Navbar nombre={userName ? userName.split(" ")[0] : ""} />
       ) : (
         <header className="primary"></header>
       )}

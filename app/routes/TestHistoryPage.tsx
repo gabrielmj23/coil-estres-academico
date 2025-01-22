@@ -45,7 +45,7 @@ export default function TestHistoryPage({ loaderData }: Route.ComponentProps) {
 
   return (
     <>
-      <Navbar nombre={userName} />
+      <Navbar nombre={userName ? userName.split(" ")[0] : ""} />
 
       <main className="mt-3 mb-10">
         <h1 className="text-3xl text-center">Histórico de Pruebas</h1>
