@@ -8,8 +8,12 @@ import { getPreguntasSISCO } from "~/api/controllers/preguntas";
 import { calculatePointsSISCO } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
-import { useNavigate } from "react-router";
+import { useActionData, useFetcher, useNavigate } from "react-router";
 import RestoreProgressModal from "~/components/RestoreProgressModal/RestoreProgressModal";
+import { getSession } from "~/sessions.server";
+import { saveHistorySISCO } from "~/api/controllers/cuestionario_historico";
+import { Spinner } from "flowbite-react";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -21,8 +25,28 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
-  return getPreguntasSISCO();
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = session.get("userId");
+  const preguntasSISCO = await getPreguntasSISCO();
+  return { sections: preguntasSISCO, userId };
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  // Parse form data
+  const formData = await request.formData();
+  const userId = formData.get("userId");
+  const idStress = formData.get("idStress");
+  const scoreStress = formData.get("scoreStress");
+  if (!userId || !idStress || !scoreStress) {
+    return { redirect: "/seleccion-de-prueba" };
+  }
+
+  return saveHistorySISCO(
+    Number(userId),
+    Number(idStress),
+    Number(scoreStress)
+  );
 }
 
 export default function QuestionnaireSiscoPage({
@@ -41,12 +65,37 @@ export default function QuestionnaireSiscoPage({
   // Modal
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
+  // Alert
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  // Save history
+  const fetcher = useFetcher<{ success: boolean; message: string }>();
+
+  useEffect(function checkLocalProgress() {
     const storedSisco = localStorage.getItem("siscoProgress");
     if (storedSisco) {
       setOpenModal(true);
     }
   }, []);
+
+  useEffect(
+    function historySaved() {
+      if (fetcher.data) {
+        if (fetcher.data.success) {
+          navigate("/cuestionario-completado");
+        } else {
+          setIsOpenAlert(true);
+          setAlertMessage(fetcher.data.message);
+          // Hide modal after 4 seconds
+          setTimeout(() => {
+            setIsOpenAlert(false);
+          }, 4000);
+        }
+      }
+    },
+    [fetcher.data]
+  );
 
   const cancelProgress = () => {
     localStorage.removeItem("siscoProgress");
@@ -109,11 +158,23 @@ export default function QuestionnaireSiscoPage({
       if (sectionIndex + 1 === sections.length) {
         // Test has ended
         localStorage.setItem("testType", "SISCO");
-        localStorage.setItem(
-          "scoreStress",
-          String(calculatePointsSISCO(newAnswers))
-        );
-        navigate("/cuestionario-completado");
+        const totalSum = calculatePointsSISCO(newAnswers);
+        localStorage.setItem("scoreStress", String(totalSum));
+
+        // Save in database
+        if (loaderData.userId) {
+          const percentage = Math.round((totalSum / 116) * 100);
+          fetcher.submit(
+            {
+              userId: loaderData.userId,
+              idStress: currentQuestion.idIndicador,
+              scoreStress: percentage,
+            },
+            { method: "post", action: "/cuestionario-sisco" }
+          );
+        } else {
+          navigate("/cuestionario-completado");
+        }
       } else {
         // Go to next section
         newSectionIndex += 1;
@@ -170,17 +231,30 @@ export default function QuestionnaireSiscoPage({
             selectedOption={selectedOption}
             onChange={(option) => setSelectedOption(option.idOpcion)}
           />
-          <PrimaryButton
-            label="Continuar"
-            onClick={saveAnswer}
-            disabled={selectedOption === null}
-            icon={<ArrowRight className="w-6" />}
-          />
+          {fetcher.state === "idle" && (
+            <PrimaryButton
+              label="Continuar"
+              onClick={saveAnswer}
+              disabled={selectedOption === null}
+              icon={<ArrowRight className="w-6" />}
+            />
+          )}
+          {fetcher.state !== "idle" && (
+            <div className="flex w-full justify-center">
+              <Spinner color="failure" />
+            </div>
+          )}
 
           <ProgressBar
             progress={(globalIndex * 100) / TOTAL_QUESTIONS}
           ></ProgressBar>
         </div>
+        <ModalAlert
+          type="error"
+          isOpen={isOpenAlert}
+          onClose={() => setIsOpenAlert(false)}
+          message={alertMessage}
+        />
       </main>
     </>
   );

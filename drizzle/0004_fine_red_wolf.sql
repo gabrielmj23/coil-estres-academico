@@ -1,0 +1,1 @@
+ALTER TABLE "cuestionario_historico" ALTER COLUMN "fecha" SET DEFAULT now();
