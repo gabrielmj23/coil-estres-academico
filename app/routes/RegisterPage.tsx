@@ -148,7 +148,6 @@ export default function RegisterPage() {
           <Field
             label="Nombre"
             name="nombre"
-            name="nombre"
             placeholder="Ingrese su nombre"
             type="text"
             value={nombre}
@@ -158,7 +157,6 @@ export default function RegisterPage() {
           />
           <Field
             label="Correo Electrónico"
-            name="correo"
             name="correo"
             placeholder="example@ucab.com"
             type="email"
@@ -170,7 +168,6 @@ export default function RegisterPage() {
           <Field
             label="Contraseña"
             placeholder="Ingrese su contraseña"
-            name="contraseña"
             name="contraseña"
             type="password"
             value={contraseña}
