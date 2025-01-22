@@ -5,8 +5,8 @@ export default [
   route("iniciar-sesion", "./routes/LoginPage.tsx"), // Ruta "/iniciar-sesion"
   route("registrarse", "./routes/RegisterPage.tsx"), // Ruta "/registrarse"
   route("seleccion-de-prueba", "./routes/TestSelectionPage.tsx"), // Ruta "/seleccion-de-prueba"
-  route("olvide-mi-contraseña","./routes/ForgotPasswordPage.tsx"), // Ruta  "/olvide-mi-contraseña"
-
+  route("olvide-mi-contraseña", "./routes/ForgotPasswordPage.tsx"), // Ruta  "/olvide-mi-contraseña"
+  route("logout", "./routes/Logout.tsx"), // Ruta "/logout"
   // Perfil de usuario
   route("configurar-perfil", "./routes/ProfileConfigurationPage.tsx"), // Ruta "/configurar-perfil"
   route("recomendaciones-dashboard", "./routes/DashboardRecommendations.tsx"), // Ruta "/recomendaciones-dashboard"
