@@ -87,7 +87,7 @@ export default function LoginPage() {
       setErrorPassword("");
     } else {
       setErrorPassword(
-        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial."
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial de los siguientes (!@#$%^&*,.)."
       );
     }
   };
