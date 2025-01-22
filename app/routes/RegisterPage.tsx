@@ -26,6 +26,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   const usuarioData = { nombre, correo, contraseña, fechaNacimiento, sexo };
   console.log(usuarioData);
+  console.log(usuarioData);
   try {
     const respuesta = await registrarUsuario(usuarioData);
 
@@ -96,7 +97,7 @@ export default function RegisterPage() {
       setErrorContraseña(""); // Limpiar el error si la contraseña es válida
     } else {
       setErrorContraseña(
-        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial."
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial de los siguientes (!@#$%^&*,.)."
       );
     }
   };

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs"; // Necesitamos bcrypt para encriptar la contrase�
 import { eq } from "drizzle-orm";
 import db from "../db"; // Importamos la instancia de db que has configurado
 import jwt from "jsonwebtoken";
+import nodemailer from 'nodemailer';
 import "dotenv/config";
 
 /**
@@ -120,6 +121,110 @@ export const iniciarSesion = async (loginData: {
     }
     console.error("Error inesperado:", error);
     return { message: "Error inesperado al iniciar sesión." };
+  }
+};
+
+/**
+ * Genera una contraseña aleatoria segura.
+ * La contraseña cumple con los siguientes criterios:
+ * - Longitud mínima de 12 caracteres.
+ * - Al menos una letra mayúscula.
+ * - Al menos una letra minúscula.
+ * - Al menos un número.
+ * - Al menos un carácter especial.
+ * 
+ * @returns Una contraseña generada aleatoriamente que cumple con los requisitos de seguridad.
+ * @author Karim
+ */
+const generarContraseñaAleatoria = (): string => {
+  const longitud = 12; // Longitud mínima de la contraseña
+  const caracteresMayusculas = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const caracteresMinusculas = 'abcdefghijklmnopqrstuvwxyz';
+  const caracteresNumeros = '0123456789';
+  const caracteresEspeciales = '!@#$%^&*,.';
+  const todosCaracteres = caracteresMayusculas + caracteresMinusculas + caracteresNumeros + caracteresEspeciales;
+
+  // Garantizar que la contraseña cumpla con los requisitos mínimos
+  let contraseña = '';
+  contraseña += caracteresMayusculas.charAt(Math.floor(Math.random() * caracteresMayusculas.length));
+  contraseña += caracteresMinusculas.charAt(Math.floor(Math.random() * caracteresMinusculas.length));
+  contraseña += caracteresNumeros.charAt(Math.floor(Math.random() * caracteresNumeros.length));
+  contraseña += caracteresEspeciales.charAt(Math.floor(Math.random() * caracteresEspeciales.length));
+
+  // Completar el resto de la contraseña con caracteres aleatorios
+  for (let i = contraseña.length; i < longitud; i++) {
+    contraseña += todosCaracteres.charAt(Math.floor(Math.random() * todosCaracteres.length));
+  }
+
+  // Mezclar los caracteres para que no sigan un patrón predecible
+  contraseña = contraseña.split('').sort(() => Math.random() - 0.5).join('');
+
+  return contraseña;
+};
+
+
+/**
+ * Genera una nueva contraseña aleatoria para un usuario registrado y la envía por correo.
+ * La contraseña se actualiza en la base de datos de forma segura (hasheada).
+ * 
+ * @param correo - Correo electrónico del usuario para enviar la nueva contraseña.
+ * @returns Un objeto con un mensaje indicando si la contraseña fue enviada exitosamente,
+ *          o un mensaje de error si el correo no está registrado.
+ * @throws Error si ocurre un problema al generar o enviar la nueva contraseña.
+ * @author Karim
+ */
+export const generarCodigoRecuperacion = async (correo: string) => {
+  try {
+    // Verifica si el usuario existe
+    const usuario = await db
+      .select()
+      .from(usuarios)
+      .where(eq(usuarios.correo, correo)) // Filtrar por correo
+      .limit(1)
+      .execute();
+
+    if (usuario.length === 0) {
+      throw new Error("El correo no está registrado.");
+    }
+
+    // Generar una nueva contraseña aleatoria
+    const nuevaContraseña = generarContraseñaAleatoria();
+
+    // Hashear la nueva contraseña
+    const hashContraseña = await bcrypt.hash(nuevaContraseña, 10);
+
+    // Actualizar la contraseña del usuario en la base de datos
+    await db
+      .update(usuarios)
+      .set({ contraseña: hashContraseña })
+      .where(eq(usuarios.correo, correo)) // Filtrar por correo
+      .execute();
+
+    // Configuración del transportador para Gmail
+    const transporter = nodemailer.createTransport({
+      service: 'gmail', // Utiliza el servicio de Gmail
+      auth: {
+        user: process.env.EMAIL_USER, // Tu correo de Gmail
+        pass: process.env.EMAIL_PASSWORD, // Contraseña de aplicación generada
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER, // Dirección del remitente (tu correo de Gmail)
+      to: correo, // Dirección del destinatario
+      subject: "Tu nueva contraseña de acceso",
+      text: `Tu nueva contraseña es: ${nuevaContraseña}`, // Mensaje del correo
+    };
+
+    // Enviar el correo
+    await transporter.sendMail(mailOptions);
+
+    console.log(`Nueva contraseña enviada a ${correo}: ${nuevaContraseña}`);
+
+    return { message: "La nueva contraseña ha sido enviada al correo." };
+  } catch (error: any) {
+    console.error("Error al generar la nueva contraseña:", error.message);
+    return { message: error.message };
   }
 };
 
