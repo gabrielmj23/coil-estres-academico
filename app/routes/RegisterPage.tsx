@@ -53,6 +53,17 @@ export default function RegisterPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
+  useEffect(() => {
+    if (actionData) {
+      setModalMessage(actionData.message);
+      setIsModalOpen(true);
+      // Hide modal after 5 seconds
+      setTimeout(() => {
+        setIsModalOpen(false);
+      }, 4000);
+    }
+  }, [actionData]);
+
   // Validation functions
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -202,13 +213,7 @@ export default function RegisterPage() {
           <div></div>
           <PrimaryButton type="submit" label="Registrar" disabled={false} />
         </Form>
-        {actionData && (
-          <p className="text-center">
-            {actionData.success
-              ? actionData.message
-              : `Error: ${actionData.message}`}
-          </p>
-        )}
+
         <p className="login-text text-center">
           ¿Ya tienes una cuenta?{" "}
           <Link to="/iniciar-sesion" className="login-link" viewTransition>
