@@ -25,7 +25,10 @@ export default {
       colors: {
         coilterracota: "#582828",
         coilbeige: "#fde0b5",
-        coilgreen: "#9bb168",
+        coilgreen: {
+          light: "#f2f4eb",
+          dark: "#9bb168",
+        },
         coilorange: {
           light: "#fe8659",
           dark: "#b2563c",

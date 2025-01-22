@@ -11,6 +11,7 @@ import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowLeft from "~/icons/ArrowLeft";
 import { getSession } from "~/sessions.server";
 import { getSexoIconSrc, isValidEmail, isValidPassword } from "~/utils";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -237,14 +238,13 @@ export default function ProfileConfigurationPage({
           <div></div>
           <PrimaryButton type="submit" label="Actualizar" disabled={false} />
         </Form>
-        {actionData && (
-          <p className="text-center">
-            {actionData.success
-              ? actionData.message
-              : `Error: ${actionData.message}`}
-          </p>
-        )}
       </main>
+      <ModalAlert
+        isOpen={isModalOpen}
+        message={modalMessage}
+        type={modalType}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
