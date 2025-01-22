@@ -15,6 +15,27 @@
       "when": 1736457420664,
       "tag": "0001_watery_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1737271882550,
+      "tag": "0002_steep_maginty",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1737520794554,
+      "tag": "0003_many_lenny_balinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1737542958727,
+      "tag": "0004_fine_red_wolf",
+      "breakpoints": true
     }
   ]
 }

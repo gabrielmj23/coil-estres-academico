@@ -1,57 +1,50 @@
-body {
-    background-color: #1f1f1f;
-    color: white;
-    font-family: "Arial", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 300px;
-  }
-  
-  .form-label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #b43b3b; /* Color rojo similar */
-  }
-  
-  .input-wrapper {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 30px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-    padding: 10px 20px;
-    gap: 10px;
-    transition: all 0.3s ease;
-  }
-  
-  .input-wrapper:hover {
-    box-shadow: 0px 4px 15px rgba(255, 208, 94, 0.8);
-  }
-  
-  .icon {
-    font-size: 20px;
-    color: #5b4636; /* Marrón similar */
-  }
-  
-  .email-input {
-    border: none;
-    outline: none;
-    flex: 1;
-    font-size: 16px;
-    color: #333333;
-    background: none;
-    font-family: "Arial", sans-serif;
-  }
-  
-  .email-input::placeholder {
-    color: #aaaaaa;
-  }
+
+/* Force password input to inherit the same styling */
+input[type="password"] {
+  font-size: 16px !important; /* Ensure password text is same size */
+  font-weight: bold !important; /* Ensure password text is bold */
+  color: #736B66 !important; /* Ensure password text color is same */
+}
+
+.input-style {
+  border-radius: 1234px;
+  font-size: 16px;
+  color: #736B66;
+}
+
+.label-input-style {
+  font-size: 14px;
+}
+
+.ok-input-style:focus {
+  border: 1px solid #fde0b5; /* coilbeige color */
+  box-shadow: 0 0 5px rgba(253, 224, 181, 0.5); /* coilbeige shadow */
+  outline: none; /* Remove default outline */
+}
+.error-style {
+  font-size: 14px;
+}
+
+/* styles.css */
+.field-error {
+  box-shadow: 0 0 10px rgba(254, 139, 89, 0.75); 
+  background-color:#F7E8E2 ;
+}
+
+.field-error:focus {
+  border: 1px solid #fe8659; /* coilbeige color */
+  outline: none; /* Remove default outline */
+}
+
+.login-text {
+  font-size: 14px;
+  color: #646464;
+  margin-top: 10px;
+}
+
+.login-link {
+  color: #b2775c;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: bold;
+}

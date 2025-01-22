@@ -7,8 +7,12 @@ import { getPreguntasGoldBerg } from "~/api/controllers/preguntas";
 import { calculatePointsGoldberg } from "~/api/utils/utils";
 import SectionPage from "~/components/SectionPage/SectionPage";
 import ProgressBar from "../components/ProgressBar/ProgressBar";
-import { useNavigate } from "react-router";
+import { useFetcher, useNavigate } from "react-router";
 import RestoreProgressModal from "~/components/RestoreProgressModal/RestoreProgressModal";
+import { getSession } from "~/sessions.server";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
+import { Spinner } from "flowbite-react";
+import { saveHistoryGoldberg } from "~/api/controllers/cuestionario_historico";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -20,8 +24,32 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-export async function loader() {
-  return getPreguntasGoldBerg();
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  const userId = session.get("userId");
+  const sections = await getPreguntasGoldBerg();
+  return { sections, userId };
+}
+
+export async function action({ request }: Route.ActionArgs) {
+  // Parse form data
+  const formData = await request.formData();
+  const userId = formData.get("userId");
+  const idAnxiety = formData.get("idAnxiety");
+  const idSocial = formData.get("idSocial");
+  const scoreAnxiety = formData.get("scoreAnxiety");
+  const scoreSocial = formData.get("scoreSocial");
+  if (!userId || !idAnxiety || !idSocial || !scoreAnxiety || !scoreSocial) {
+    return { redirect: "/seleccion-de-prueba" };
+  }
+
+  return saveHistoryGoldberg(
+    Number(userId),
+    Number(idAnxiety),
+    Number(idSocial),
+    Number(scoreAnxiety),
+    Number(scoreSocial)
+  );
 }
 
 export default function QuestionnaireGoldbergPage({
@@ -37,15 +65,40 @@ export default function QuestionnaireGoldbergPage({
 
   const navigate = useNavigate();
 
+  // Save history
+  const fetcher = useFetcher<{ success: boolean; message: string }>();
+
   // Modal
   const [openModal, setOpenModal] = useState(false);
 
-  useEffect(() => {
+  // Alert
+  const [isOpenAlert, setIsOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  useEffect(function checkLocalProgress() {
     const storedGoldberg = localStorage.getItem("goldbergProgress");
     if (storedGoldberg) {
       setOpenModal(true);
     }
   }, []);
+
+  useEffect(
+    function historySaved() {
+      if (fetcher.data) {
+        if (fetcher.data.success) {
+          navigate("/cuestionario-completado");
+        } else {
+          setIsOpenAlert(true);
+          setAlertMessage(fetcher.data.message);
+          // Hide modal after 4 seconds
+          setTimeout(() => {
+            setIsOpenAlert(false);
+          }, 4000);
+        }
+      }
+    },
+    [fetcher.data]
+  );
 
   const cancelProgress = () => {
     localStorage.removeItem("goldbergProgress");
@@ -118,7 +171,29 @@ export default function QuestionnaireGoldbergPage({
           "scoreSocial",
           String(results["Disfunción Social"])
         );
-        navigate("/cuestionario-completado");
+
+        // Save history in db
+        if (loaderData.userId) {
+          const anxietyId = currentSection.preguntas.find(
+            (p) => p.nombreIndicador === "Ansiedad/Depresión"
+          )?.idIndicador!;
+          const socialId = currentSection.preguntas.find(
+            (p) => p.nombreIndicador === "Disfunción Social"
+          )?.idIndicador!;
+
+          fetcher.submit(
+            {
+              userId: loaderData.userId,
+              idAnxiety: anxietyId,
+              idSocial: socialId,
+              scoreAnxiety: results["Ansiedad/Depresión"],
+              scoreSocial: results["Disfunción Social"],
+            },
+            { method: "post", action: "/cuestionario-goldberg" }
+          );
+        } else {
+          navigate("/cuestionario-completado");
+        }
       } else {
         // Go to next section
         newSectionIndex += 1;
@@ -173,17 +248,30 @@ export default function QuestionnaireGoldbergPage({
             selectedOption={selectedOption}
             onChange={(option) => setSelectedOption(option.idOpcion)}
           />
-          <PrimaryButton
-            label="Continuar"
-            onClick={saveAnswer}
-            disabled={selectedOption === null}
-            icon={<ArrowRight className="w-6" />}
-          />
+          {fetcher.state === "idle" && (
+            <PrimaryButton
+              label="Continuar"
+              onClick={saveAnswer}
+              disabled={selectedOption === null}
+              icon={<ArrowRight className="w-6" />}
+            />
+          )}
+          {fetcher.state !== "idle" && (
+            <div className="flex w-full justify-center">
+              <Spinner color="failure" />
+            </div>
+          )}
 
           <ProgressBar
             progress={(globalIndex * 100) / TOTAL_QUESTIONS}
           ></ProgressBar>
         </div>
+        <ModalAlert
+          type="error"
+          isOpen={isOpenAlert}
+          onClose={() => setIsOpenAlert(false)}
+          message={alertMessage}
+        />
       </main>
     </>
   );

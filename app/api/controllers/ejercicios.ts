@@ -1,8 +1,6 @@
-import { eq } from "drizzle-orm";
 import db from "../db";
 import { ejercicios } from "../tables/ejercicios";
 import { data } from "react-router";
-
 
 export const getejercios = async () => {
   try {
@@ -10,16 +8,13 @@ export const getejercios = async () => {
     const ejerciciosList = await db
       .select()
       .from(ejercicios)
-      .orderBy(ejercicios.id); 
+      .orderBy(ejercicios.id);
 
     // Responder con las opciones encontradas
-    return data({ ejercicios: ejerciciosList }, { status: 200 });
+    return ejerciciosList;
   } catch (error) {
     // En caso de error, responder con un mensaje de error
     console.error("Error al obtener los ejercicios:", error);
-    throw data(
-      { message: "Error al obtener los ejercicios" },
-      { status: 500 }
-    );
+    throw data({ message: "Error al obtener los ejercicios" }, { status: 500 });
   }
 };

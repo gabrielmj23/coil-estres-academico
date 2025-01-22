@@ -121,7 +121,7 @@ export const getPreguntasPorCuestionario = async (id: number) => {
     }
 
     // Responder con las preguntas encontradas
-    return data({ sections: parsedSections }, { status: 200 });
+    return parsedSections;
   } catch (error) {
     // En caso de error, responder con un mensaje de error
     console.error("Error al obtener las preguntas del cuestionario:", error);
