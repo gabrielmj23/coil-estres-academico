@@ -1,5 +1,9 @@
+import React, { useState } from "react";
 import "./Navbar.css";
 import { Link, useLocation } from "react-router";
+import LogoutModal from "../LogoutModal/LogoutModal";
+import ModalAlert from "../ModalAlert/ModalAlert";
+import { HiOutlineLogout } from "react-icons/hi";
 
 interface NavbarProps {
   nombre: string;
@@ -7,10 +11,25 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ nombre }) => {
   const location = useLocation();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const openLogoutModal = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const closeLogoutModal = () => {
+    setIsLogoutModalOpen(false);
+  };
+
   return (
     <nav className="navbar h-28">
-      <div className="navbar-message">
-        <a>¡Bienvenid@, {nombre}!</a>
+      <div className="flex items-center">
+        <button onClick={openLogoutModal} className="logout-button absolute left-4">
+          <HiOutlineLogout className="w-6 h-6 text-white-700" />
+        </button>
+        <div className="navbar-message ml-10">
+          <a>¡Bienvenid@, {nombre}!</a>
+        </div>
       </div>
       <ul className="navbar-links">
         <li>
@@ -58,6 +77,10 @@ const Navbar: React.FC<NavbarProps> = ({ nombre }) => {
           </Link>
         </li>
       </ul>
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+      />
     </nav>
   );
 };
