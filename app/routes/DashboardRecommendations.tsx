@@ -1,25 +1,37 @@
-import React from "react";
-import { Link } from "react-router";
-import type { Route } from "./+types/RecommendationsPage";
+import type { Route } from "./+types/DashboardRecommendations";
 import { getejercios } from "~/api/controllers/ejercicios";
 import Card from "~/components/SelectorCuestionario/SelectorCuestionario";
-import ArrowLeft from "~/icons/ArrowLeft";
+import Navbar from "~/components/Navbar/Navbar";
+import { getSession } from "~/sessions.server";
+import { redirect } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Recomendaciones" },
-    { name: "description", content: "Página de recomendaciones." },
+    {
+      name: "description",
+      content:
+        "Recomendaciones para mejorar tu salud mental y reducir tu estrés académico",
+    },
   ];
 }
 
-export async function loader() {
-  return { ejercicios: await getejercios() };
+export async function loader({ request }: Route.LoaderArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("userId")) {
+    return redirect("/iniciar-sesion");
+  }
+  const ejercicios = await getejercios();
+  return {
+    userName: session.get("userName")!,
+    ejercicios,
+  };
 }
 
-export default function RecommendationsPage({
+export default function DashboardRecommendationsPage({
   loaderData,
 }: Route.ComponentProps) {
-  const { ejercicios } = loaderData;
+  const { userName, ejercicios } = loaderData;
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -33,16 +45,7 @@ export default function RecommendationsPage({
 
   return (
     <div className="h-[100dvh]">
-      <header className="questionnaire">
-        <img src="/logo-light.svg" alt="Logo" className="logo" />
-      </header>
-      <Link
-        to="/cuestionario-completado"
-        className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
-        viewTransition
-      >
-        <ArrowLeft />
-      </Link>
+      <Navbar nombre={userName} />
       <main className="flex flex-col gap-5 pb-12">
         <h1 className="text-3xl text-center">Ejercicios Recomendados</h1>
         <div className="flex justify-center">

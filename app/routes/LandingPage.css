@@ -9,7 +9,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  height: 100vh;
+  height: 100dvh;
   background-color: #f0eaea;
 }
 
@@ -114,16 +114,16 @@ body {
     font-size: 390%;
     text-align: center;
     margin: 0%;
-    margin-bottom: 6px;
+    margin-bottom: 22px;
     line-height: 4rem;
     text-wrap: balance;
   }
 
   .subtitle {
     font-size: 2.5rem;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 8px;
-    margin: -21% 3px 4px;
+    margin: -25% 3px 4px;
     color: var(--coilorange-dark); /* Light brown */
     line-height: 1.2;
     text-align: center;

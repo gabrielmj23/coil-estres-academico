@@ -16,7 +16,7 @@ export const getCuestionarios = async () => {
       .from(cuestionarios)
       .orderBy(asc(cuestionarios.id));
 
-    return data({ questionnaires: cuestionariosList }, { status: 200 });
+    return cuestionariosList;
   } catch (error) {
     // En caso de error, responder con un mensaje de error
     console.error("Error al obtener los cuestionarios:", error);

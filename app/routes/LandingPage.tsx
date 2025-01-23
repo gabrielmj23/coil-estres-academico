@@ -15,10 +15,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function LandingPage() {
-  const handleButtonClick = () => {
-    console.log("activado");
-  };
-
   return (
     <div className="welcome-screen">
       <div className="header">
