@@ -117,7 +117,7 @@ export default function RegisterPage() {
   const onChangeSexo = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSexo(e.target.value);
     if (e.target.value === "") {
-      setErrorSexo("El sexo es obligatorio");
+      setErrorSexo("El género es obligatorio");
     } else {
       setErrorSexo("");
     }
@@ -189,8 +189,8 @@ export default function RegisterPage() {
             iconSrc="/calendar-icon.svg"
           />
           <Field
-            label="Sexo"
-            placeholder="Seleccione su sexo"
+            label="Género"
+            placeholder="Selecciona tu género"
             name="sexo"
             type="select"
             value={sexo}
@@ -198,7 +198,7 @@ export default function RegisterPage() {
             error={errorSexo}
             iconSrc={getSexoIconSrc(sexo)}
             options={[
-              { value: "", label: "Selecciona sexo" },
+              { value: "", label: "Selecciona tu género" },
               { value: "M", label: "Masculino" },
               { value: "F", label: "Femenino" },
               { value: "Otro", label: "Otro" },

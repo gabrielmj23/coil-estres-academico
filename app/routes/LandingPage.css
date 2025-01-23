@@ -9,7 +9,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  height: 100dvh;
+  height: 100vh;
   background-color: #f0eaea;
 }
 
@@ -113,17 +113,17 @@ body {
   .title {
     font-size: 390%;
     text-align: center;
-    margin: 0%;
-    margin-bottom: 22px;
+    margin: 20px 0; /* Espacio arriba y abajo */
+    margin-bottom: 6px;
     line-height: 4rem;
     text-wrap: balance;
   }
 
   .subtitle {
     font-size: 2.5rem;
-    font-weight: 400;
+    font-weight: 300;
     letter-spacing: 8px;
-    margin: -25% 3px 4px;
+    margin: 10px 0; /* Más espacio vertical */
     color: var(--coilorange-dark); /* Light brown */
     line-height: 1.2;
     text-align: center;
@@ -131,7 +131,7 @@ body {
 
   .illustration img {
     height: auto;
-    margin: -67px auto -30px;
+    margin: 10px auto 20px;
     max-width: 90%;
     border-radius: 24%;
     box-shadow: 0 4px 10px #f0eaea;
@@ -140,7 +140,7 @@ body {
   .tagline {
     font-size: 19px;
     color: var(--coilgray-dark);
-    margin: -15% 0 20px;
+    margin: 10px auto 20px;
   }
 
   .start-button {

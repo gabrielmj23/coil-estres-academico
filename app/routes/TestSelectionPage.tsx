@@ -6,6 +6,8 @@ import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
 import ArrowRight from "~/icons/ArrowRight";
 import Navbar from "~/components/Navbar/Navbar";
 import { getSession } from "~/sessions.server";
+import { Link } from "react-router";
+import ArrowLeft from "~/icons/ArrowLeft";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -42,9 +44,18 @@ export default function TestSelectionPage({
   return (
     <div className="h-[100dvh]">
       {userName ? (
-        <Navbar nombre={userName} />
+        <Navbar nombre={userName ? userName.split(" ")[0] : ""} />
       ) : (
-        <header className="primary"></header>
+        <>
+          <header className="primary"></header>
+          <Link
+            to="/"
+            className="absolute top-8 left-4 rounded-full border-solid border-[1px] p-1"
+            viewTransition
+          >
+            <ArrowLeft />
+          </Link>
+        </>
       )}
       <main className="flex flex-col gap-5">
         <h1 className="text-3xl text-center">Pruebas Disponibles</h1>

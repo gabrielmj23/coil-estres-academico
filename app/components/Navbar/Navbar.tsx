@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ nombre }) => {
           <HiOutlineLogout className="w-6 h-6 text-white-700" />
         </button>
         <div className="navbar-message ml-10">
-          <a>¡Bienvenido, {nombre}!</a>
+          <a>¡Bienvenid@, {nombre}!</a>
         </div>
       </div>
       <ul className="navbar-links">

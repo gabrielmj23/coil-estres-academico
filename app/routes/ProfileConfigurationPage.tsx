@@ -66,7 +66,7 @@ export async function action({ request }: Route.ActionArgs) {
 
   try {
     const respuesta = await actualizarUsuario(usuarioData);
-    return { success: true, message: "Actualizacion exitosa", data: respuesta };
+    return { success: true, message: "Actualización exitosa", data: respuesta };
   } catch (error) {
     return { success: false, message: (error as Error).message };
   }
@@ -166,7 +166,7 @@ export default function ProfileConfigurationPage({
 
   return (
     <div className="h-[100dvh]">
-      <Navbar nombre={usuarioOriginal.nombre} />
+      <Navbar nombre={usuarioOriginal.nombre ? usuarioOriginal.nombre.split(" ")[0] : ""} />
       <main className="flex flex-col gap-[3.125rem] mt-5">
         <h1 className="text-3xl text-center">Configuración de Usuario</h1>
         <Form method="post" className="space-y-6">
@@ -214,7 +214,7 @@ export default function ProfileConfigurationPage({
             iconSrc="/calendar-icon.svg"
           />
           <Field
-            label="Sexo"
+            label="Género"
             placeholder="Seleccione su sexo"
             name="sexo"
             type="select"
@@ -223,7 +223,7 @@ export default function ProfileConfigurationPage({
             error={errorSexo}
             iconSrc={getSexoIconSrc(formState.sexo)}
             options={[
-              { value: "", label: "Selecciona sexo" },
+              { value: "", label: "Selecciona tu género" },
               { value: "M", label: "Masculino" },
               { value: "F", label: "Femenino" },
               { value: "Otro", label: "Otro" },
