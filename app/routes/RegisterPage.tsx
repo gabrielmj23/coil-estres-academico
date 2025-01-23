@@ -205,7 +205,7 @@ export default function RegisterPage() {
             ]}
           />
           <div></div>
-          <PrimaryButton type="submit" label="Registrar" disabled={false} />
+          <PrimaryButton type="submit" label="Registrar" disabled={!isValidEmail(correo) || !isValidPassword(contraseña)} />
         </Form>
         <p className="login-text text-center">
           ¿Ya tienes una cuenta?{" "}
