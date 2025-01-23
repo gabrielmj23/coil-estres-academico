@@ -66,10 +66,10 @@ export const registrarUsuario = async (userData: {
       nuevoUsuario[0];
 
     // Responder con el usuario creado
-    return data({ usuario: usuarioSinContraseña }, { status: 201 });
+    return { usuario: usuarioSinContraseña };
   } catch (error) {
-    console.error("Error al registrar usuario:", error);
-    throw data({ message: "Error al registrar usuario." }, { status: 500 });
+    console.error(error, "hola en back");
+    return { message: (error as Error).message };
   }
 };
 

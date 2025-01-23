@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Form, useActionData, Link, redirect } from "react-router";
+import { Form, useActionData, Link, data, redirect } from "react-router";
 import type { Route } from "./+types/RegisterPage";
 import { iniciarSesion, registrarUsuario } from "~/api/controllers/usuarios";
 import Field from "~/components/Field/Field";
 import PrimaryButton from "~/components/PrimaryButton/PrimaryButton";
+import ModalAlert from "~/components/ModalAlert/ModalAlert";
 import ArrowLeft from "~/icons/ArrowLeft";
 import { getSexoIconSrc, isValidEmail, isValidPassword } from "~/utils";
-import ModalAlert from "~/components/ModalAlert/ModalAlert";
 import { commitSession, getSession } from "~/sessions.server";
 
 export function meta({}: Route.MetaArgs) {
@@ -29,6 +29,9 @@ export async function action({ request }: Route.ActionArgs) {
   console.log(usuarioData);
   try {
     const respuesta = await registrarUsuario(usuarioData);
+    if (respuesta.message) {
+      throw new Error(respuesta.message);
+    }
 
     // Iniciar sesión y redirigir
     const loginResponse = await iniciarSesion({ correo, contraseña });
