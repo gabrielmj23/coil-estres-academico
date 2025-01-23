@@ -1,80 +1,83 @@
 /* Contenedor principal */
 .survey-option-container {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    border-radius: 8px;
-    margin: 0 auto;
-  }
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 0 auto;
+}
 
-  /* Lista de opciones */
-  .survey-option-container ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
+/* Lista de opciones */
+.survey-option-container ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .survey-option-container ul li {
-    margin-bottom: 1rem;
-  }
+.survey-option-container ul li {
+  margin-bottom: 1rem;
+}
 
-  
-  /* Estilos base de las opciones */
-  .survey-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 13px 20px;
-    background-color: white;
-    border-radius: 30px;
-    transition: all 0.3s ease;
-    font-size: 16px;
-    font-weight: 500;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-  
-  /* Opción seleccionada */
-  .survey-option.selected {
-    background-color: #582828;
-    box-shadow: 0 0 0 4px rgba(178, 86, 60, 0.25);
-    color: #fff;
-  }
-  
-  /* Texto de la opción */
-  .option-label {
-    color: #582828;
-    font-weight: 500;
-  }
+/* Estilos base de las opciones */
+.survey-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 20px;
+  background-color: white;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
 
-  .option-label.selected{
-    color: white;
-    font-weight: 500;
-  }
-  
-  /* Círculo del radio */
-  .radio-circle {
-    width: 20px;
-    height: 20px;
-    border: 3px solid #582828;
-    border-radius: 50%;
-    display: inline-block;
-    transition: all 0.3s ease;
-  }
-  
-  /* Círculo seleccionado */
-  .radio-circle.checked {
-    background-color: #582828;
-    border-color: white;
-  }
+/* Opción seleccionada */
+.survey-option.selected {
+  background-color: #582828;
+  box-shadow: 0 0 0 4px rgba(178, 86, 60, 0.25);
+  color: #fff;
+}
 
-  /* Punto del radio */
+/* Texto de la opción */
+.option-label {
+  color: #582828;
+  font-weight: 500;
+}
+
+.option-label.selected {
+  color: white;
+  font-weight: 500;
+}
+
+/* Círculo del radio */
+.radio-circle {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #582828;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Círculo seleccionado */
+.radio-circle.checked {
+  background-color: #582828;
+  border-color: white;
+}
+
+/* Punto del radio */
 .radio-dot {
   width: 10px;
   height: 10px;
   background-color: white;
   border-radius: 50%;
-  transform: translate(25%, 25%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: none; /* Oculto por defecto */
 }
 
@@ -82,5 +85,3 @@
 .radio-circle.checked .radio-dot {
   display: block;
 }
-
-  
