@@ -62,7 +62,7 @@ export default function QuestionnaireCompletionPage({
           <StressLevel percentage={Number(loaderData.scoreStress) / 116} />
           <div className="flex flex-col gap-3 items-center">
             <PrimaryButton label="Recomendaciones" linkTo="/recomendaciones" />
-            <SecondaryButton label="Volver a Inicio" linkTo="/" />
+            <SecondaryButton label="Volver a Inicio" linkTo="/seleccion-de-prueba" />
           </div>
         </main>
       </>
@@ -84,7 +84,7 @@ export default function QuestionnaireCompletionPage({
           />
           <div className="flex flex-col gap-3 items-center">
             <PrimaryButton label="Recomendaciones" linkTo="/recomendaciones" />
-            <SecondaryButton label="Volver a Inicio" linkTo="/" />
+            <SecondaryButton label="Volver a Inicio" linkTo="/seleccion-de-prueba" />
           </div>
         </main>
       </>
